@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "271694658984",
+    "project_id": "senturionscalegback",
+    "storage_bucket": "senturionscalegback.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271694658984:android:df5654ea4fc6531b1a319d",
+        "android_client_info": {
+          "package_name": "com.example.senturionscaleg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCP8rUFLUqCj7UO_n1ajzxPhCEjOoL4hGs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
