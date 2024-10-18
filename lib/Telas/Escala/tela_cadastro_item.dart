@@ -61,7 +61,7 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
       );
 
   Widget botoesAcoes(
-          String nomeBotao, Color corBotao, double largura, double altura) =>
+          String nomeBotao, IconData icone, double largura, double altura) =>
       Container(
           margin: const EdgeInsets.only(bottom: 10.0),
           height: altura,
@@ -70,17 +70,17 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
               heroTag: nomeBotao,
               elevation: 0,
               backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(color: corBotao),
-                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              shape: const RoundedRectangleBorder(
+                  side: BorderSide(color: PaletaCores.corCastanho),
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
               onPressed: () async {
                 //verificando o tipo do botao
                 // para fazer acoes diferentes
-                if (nomeBotao == Constantes.iconeSalvar) {
+                if (nomeBotao == Textos.btnSalvar) {
                   if (_formKeyFormulario.currentState!.validate()) {
                     adicionarItensBancoDados();
                   }
-                } else if (nomeBotao == Constantes.iconeLista) {
+                } else if (nomeBotao == Textos.btnVerEscalaAtual) {
                   var dados = {};
                   dados[Constantes.rotaArgumentoNomeEscala] = widget.nomeTabela;
                   dados[Constantes.rotaArgumentoIDEscalaSelecionada] =
@@ -88,77 +88,33 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                   Navigator.pushReplacementNamed(
                       context, Constantes.rotaEscalaDetalhada,
                       arguments: dados);
-                } else if (nomeBotao == Constantes.iconeOpcoesData) {
+                } else if (nomeBotao == Textos.btnOpcoesData) {
                   alertaSelecaoOpcaoData(context);
                 } else {
                   exibirDataPicker();
                 }
               },
-              child: LayoutBuilder(
-                builder: (p0, p1) {
-                  if (nomeBotao == Constantes.iconeSalvar) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.save_outlined,
-                            color: PaletaCores.corAzulMagenta, size: 30),
-                        Text(
-                          Textos.btnSalvar,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                              color: PaletaCores.corAzulMagenta),
-                        )
-                      ],
-                    );
-                  } else if (nomeBotao == Constantes.iconeLista) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.view_list,
-                            color: PaletaCores.corAzulMagenta, size: 30),
-                        Text(
-                          Textos.btnVerEscalaAtual,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: PaletaCores.corAzulMagenta),
-                        )
-                      ],
-                    );
-                  } else if (nomeBotao == Constantes.iconeOpcoesData) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          Textos.btnOpcoesData,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: PaletaCores.corAzulMagenta),
-                        )
-                      ],
-                    );
-                  } else {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.date_range_outlined,
-                            color: PaletaCores.corAzulMagenta, size: 30),
-                        Text(
-                          Textos.labelData,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                              color: PaletaCores.corAzulMagenta),
-                        )
-                      ],
-                    );
-                  }
-                },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      if (nomeBotao == Textos.btnOpcoesData) {
+                        return Container();
+                      } else {
+                        return Icon(icone,
+                            color: PaletaCores.corAzulMagenta, size: 30);
+                      }
+                    },
+                  ),
+                  Text(
+                    nomeBotao,
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: PaletaCores.corAzulMagenta),
+                  )
+                ],
               )));
 
   Widget botoesSwitch(String label, bool valorBotao) => SizedBox(
@@ -555,10 +511,10 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                botoesAcoes(Constantes.iconeDataCulto,
-                                    PaletaCores.corCastanho, 60, 60),
-                                botoesAcoes(Constantes.iconeOpcoesData,
-                                    PaletaCores.corCastanho, 120, 40)
+                                botoesAcoes(Textos.btnData,
+                                    Constantes.iconeDataCulto, 60, 60),
+                                botoesAcoes(Textos.btnOpcoesData,
+                                    Constantes.iconeOpcoesData, 120, 40)
                               ],
                             ),
                             Container(
@@ -672,10 +628,10 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              botoesAcoes(Constantes.iconeSalvar,
-                                  PaletaCores.corCastanho, 90, 60),
-                              botoesAcoes(Constantes.iconeLista,
-                                  PaletaCores.corCastanho, 90, 60),
+                              botoesAcoes(Textos.btnSalvar,
+                                  Constantes.iconeSalvar, 90, 60),
+                              botoesAcoes(Textos.btnVerEscalaAtual,
+                                  Constantes.iconeLista, 90, 60),
                             ],
                           ),
                           BarraNavegacao()

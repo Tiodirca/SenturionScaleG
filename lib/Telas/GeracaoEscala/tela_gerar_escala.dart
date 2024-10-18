@@ -68,6 +68,9 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
           ) ||
           element.contains(
             Constantes.segundaHoraPulpito,
+          ) ||
+          element.contains(
+            Constantes.recolherOferta,
           ));
     } else {
       locaisSorteioCooperadores.removeWhere((element) => element.contains(
@@ -133,17 +136,20 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
           // verificando qual o tipo de voluntario para
           // preencher o capo com a informacao
           // correspondente ao tipo de voluntario
-          primeiraHoraEntrada: widget.tipoCadastroVoluntarios ==
+          primeiraHoraEntrada: linha[Constantes.primeiraHoraEntrada],
+          segundaHoraEntrada: linha[Constantes.segundaHoraEntrada],
+          primeiraHoraPulpito: widget.tipoCadastroVoluntarios ==
                   Constantes.fireBaseDocumentoCooperadores
               ? linha[Constantes.primeiraHoraPulpito]
               : "",
-          segundaHoraEntrada: widget.tipoCadastroVoluntarios ==
+          segundaHoraPulpito: widget.tipoCadastroVoluntarios ==
                   Constantes.fireBaseDocumentoCooperadores
               ? linha[Constantes.segundaHoraPulpito]
               : "",
-          primeiraHoraPulpito: linha[Constantes.primeiraHoraEntrada],
-          segundaHoraPulpito: linha[Constantes.segundaHoraEntrada],
-          recolherOferta: linha[Constantes.recolherOferta],
+          recolherOferta: widget.tipoCadastroVoluntarios ==
+                  Constantes.fireBaseDocumentoCooperadores
+              ? linha[Constantes.recolherOferta]
+              : "",
           mesaApoio: widget.tipoCadastroVoluntarios ==
                   Constantes.fireBaseDocumentoCooperadores
               ? ""
@@ -204,9 +210,13 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
       cadastrarItens(element, idDocumentoFirebase);
       contador++;
       if (contador == escalaModelo.length) {
-        setState(() {
-          exibirWidgetCarregamento = false;
-        });
+        Map dados = {};
+        dados[Constantes.rotaArgumentoNomeEscala] =
+            MetodosAuxiliares.removerEspacoNomeTabelas(nomeEscala.text);
+        dados[Constantes.rotaArgumentoIDEscalaSelecionada] =
+            idDocumentoFirebase;
+        Navigator.pushReplacementNamed(
+            arguments: dados, context, Constantes.rotaEscalaDetalhada);
       }
     }
   }
@@ -223,7 +233,8 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
         .then((querySnapshot) {
       for (var docSnapshot in querySnapshot.docs) {
         // verificando se o valor do campo e o mesmo do parametro
-        if (docSnapshot.data().values.contains(nomeEscala.text)) {
+        if (docSnapshot.data().values.contains(
+            MetodosAuxiliares.removerEspacoNomeTabelas(nomeEscala.text))) {
           // caso seja definir que a variavel vai receber o valor
           idDocumentoFirebase = docSnapshot.id;
         }
@@ -242,17 +253,17 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
           .collection(Constantes.fireBaseDadosCadastrados)
           .doc()
           .set({
-        Constantes.primeiraHoraPulpito: escala.primeiraHoraPulpito,
-        Constantes.segundaHoraPulpito: escala.segundaHoraPulpito,
-        Constantes.primeiraHoraEntrada: escala.primeiraHoraEntrada,
-        Constantes.segundaHoraEntrada: escala.segundaHoraEntrada,
-        Constantes.recolherOferta: escala.recolherOferta,
+        Constantes.primeiraHoraPulpito: escala.primeiraHoraPulpito.toString(),
+        Constantes.segundaHoraPulpito: escala.segundaHoraPulpito.toString(),
+        Constantes.primeiraHoraEntrada: escala.primeiraHoraEntrada.toString(),
+        Constantes.segundaHoraEntrada: escala.segundaHoraEntrada.toString(),
+        Constantes.recolherOferta: escala.recolherOferta.toString(),
         Constantes.uniforme: escala.uniforme,
-        Constantes.mesaApoio: escala.uniforme,
-        Constantes.servirSantaCeia: escala.servirSantaCeia,
+        Constantes.mesaApoio: escala.mesaApoio.toString(),
+        Constantes.servirSantaCeia: escala.servirSantaCeia.toString(),
         Constantes.dataCulto: escala.dataCulto,
         Constantes.horarioTroca: escala.horarioTroca,
-        Constantes.irmaoReserva: escala.irmaoReserva,
+        Constantes.irmaoReserva: escala.irmaoReserva.toString(),
       });
     } catch (e) {
       MetodosAuxiliares.exibirMensagens(Textos.descricaoNotificacaoSucessoErro,

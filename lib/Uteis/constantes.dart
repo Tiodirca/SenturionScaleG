@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 class Constantes {
   // rotas
   static const rotaTelaInicial = "rotaTelaInicial";
@@ -22,7 +25,7 @@ class Constantes {
       "listaVoluntariosEspeficicos";
   static const rotaArgumentoListaDiasEspecificos = "listaDiasEspeficicos";
   static const rotaArgumentoNomeEscala = "nomeEscala";
-  static const rotaArgumentoIDEscalaSelecionada  = "IDEscalaSelecionada";
+  static const rotaArgumentoIDEscalaSelecionada = "IDEscalaSelecionada";
 
   // variaveis responsaveis pela gravacao e consulta no firebase
   // referente aos nomes de voluntarios masculino e feminino
@@ -52,25 +55,19 @@ class Constantes {
   static const horarioTroca = "horarioTroca";
   static const irmaoReserva = "irmaoReserva";
 
-
   // ICONES
-  static const iconeAdicionar = "adicionar";
-  static const iconeTelaInicial = "telaInicial";
-  static const iconeAtualizar = "atualizar";
-  static const iconeAdicionarEscala = "adicionarEscala";
-  static const iconeLista = "lista";
-  static const iconeConfiguracao = "configuracao";
-  static const iconeOpcoesData = "opcoesData";
+  static const iconeTelaInicial = Icons.home_filled;
+  static const iconeAdicionar = Icons.add;
+  static const iconeAtualizar = Icons.update;
+  static const iconeLista = Icons.list_alt_outlined;
+  static const iconeOpcoesData = Icons.settings;
 
-  static const iconeExclusao = "exclusao";
-  static const iconeRecarregar = "recarregar";
-  static const iconeBaixar = "baixar";
-  static const iconeEditar = "editar";
+  static const iconeExclusao = Icons.close;
+  static const iconeRecarregar = Icons.refresh;
+  static const iconeBaixar = Icons.download_rounded;
 
-
-  static const iconeSalvar = "salvar";
-  static const iconeDataCulto = "dataCulto";
-
+  static const iconeSalvar = Icons.save;
+  static const iconeDataCulto = Icons.date_range_outlined;
 
 // Horario padrao de trocas de cooperadores
   static const horarioInicialSemana = "19:00";
