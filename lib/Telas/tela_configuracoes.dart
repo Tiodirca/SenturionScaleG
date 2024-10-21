@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:senturionscaleg/Widgets/barra_navegacao_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Uteis/estilo.dart';
@@ -140,107 +141,110 @@ class _TelaConfiguracoesState extends State<TelaConfiguracoes> {
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
-    double alturaBarraStatus = MediaQuery.of(context).padding.top;
-    double alturaAppBar = AppBar().preferredSize.height;
 
     return Theme(
-        data: estilo.estiloGeral,
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: Text(Textos.tituloTelaConfiguracoes),
-            leading: IconButton(
-                color: Colors.white,
-                //setando tamanho do icone
-                iconSize: 30,
-                enableFeedback: false,
-                onPressed: () {
-                  Navigator.pushReplacementNamed(
-                      context, Constantes.rotaTelaInicial);
-                },
-                icon: const Icon(Icons.arrow_back_ios)),
-          ),
-          body: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
+      data: estilo.estiloGeral,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text(Textos.tituloTelaConfiguracoes),
+          leading: IconButton(
+              color: Colors.white,
+              //setando tamanho do icone
+              iconSize: 30,
+              enableFeedback: false,
+              onPressed: () {
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaInicial);
               },
-              child: SizedBox(
-                  width: larguraTela,
-                  height: alturaTela - alturaAppBar - alturaBarraStatus,
-                  child: Column(
-                    children: [
-                      Container(
-                          margin: const EdgeInsets.only(top: 10.0),
-                          child: SingleChildScrollView(
-                            child: SizedBox(
-                              height: alturaTela * 0.8,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(bottom: 20.0),
-                                    width: larguraTela * 0.8,
-                                    child: Text(
-                                        Textos.descricaoBtnDefinirHorario,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(fontSize: 20)),
-                                  ),
-                                  Text(Textos.descricaoTrocaSemana,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18)),
-                                  botoesAcoes(
-                                      larguraTela,
-                                      horarioInicioSemana,
-                                      horarioTrocaSemana,
-                                      Constantes.trocarHorarioSemana),
-                                  Text(Textos.descricaoTrocaFimSemana,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18)),
-                                  botoesAcoes(
-                                      larguraTela,
-                                      horarioInicioFSemana,
-                                      horarioTrocaFSemana,
-                                      Constantes.trocarHorarioFimSemana),
-                                  Container(
-                                    margin: const EdgeInsets.only(bottom: 20.0),
-                                    width: larguraTela * 0.8,
-                                    child: Text(
-                                        Textos
-                                            .descricaoRedefinirValoresHorarioTroca,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(fontSize: 20)),
-                                  ),
-                                  SizedBox(
-                                      height: 60,
-                                      width: 60,
-                                      child: FloatingActionButton(
-                                          elevation: 0,
-                                          backgroundColor: Colors.white,
-                                          shape: const RoundedRectangleBorder(
-                                              side: BorderSide(
-                                                  color: PaletaCores
-                                                      .corCastanho),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(10))),
-                                          onPressed: () async {
-                                            MetodosAuxiliares
-                                                metodosAuxiliares =
-                                                MetodosAuxiliares();
-                                            metodosAuxiliares
-                                                .gravarDadosPadrao();
-                                            recuperarValoresSharePreferences();
-                                          },
-                                          child: const Icon(
-                                            Icons.reset_tv,
-                                            color: PaletaCores.corCastanho,
-                                          )))
-                                ],
-                              ),
+              icon: const Icon(Icons.arrow_back_ios)),
+        ),
+        body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: Container(
+                width: larguraTela,
+                height: alturaTela,
+                child: Column(
+                  children: [
+                    Container(
+                        margin: const EdgeInsets.only(top: 10.0),
+                        child: SingleChildScrollView(
+                          child: SizedBox(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: larguraTela * 0.8,
+                                  child: Text(Textos.descricaoBtnDefinirHorario,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(fontSize: 20)),
+                                ),
+                                Text(Textos.descricaoTrocaSemana,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
+                                botoesAcoes(
+                                    larguraTela,
+                                    horarioInicioSemana,
+                                    horarioTrocaSemana,
+                                    Constantes.trocarHorarioSemana),
+                                Text(Textos.descricaoTrocaFimSemana,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
+                                botoesAcoes(
+                                    larguraTela,
+                                    horarioInicioFSemana,
+                                    horarioTrocaFSemana,
+                                    Constantes.trocarHorarioFimSemana),
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 20.0),
+                                  width: larguraTela * 0.8,
+                                  child: Text(
+                                      Textos
+                                          .descricaoRedefinirValoresHorarioTroca,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(fontSize: 20)),
+                                ),
+                                SizedBox(
+                                    height: 60,
+                                    width: 60,
+                                    child: FloatingActionButton(
+                                        elevation: 0,
+                                        backgroundColor: Colors.white,
+                                        shape: const RoundedRectangleBorder(
+                                            side: BorderSide(
+                                                color: PaletaCores.corCastanho),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                        onPressed: () async {
+                                          MetodosAuxiliares metodosAuxiliares =
+                                              MetodosAuxiliares();
+                                          metodosAuxiliares.gravarDadosPadrao();
+                                          recuperarValoresSharePreferences();
+                                        },
+                                        child: const Icon(
+                                          Icons.reset_tv,
+                                          color: PaletaCores.corCastanho,
+                                        )))
+                              ],
                             ),
-                          ))
-                    ],
-                  ))),
-        ));
+                          ),
+                        ))
+                  ],
+                ))),
+        bottomNavigationBar: Container(
+            alignment: Alignment.center,
+            color: Colors.white,
+            width: larguraTela,
+            height: 70,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [BarraNavegacao()],
+            )),
+      ),
+    );
   }
 }

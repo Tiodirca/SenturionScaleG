@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -5,18 +7,18 @@ import 'package:senturionscaleg/Modelo/escala_modelo.dart';
 import 'package:senturionscaleg/Uteis/PDF/GerarPDF.dart';
 import 'package:senturionscaleg/Uteis/constantes.dart';
 import 'package:senturionscaleg/Uteis/estilo.dart';
+import 'package:senturionscaleg/Uteis/metodos_auxiliares.dart';
 import 'package:senturionscaleg/Uteis/paleta_cores.dart';
 import 'package:senturionscaleg/Uteis/textos.dart';
 import 'package:senturionscaleg/Widgets/barra_navegacao_widget.dart';
 import 'package:senturionscaleg/Widgets/tela_carregamento.dart';
 
 class TelaEscalaDetalhada extends StatefulWidget {
-  TelaEscalaDetalhada(
-      {Key? key, required this.nomeTabela, required this.idTabelaSelecionada})
-      : super(key: key);
+  const TelaEscalaDetalhada(
+      {super.key, required this.nomeTabela, required this.idTabelaSelecionada});
 
-  String nomeTabela;
-  String idTabelaSelecionada;
+  final String nomeTabela;
+  final String idTabelaSelecionada;
 
   @override
   State<TelaEscalaDetalhada> createState() => _TelaEscalaDetalhadaState();
@@ -86,6 +88,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
     final dados = docSnap.data(); // convertendo
     if (dados != null) {
       dados.id = docSnap.id;
+      //print(dados.id);
       //adicionando os dados convertidos na lista
       escala.add(dados);
       setState(() {
@@ -141,11 +144,6 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
     }
   }
 
-  exibirMsg(String msg) {
-    final snackBar = SnackBar(content: Text(msg));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   // Metodo para chamar deletar tabela
   chamarDeletar(EscalaModelo escalaModelo) async {
     var db = FirebaseFirestore.instance;
@@ -161,9 +159,11 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
           escala.clear();
           realizarBuscaDadosFireBase(widget.idTabelaSelecionada);
         });
-        exibirMsg(Textos.sucessoExcluirItem);
+        MetodosAuxiliares.exibirMensagens(
+            Textos.sucessoExcluirItem, Textos.tipoNotificacaoSucesso, context);
       },
-      onError: (e) => exibirMsg(Textos.erroMsgExcluirEscala),
+      onError: (e) => MetodosAuxiliares.exibirMensagens(
+          Textos.erroMsgExcluirItemEscala, Textos.tipoNotificacaoErro, context),
     );
   }
 
@@ -303,12 +303,12 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
               } else {
                 return Scaffold(
                   appBar: AppBar(
-                      title: Text(Textos.btnListarEscalas),
+                      title: Text(Textos.tituloTelaEscalaDetalhada),
                       leading: IconButton(
                         color: Colors.white,
                         onPressed: () {
                           Navigator.pushReplacementNamed(
-                              context, Constantes.rotaTelaInicial);
+                              context, Constantes.rotaListarEscalas);
                         },
                         icon: const Icon(
                           Icons.arrow_back_ios,
@@ -370,13 +370,15 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                     width: larguraTela,
                                     child: Text(
                                         Textos.descricaoTelaListagemItens,
-                                        style: const TextStyle(fontSize: 20),
+                                        style: const TextStyle(fontSize: 18),
                                         textAlign: TextAlign.center),
                                   ),
                                   Container(
                                       margin: const EdgeInsets.symmetric(
                                           horizontal: 10.0, vertical: 0.0),
-                                      height: alturaTela * 0.5,
+                                      height: Platform.isWindows
+                                          ? alturaTela * 0.6
+                                          : alturaTela * 0.5,
                                       width: larguraTela,
                                       child: Card(
                                         color: Colors.white,

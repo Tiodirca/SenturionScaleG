@@ -37,7 +37,7 @@ class Textos {
   static String descricaoSemVonluntarios =
       "Não foi possivel encontrar na base de dados o nome de algum voluntario(a) , "
       "faça o cadastro dos nomes dos voluntarios no campo acima";
-  static String descricaoSelecaoVoluntarios = "Selecione a quantidade de "
+  static String descricaoSelecaoVoluntarios = "Selecione quais "
       "voluntarios que voce deseja que a escala tenha";
 
   // TELA SELECAO DIAS SEMANA
@@ -76,7 +76,7 @@ class Textos {
   static String descricaoTabelaSelecionada = "A Escala selecionada foi : ";
 
   // LISTAGEM
-  static String tituloTelaListagemItens = "Listagem Itens";
+  static String tituloTelaEscalaDetalhada = "Escala Detalhada";
   static String descricaoTelaListagemItens =
       "Aqui você pode estar vendo a escala completa,"
       "com todos os itens já adicionados. se for necessario"
@@ -115,7 +115,7 @@ class Textos {
   // GERAIS
   //TELA DE CARREGAMENTO
   static String descricaoTelaCarregamento = "Aguarde Carregando";
-
+  static String descricaoTipoVoluntario = "Gerando escala de : ";
   static String labelEditar = "Editar";
   static String labelExcluir = "Excluir";
   static String labelHorarioTroca = "Horários de troca";
@@ -160,7 +160,7 @@ class Textos {
   static String sucessoMsgAdicionarItemEscala =
       "Sucesso ao adicionar item a escala do banco de dados";
   static String sucessoMsgAtualizarItemEscala =
-      "Sucesso ao atualizar item a escala do banco de dados";
+      "Sucesso ao atualizar item ";
   static String sucessoExcluirItem = "Item apagado com sucesso.";
   static String sucessoMsgExcluirEscala =
       "Sucesso ao excluir escala do banco de dados";
@@ -173,10 +173,12 @@ class Textos {
       " adiocione uma nova informação a base de dados";
   static String erroMsgExcluirEscala =
       "Erro ao excluir escala do banco de dados";
+  static String erroMsgAtualizarEscala =
+      "Erro ao atualizar item";
   static String erroMsgAdicionarItemEscala =
       "Erro ao adicionar item a escala do banco de dados";
-  static String erroMsgAtualizarItemEscala =
-      "Erro ao adicionar item a escala do banco de dados";
+  static String erroMsgExcluirItemEscala =
+      "Erro ao excluir item";
 
   // ALERTAS
   static String tituloAlertaExclusao = "Confirmação de Exclusão";

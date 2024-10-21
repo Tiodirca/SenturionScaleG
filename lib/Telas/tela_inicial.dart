@@ -20,7 +20,7 @@ class _TelaInicialState extends State<TelaInicial> {
       Container(
         margin: const EdgeInsets.all(10),
         width: 200,
-        height: 60,
+        height: 50,
         child: ElevatedButton(
           onPressed: () {
             if (nomeBtn == Textos.btnCooperadoras) {
@@ -45,11 +45,6 @@ class _TelaInicialState extends State<TelaInicial> {
         ),
       );
 
-  // leading: const Image(
-  // image: AssetImage('assets/imagens/Logo.png'),
-  // width: 30,
-  // height: 30,
-  // ),
   @override
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;

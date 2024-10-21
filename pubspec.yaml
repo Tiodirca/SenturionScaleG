@@ -52,7 +52,26 @@ dependencies:
   # necessario para rodar firebase
   firebase_database: ^11.1.0
   cloud_firestore: ^5.3.0
-  circular_motion: ^0.0.6
+  # Necessario para gerar icones do aplicativo
+  flutter_launcher_icons: ^0.14.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/imagens/Logo.png"
+  web:
+    generate: true
+    image_path: "assets/imagens/Logo.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/imagens/Logo.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/imagens/Logo.png"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

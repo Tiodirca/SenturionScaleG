@@ -33,7 +33,6 @@ class _TelaCadastroSelecaoVoluntariosState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.tipoCadastroVoluntarios ==
         Constantes.fireBaseDocumentoCooperadores) {
@@ -41,6 +40,8 @@ class _TelaCadastroSelecaoVoluntariosState
     } else {
       ordenarCadastroVoluntarios = Constantes.fireBaseDocumentoCooperadoras;
     }
+    // chamando metodo para
+    // buscar dados no banco de dados
     realizarBuscaDadosFireBase();
   }
 
@@ -52,7 +53,7 @@ class _TelaCadastroSelecaoVoluntariosState
           width: 30,
           height: 30,
           child: FloatingActionButton(
-            heroTag: "btnExcluirPessoa${checkBoxModel.id}",
+            heroTag: "btnExcluir${checkBoxModel.id}",
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
                 side: const BorderSide(color: Colors.red, width: 1)),
@@ -326,6 +327,15 @@ class _TelaCadastroSelecaoVoluntariosState
                                       Container(
                                         margin: const EdgeInsets.symmetric(
                                             horizontal: 10.0),
+                                        width: larguraTela,
+                                        child: Text(
+                                            Textos.descricaoTipoVoluntario +
+                                                widget.tipoCadastroVoluntarios,
+                                            textAlign: TextAlign.end),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
                                         child: Text(
                                           Textos.descricaoCadastroVoluntario,
                                           textAlign: TextAlign.justify,
@@ -382,7 +392,7 @@ class _TelaCadastroSelecaoVoluntariosState
                                 )),
                             // area de listagem de nomes geral
                             SizedBox(
-                              height: alturaTela * 0.5,
+                              height: alturaTela * 0.55,
                               width: larguraTela,
                               child: LayoutBuilder(
                                 builder: (context, constraints) {
@@ -420,7 +430,7 @@ class _TelaCadastroSelecaoVoluntariosState
                                                         color: PaletaCores
                                                             .corCastanho)),
                                                 child: SizedBox(
-                                                  height: alturaTela * 0.35,
+                                                  height: alturaTela * 0.45,
                                                   width: larguraTela * 0.8,
                                                   child: ListView(
                                                     children: [
@@ -455,7 +465,7 @@ class _TelaCadastroSelecaoVoluntariosState
                           ],
                         ),
                       )),
-                  bottomSheet: Container(
+                  bottomNavigationBar: Container(
                     alignment: Alignment.center,
                     color: Colors.white,
                     width: larguraTela,

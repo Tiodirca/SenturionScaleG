@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:senturionscaleg/Modelo/check_box_modelo.dart';
 import 'package:senturionscaleg/Uteis/constantes.dart';
@@ -36,7 +35,7 @@ class _TelaSelecaoIntervaloTrabalhoState
 
   Widget selecaoPeriodoTrabalho(String label, DateTime data) => Container(
       margin: const EdgeInsets.symmetric(horizontal: 10.0),
-      width: 200,
+      width: 150,
       child: Column(
         children: [
           Text(
@@ -81,7 +80,7 @@ class _TelaSelecaoIntervaloTrabalhoState
               });
             },
             decoration: InputDecoration(
-              hintStyle: const TextStyle(color: PaletaCores.corAzulEscuro),
+              hintStyle:  const TextStyle(color: PaletaCores.corAzulEscuro,),
               hintText: '${data.day}/${data.month}/${data.year}',
             ),
           ),
@@ -182,6 +181,15 @@ class _TelaSelecaoIntervaloTrabalhoState
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10.0),
+                          width: larguraTela,
+                          child: Text(
+                              Textos.descricaoTipoVoluntario +
+                                  widget.tipoCadastroVoluntarios,
+                              textAlign: TextAlign.end),
+                        ),
                         Container(
                           margin: const EdgeInsets.all(10),
                           child: Text(Textos.descricaoSelecaoIntervaloTrabalho,

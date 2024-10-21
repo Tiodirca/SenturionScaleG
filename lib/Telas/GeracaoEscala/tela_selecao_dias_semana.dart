@@ -121,6 +121,15 @@ class _TelaSelecaoDiasSemanaState extends State<TelaSelecaoDiasSemana> {
                     child: Column(
                       children: [
                         Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10.0),
+                          width: larguraTela,
+                          child: Text(
+                              Textos.descricaoTipoVoluntario +
+                                  widget.tipoCadastroVoluntarios,
+                              textAlign: TextAlign.end),
+                        ),
+                        Container(
                           margin: const EdgeInsets.all(10.0),
                           child: Text(
                             Textos.descricaoSelecaoDiasSemana,

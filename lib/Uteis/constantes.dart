@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Constantes {
@@ -21,9 +20,6 @@ class Constantes {
   static const rotaArgumentoListaVoluntarios = "listaVoluntarios";
   static const rotaArgumentoListaDiasSemana = "listaDiasSemana";
   static const rotaArgumentoListaIntervaloTrabalho = "listaIntervaloTrabalho";
-  static const rotaArgumentoListaVoluntariosEspecificos =
-      "listaVoluntariosEspeficicos";
-  static const rotaArgumentoListaDiasEspecificos = "listaDiasEspeficicos";
   static const rotaArgumentoNomeEscala = "nomeEscala";
   static const rotaArgumentoIDEscalaSelecionada = "IDEscalaSelecionada";
 
@@ -54,6 +50,14 @@ class Constantes {
   static const dataCulto = "dataCulto";
   static const horarioTroca = "horarioTroca";
   static const irmaoReserva = "irmaoReserva";
+
+  static const gravataPreta = "Gravata Preta";
+  static const gravataAzul = "Gravata Azul";
+  static const gravataVermelha = "Gravata Vermelha";
+  static const gravataDourada = "Gravata Dourada";
+  static const gravataVerde = "Gravata Verde";
+  static const gravataAmarela = "Gravata Amarela";
+  static const gravataMarsala = "Gravata Marsala";
 
   // ICONES
   static const iconeTelaInicial = Icons.home_filled;

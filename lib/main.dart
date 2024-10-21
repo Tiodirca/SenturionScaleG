@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:senturionscaleg/Uteis/ScrollBehaviorPersonalizado.dart';
 
 import 'Uteis/rotas.dart';
 import 'Uteis/constantes.dart';
@@ -20,11 +21,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
-    return const MaterialApp(
-      localizationsDelegates: [
+    return  MaterialApp(
+      scrollBehavior: ScrollBehaviorPersonalizado(),
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
+        GlobalWidgetsLocalizations.delegate,
       ],
       // definindo lingua do data picker
       supportedLocales: const [Locale('pt', 'BR')],

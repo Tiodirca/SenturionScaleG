@@ -4,7 +4,7 @@ import 'package:pdf/widgets.dart' as pdfLib;
 import 'package:senturionscaleg/Modelo/escala_modelo.dart';
 
 import '../textos.dart';
-import 'salvarPDF/SavePDFMobile.dart'
+import 'salvarPDF/SavePDFWeb.dart'
     if (dart.library.html) 'salvarPDF/SavePDFWeb.dart';
 
 class GerarPDF {
