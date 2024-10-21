@@ -20,7 +20,7 @@ class _TelaInicialState extends State<TelaInicial> {
       Container(
         margin: const EdgeInsets.all(10),
         width: 200,
-        height: 60,
+        height: 50,
         child: ElevatedButton(
           onPressed: () {
             if (nomeBtn == Textos.btnCooperadoras) {

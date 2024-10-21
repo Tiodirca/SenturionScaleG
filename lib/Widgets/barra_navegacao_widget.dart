@@ -14,25 +14,27 @@ class BarraNavegacao extends StatelessWidget {
           height: 60,
           width: 60,
           child: FloatingActionButton(
-              onPressed: () {
-                if (nomeBtn == Textos.btnTelaInicial) {
-                  Navigator.pushReplacementNamed(
-                      context, Constantes.rotaTelaInicial);
-                } else if (nomeBtn == Textos.btnListarEscalas) {
-                  Navigator.pushReplacementNamed(
-                      context, Constantes.rotaListarEscalas);
-                } else if (nomeBtn == Textos.btnConfiguracoes) {
-                  Navigator.pushReplacementNamed(
-                      context, Constantes.rotaTelaConfiguracoes);
-                }
-              },
-              child: Center(
-                child: Icon(
-                  icon,
-                  size: 25,
-                  color: corTextoBotao,
-                ),
-              ),));
+            heroTag: nomeBtn,
+            onPressed: () {
+              if (nomeBtn == Textos.btnTelaInicial) {
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaInicial);
+              } else if (nomeBtn == Textos.btnListarEscalas) {
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaListarEscalas);
+              } else if (nomeBtn == Textos.btnConfiguracoes) {
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaConfiguracoes);
+              }
+            },
+            child: Center(
+              child: Icon(
+                icon,
+                size: 25,
+                color: corTextoBotao,
+              ),
+            ),
+          ));
 
   @override
   Widget build(BuildContext context) {

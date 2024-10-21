@@ -52,6 +52,16 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
   String horarioSemana = "";
   String horarioFinalSemana = "";
 
+  List<String> gravataCor = [
+    Constantes.gravataPreta,
+    Constantes.gravataAmarela,
+    Constantes.gravataAzul,
+    Constantes.gravataDourada,
+    Constantes.gravataMarsala,
+    Constantes.gravataVerde,
+    Constantes.gravataVermelha
+  ];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -128,6 +138,7 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
       } else {
         horarioTroca = horarioSemana;
       }
+
       //adiocionando os itens sorteados em uma
       // LISTA do MODELO DE ESCALA para poder trabalhar
       // com cada item separadamente depois
@@ -154,7 +165,10 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
                   Constantes.fireBaseDocumentoCooperadores
               ? ""
               : linha[Constantes.mesaApoio],
-          uniforme: "",
+          uniforme: widget.tipoCadastroVoluntarios ==
+                  Constantes.fireBaseDocumentoCooperadores
+              ? sortearGravata()
+              : "",
           horarioTroca: horarioTroca,
           servirSantaCeia: "",
           irmaoReserva: linha[Constantes.irmaoReserva]));
@@ -163,6 +177,11 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
       sortearNomesSemRepeticao(numeroRandomico);
     }
     chamarCadastroItens(escalaSorteada);
+  }
+
+  sortearGravata() {
+    int numeroRandom = random.nextInt(gravataCor.length);
+    return gravataCor.elementAt(numeroRandom);
   }
 
   // metodo para chamar o sorteio de nomes sem repeticao
@@ -334,6 +353,15 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
                                 child: SingleChildScrollView(
                                   child: Column(
                                     children: [
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        width: larguraTela,
+                                        child: Text(
+                                            Textos.descricaoTipoVoluntario +
+                                                widget.tipoCadastroVoluntarios,
+                                            textAlign: TextAlign.end),
+                                      ),
                                       Container(
                                         margin: const EdgeInsets.symmetric(
                                             horizontal: 10.0),

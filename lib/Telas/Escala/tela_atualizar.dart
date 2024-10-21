@@ -398,23 +398,19 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
         Constantes.horarioTroca: horarioTroca,
         Constantes.irmaoReserva: irmaoReserva,
       });
-      exibirMsg(Textos.sucessoMsgAdicionarItemEscala);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.sucessoMsgAtualizarItemEscala, Textos.tipoNotificacaoErro, context);
       setState(() {
         redirecionarTela();
       });
     } catch (e) {
-      exibirMsg(Textos.erroMsgAdicionarItemEscala);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.erroMsgAtualizarEscala, Textos.tipoNotificacaoErro, context);
       setState(() {
         exibirWidgetCarregamento = false;
       });
     }
   }
-
-  exibirMsg(String msg) {
-    final snackBar = SnackBar(content: Text(msg));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   // metodo para recuperar os horarios definidos
   // e gravados no share preferences
   recuperarHorarioTroca() async {

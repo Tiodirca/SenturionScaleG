@@ -212,22 +212,19 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
         Constantes.horarioTroca: horarioTroca,
         Constantes.irmaoReserva: irmaoReserva,
       });
-      exibirMsg(Textos.sucessoMsgAdicionarItemEscala);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.sucessoMsgAdicionarItemEscala, Textos.tipoNotificacaoSucesso, context);
       setState(() {
         limparValoresCampos();
         exibirTelaCarregamento = false;
       });
     } catch (e) {
-      exibirMsg(Textos.erroMsgAdicionarItemEscala);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.erroMsgAdicionarItemEscala, Textos.tipoNotificacaoErro, context);
       setState(() {
         exibirTelaCarregamento = false;
       });
     }
-  }
-
-  exibirMsg(String msg) {
-    final snackBar = SnackBar(content: Text(msg));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   // metodo para recuperar os horarios definidos
