@@ -219,6 +219,7 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
         exibirTelaCarregamento = false;
       });
     } catch (e) {
+
       MetodosAuxiliares.exibirMensagens(
           Textos.erroMsgAdicionarItemEscala, Textos.tipoNotificacaoErro, context);
       setState(() {

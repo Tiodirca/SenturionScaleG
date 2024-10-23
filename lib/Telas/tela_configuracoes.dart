@@ -172,6 +172,7 @@ class _TelaConfiguracoesState extends State<TelaConfiguracoes> {
                         margin: const EdgeInsets.only(top: 10.0),
                         child: SingleChildScrollView(
                           child: SizedBox(
+
                             child: Column(
                               children: [
                                 SizedBox(

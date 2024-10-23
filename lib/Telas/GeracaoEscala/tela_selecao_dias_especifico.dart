@@ -158,6 +158,7 @@ class _TelaSelecaoTelaSelecaoDiasEspecificoState
             onTap: () {
               FocusScope.of(context).requestFocus(FocusNode());
             },
+
             child: Scaffold(
               appBar: AppBar(
                   title: Text(Textos.tituloSelecaoDiasEspecifico),

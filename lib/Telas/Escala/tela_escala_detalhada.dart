@@ -730,6 +730,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                       }
                     },
                   ),
+
                   bottomNavigationBar: Container(
                       alignment: Alignment.center,
                       color: Colors.white,

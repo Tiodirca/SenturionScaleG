@@ -18,6 +18,7 @@ class TelaSelecaoIntervaloTrabalho extends StatefulWidget {
       required this.voluntariosSelecionados,
       required this.diasSemanaCulto});
 
+
   @override
   State<TelaSelecaoIntervaloTrabalho> createState() =>
       _TelaSelecaoIntervaloTrabalhoState();

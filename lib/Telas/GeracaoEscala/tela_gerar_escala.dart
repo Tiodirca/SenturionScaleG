@@ -105,6 +105,7 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
             Constantes.diaDomingo);
   }
 
+
   // metodo para realizar o sorteio dos nomes nos locais de trabalho
   fazerSorteio() {
     setState(() {

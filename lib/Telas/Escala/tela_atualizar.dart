@@ -404,6 +404,7 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
         redirecionarTela();
       });
     } catch (e) {
+
       MetodosAuxiliares.exibirMensagens(
           Textos.erroMsgAtualizarEscala, Textos.tipoNotificacaoErro, context);
       setState(() {

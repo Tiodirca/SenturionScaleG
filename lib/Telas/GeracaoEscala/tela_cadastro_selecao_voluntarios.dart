@@ -333,6 +333,7 @@ class _TelaCadastroSelecaoVoluntariosState
                                                 widget.tipoCadastroVoluntarios,
                                             textAlign: TextAlign.end),
                                       ),
+
                                       Container(
                                         margin: const EdgeInsets.symmetric(
                                             horizontal: 10.0),
