@@ -7,7 +7,7 @@ import '../Uteis/textos.dart';
 class BarraNavegacao extends StatelessWidget {
   BarraNavegacao({Key? key}) : super(key: key);
 
-  Color corTextoBotao = PaletaCores.corAzulEscuro;
+  final Color corTextoBotao = PaletaCores.corAzulEscuro;
 
   Widget botoesIcones(String nomeBtn, BuildContext context, IconData icon) =>
       SizedBox(

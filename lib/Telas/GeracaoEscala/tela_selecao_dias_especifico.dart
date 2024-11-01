@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import '../../Modelo/check_box_modelo.dart';
 import '../../Uteis/estilo.dart';

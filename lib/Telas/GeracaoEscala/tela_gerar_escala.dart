@@ -407,7 +407,6 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
                                                     .currentState!
                                                     .validate()) {
                                                   fazerSorteio();
-                                                  //cadastrarItens();
                                                 }
                                               },
                                               child:

@@ -118,7 +118,7 @@ class GerarPDF {
         //CORPO DO PDF
         build: (context) => [
               pdfLib.SizedBox(height: 20),
-              pdfLib.Table.fromTextArray(
+              pdfLib.TableHelper.fromTextArray(
                   cellPadding: const pdfLib.EdgeInsets.symmetric(
                       horizontal: 0.0, vertical: 0.0),
                   headerPadding: const pdfLib.EdgeInsets.symmetric(

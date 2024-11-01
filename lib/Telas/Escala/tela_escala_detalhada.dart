@@ -88,13 +88,12 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
     final dados = docSnap.data(); // convertendo
     if (dados != null) {
       dados.id = docSnap.id;
-      //print(dados.id);
       //adicionando os dados convertidos na lista
       escala.add(dados);
       setState(() {
         ordenarLista();
-        exibirWidgetCarregamento = false;
         chamarVerificarColunaVazia();
+        exibirWidgetCarregamento = false;
       });
     }
   }
@@ -646,6 +645,8 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                                     .all(5),
                                                             child:
                                                                 FloatingActionButton(
+                                                              heroTag: item.id
+                                                                  .toString(),
                                                               elevation: 0,
                                                               backgroundColor:
                                                                   Colors.white,
@@ -691,6 +692,8 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                                     .all(5),
                                                             child:
                                                                 FloatingActionButton(
+                                                              heroTag:
+                                                                  "Excluir${item.id.toString()}",
                                                               elevation: 0,
                                                               backgroundColor:
                                                                   Colors.white,
@@ -730,7 +733,6 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                       }
                     },
                   ),
-
                   bottomNavigationBar: Container(
                       alignment: Alignment.center,
                       color: Colors.white,

@@ -478,7 +478,7 @@ class _TelaCadastroSelecaoVoluntariosState
                         heroTag: "avancar",
                         onPressed: () {
                           if (listaVoluntariosSelecionados.isEmpty ||
-                              (listaVoluntariosSelecionados.length < 5)) {
+                              (listaVoluntariosSelecionados.length < 6)) {
                             MetodosAuxiliares.exibirMensagens(
                                 Textos.descricaoNoficacaoSelecaoVoluntarios,
                                 Textos.tipoNotificacaoErro,

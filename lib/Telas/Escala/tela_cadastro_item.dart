@@ -11,13 +11,14 @@ import 'package:senturionscaleg/Widgets/barra_navegacao_widget.dart';
 import 'package:senturionscaleg/Widgets/tela_carregamento.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+@immutable
 class TelaCadastroItem extends StatefulWidget {
   TelaCadastroItem(
       {Key? key, required this.nomeTabela, required this.idTabelaSelecionada})
       : super(key: key);
 
-  String nomeTabela;
-  String idTabelaSelecionada;
+  final String nomeTabela;
+  final String idTabelaSelecionada;
 
   @override
   State<TelaCadastroItem> createState() => _TelaCadastroItemState();

@@ -71,6 +71,16 @@ class _TelaInicialState extends State<TelaInicial> {
               ],
             ),
           ),
+          bottomNavigationBar: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            color: Colors.white,
+            width: larguraTela,
+            height: 40,
+            child: Text(
+              Textos.versaoApp,
+              textAlign: TextAlign.end,
+            ),
+          ),
         ));
   }
 }

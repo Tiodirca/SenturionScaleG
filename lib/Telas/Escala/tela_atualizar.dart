@@ -15,6 +15,7 @@ import '../../Widgets/barra_navegacao_widget.dart';
 import '../../Widgets/tela_carregamento.dart';
 
 class TelaAtualizar extends StatefulWidget {
+
   TelaAtualizar(
       {Key? key,
       required this.nomeTabela,
@@ -22,9 +23,9 @@ class TelaAtualizar extends StatefulWidget {
       required this.escalaModelo})
       : super(key: key);
 
-  String nomeTabela;
-  String idTabelaSelecionada;
-  EscalaModelo escalaModelo;
+  final String nomeTabela;
+  final String idTabelaSelecionada;
+  final EscalaModelo escalaModelo;
 
   @override
   State<TelaAtualizar> createState() => _TelaAtualizarState();
