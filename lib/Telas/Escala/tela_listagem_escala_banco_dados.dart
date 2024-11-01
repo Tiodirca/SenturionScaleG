@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:senturionscaleg/Modelo/tabelas_modelo.dart';
 import 'package:senturionscaleg/Uteis/metodos_auxiliares.dart';
 import 'package:senturionscaleg/Uteis/paleta_cores.dart';
-import 'package:senturionscaleg/Widgets/barra_navegacao_widget.dart';
 import '../../Uteis/constantes.dart';
 import '../../Uteis/estilo.dart';
 import '../../Uteis/textos.dart';

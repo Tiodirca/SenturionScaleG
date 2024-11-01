@@ -129,7 +129,6 @@ class _TelaSelecaoDiasSemanaState extends State<TelaSelecaoDiasSemana> {
                                   widget.tipoCadastroVoluntarios,
                               textAlign: TextAlign.end),
                         ),
-
                         Container(
                           margin: const EdgeInsets.all(10.0),
                           child: Text(
