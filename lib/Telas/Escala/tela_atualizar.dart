@@ -15,7 +15,6 @@ import '../../Widgets/barra_navegacao_widget.dart';
 import '../../Widgets/tela_carregamento.dart';
 
 class TelaAtualizar extends StatefulWidget {
-
   TelaAtualizar(
       {Key? key,
       required this.nomeTabela,
@@ -226,6 +225,14 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
       valorRadioButton = 4;
     } else if (data.toString().contains(Textos.departamentoInfantil)) {
       valorRadioButton = 5;
+    } else if (data.toString().contains(Textos.departamentoVaroes)) {
+      valorRadioButton = 6;
+    } else if (data.toString().contains(Textos.departamentoCampanha)) {
+      valorRadioButton = 7;
+    } else if (data.toString().contains(Textos.departamentoEbom)) {
+      valorRadioButton = 8;
+    } else if (data.toString().contains(Textos.departamentoSede)) {
+      valorRadioButton = 9;
     }
   }
 
@@ -399,13 +406,12 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
         Constantes.horarioTroca: horarioTroca,
         Constantes.irmaoReserva: irmaoReserva,
       });
-      MetodosAuxiliares.exibirMensagens(
-          Textos.sucessoMsgAtualizarItemEscala, Textos.tipoNotificacaoSucesso, context);
+      MetodosAuxiliares.exibirMensagens(Textos.sucessoMsgAtualizarItemEscala,
+          Textos.tipoNotificacaoSucesso, context);
       setState(() {
         redirecionarTela();
       });
     } catch (e) {
-
       MetodosAuxiliares.exibirMensagens(
           Textos.erroMsgAtualizarEscala, Textos.tipoNotificacaoErro, context);
       setState(() {
@@ -413,6 +419,7 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
       });
     }
   }
+
   // metodo para recuperar os horarios definidos
   // e gravados no share preferences
   recuperarHorarioTroca() async {
