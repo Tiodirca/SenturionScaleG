@@ -193,4 +193,10 @@ class Textos {
       "Quem sua mão ao arado já pois, constante precisa ser.";
   static String nomeIgreja = "ADTL Parque São Carlos";
   static String txtGeradoApk = "Escala criada por Senturion Scale G";
+  static String descricaoObsPDF = "OBS: O irmão que está escalado no 2° horário do pulpito,"
+      " está RESPONSAVEL por FECHAR a IGREJA ao final dos CULTOS. Deve-se esperar"
+      " todos SAIREM da nave da igreja para fechar,principalmente aos domingos";
+
+  static String descricaoObsPDFConversa = "Obreiros(as) Escalados na PORTA fica PROIBIDO "
+      "CONVERSAS PARELELAS no PERIODO do CULTO ou ANTES DO CULTO ";
 }

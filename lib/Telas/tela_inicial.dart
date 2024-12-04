@@ -41,7 +41,7 @@ class _TelaInicialState extends State<TelaInicial> {
                   Constantes.rotaTelaCadastroVoluntarios);
             }
           },
-          child: Text(nomeBtn),
+          child: Text(nomeBtn,style: TextStyle(fontWeight: FontWeight.bold),),
         ),
       );
 
@@ -54,6 +54,11 @@ class _TelaInicialState extends State<TelaInicial> {
         child: Scaffold(
           appBar: AppBar(
             title: Text(Textos.nomeApp),
+            leading:  const Image(
+              image: AssetImage('assets/imagens/Logo.png'),
+              width: 10,
+              height: 10,
+            ),
           ),
           body: Container(
             width: larguraTela,

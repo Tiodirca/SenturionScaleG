@@ -93,9 +93,12 @@ class GerarPDF {
         //RODAPE DO PDF
         footer: (context) => pdfLib.Column(children: [
               pdfLib.Container(
-                child: pdfLib.Text(Textos.txtRodapePDF,
-                    textAlign: pdfLib.TextAlign.center),
-              ),
+                  child: pdfLib.Column(
+                      mainAxisAlignment: pdfLib.MainAxisAlignment.spaceBetween,
+                      children: [
+                    pdfLib.Text(Textos.txtRodapePDF,
+                        textAlign: pdfLib.TextAlign.center),
+                  ])),
               pdfLib.Container(
                   padding: const pdfLib.EdgeInsets.only(
                       left: 0.0, top: 10.0, bottom: 0.0, right: 0.0),
@@ -125,6 +128,28 @@ class GerarPDF {
                       horizontal: 0.0, vertical: 5.0),
                   cellAlignment: pdfLib.Alignment.center,
                   data: listagemDados()),
+              pdfLib.LayoutBuilder(
+                builder: (context, constraints) {
+                  if (exibirMesaApoio) {
+                    return pdfLib.Container();
+                  } else {
+                    return pdfLib.Container(
+                      margin: pdfLib.EdgeInsets.all(10.0),
+                      child: pdfLib.Text(Textos.descricaoObsPDF,
+                          textAlign: pdfLib.TextAlign.center,
+                          style: pdfLib.TextStyle(
+                              fontWeight: pdfLib.FontWeight.bold)),
+                    );
+                  }
+                },
+              ),
+              pdfLib.Container(
+                margin: pdfLib.EdgeInsets.all(10.0),
+                child: pdfLib.Text(Textos.descricaoObsPDFConversa,
+                    textAlign: pdfLib.TextAlign.center,
+                    style:
+                        pdfLib.TextStyle(fontWeight: pdfLib.FontWeight.bold)),
+              )
             ]));
 
     List<int> bytes = await pdf.save();
