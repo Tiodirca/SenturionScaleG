@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EscalaModelo {
   String id;
+  String porta01;
+  String banheiroFeminino;
   String primeiraHoraPulpito;
   String segundaHoraPulpito;
   String primeiraHoraEntrada;
@@ -17,6 +19,8 @@ class EscalaModelo {
 
   EscalaModelo(
       {this.id = "",
+      required this.porta01,
+      required this.banheiroFeminino,
       required this.primeiraHoraPulpito,
       required this.segundaHoraPulpito,
       required this.primeiraHoraEntrada,
@@ -31,6 +35,8 @@ class EscalaModelo {
 
   factory EscalaModelo.fromJson(Map<dynamic, dynamic> json) {
     return EscalaModelo(
+        porta01: json['porta01'] as String,
+        banheiroFeminino: json['banheiroFeminino'] as String,
         primeiraHoraPulpito: json['primeiraHoraPulpito'] as String,
         segundaHoraPulpito: json['segundaHoraPulpito'] as String,
         primeiraHoraEntrada: json['primeiraHoraEntrada'] as String,
@@ -50,6 +56,8 @@ class EscalaModelo {
   ) {
     final data = snapshot.data();
     return EscalaModelo(
+      porta01: data?['porta01'],
+      banheiroFeminino: data?['banheiroFeminino'],
       primeiraHoraPulpito: data?['primeiraHoraPulpito'],
       segundaHoraPulpito: data?['segundaHoraPulpito'],
       primeiraHoraEntrada: data?['primeiraHoraEntrada'],

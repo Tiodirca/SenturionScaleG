@@ -27,7 +27,7 @@ class Textos {
   static String labelSwitchServirSantaCeia = "Servir Santa Ceia";
   static String labelSwitchIrmaoReserva = "Irmão(a) Reserva";
 
-  static String msgComecoHorarioEscala = "Começa às : ";
+  static String msgComecoHorarioEscala = "Começo : ";
   static String msgTrocaHorarioEscala = "Troca às : ";
 
   // TELA CADASTRO E SELECAO DE VOLUNTARIOS
@@ -121,6 +121,8 @@ class Textos {
   static String labelExcluir = "Excluir";
   static String labelHorarioTroca = "Horários de troca";
   static String labelData = "Data";
+  static String labelPorta01 = "Porta 01";
+  static String labelBanheiroFeminino = "Banheiro Feminino";
   static String labelPrimeiroHoraPulpito = "1° Hora Pulpito";
   static String labelSegundoHoraPulpito = "2° Hora Pulpito";
   static String labelPrimeiroHoraEntrada = "1° Hora Entrada";

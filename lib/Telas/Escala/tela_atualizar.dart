@@ -51,6 +51,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
   TextEditingController ctMesaApoio = TextEditingController(text: "");
   TextEditingController ctServirSantaCeia = TextEditingController(text: "");
   TextEditingController ctIrmaoReserva = TextEditingController(text: "");
+  TextEditingController ctPorta01 = TextEditingController(text: "");
+  TextEditingController ctBanheiroFeminino = TextEditingController(text: "");
 
   Widget camposFormulario(
           double larguraTela, TextEditingController controller, String label) =>
@@ -183,6 +185,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
     ctMesaApoio.text = element.mesaApoio;
     ctServirSantaCeia.text = element.servirSantaCeia;
     ctIrmaoReserva.text = element.irmaoReserva;
+    ctPorta01.text = element.porta01;
+    ctBanheiroFeminino.text = element.banheiroFeminino;
 
     dataSelecionada =
         DateFormat("dd/MM/yyyy EEEE", "pt_BR").parse(element.dataCulto);
@@ -365,15 +369,21 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
     String mesaApoio = "";
     String servirSantaCeia = "";
     String irmaoReserva = "";
+    String porta01 = "";
+    String banheiroFeminino = "";
 
     if (exibirSoCamposCooperadora) {
       primeiroHoraPulpito = "";
       segundoHoraPulpito = "";
       mesaApoio = ctMesaApoio.text;
+      banheiroFeminino = ctBanheiroFeminino.text;
+      porta01 = "";
     } else {
       primeiroHoraPulpito = ctPrimeiroHoraPulpito.text;
       segundoHoraPulpito = ctSegundoHoraPulpito.text;
       mesaApoio = "";
+      porta01 = ctPorta01.text;
+      banheiroFeminino = "";
     }
     if (exibirCampoServirSantaCeia) {
       servirSantaCeia = ctServirSantaCeia.text;
@@ -394,6 +404,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
           .collection(Constantes.fireBaseDadosCadastrados)
           .doc(widget.escalaModelo.id)
           .set({
+        Constantes.porta01: porta01,
+        Constantes.banheiroFeminino: banheiroFeminino,
         Constantes.primeiraHoraPulpito: primeiroHoraPulpito,
         Constantes.segundaHoraPulpito: segundoHoraPulpito,
         Constantes.primeiraHoraEntrada: ctPrimeiroHoraEntrada.text,
@@ -589,6 +601,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
                                       visible: !exibirSoCamposCooperadora,
                                       child: Wrap(
                                         children: [
+                                          camposFormulario(larguraTela,
+                                              ctPorta01, Textos.labelPorta01),
                                           camposFormulario(
                                               larguraTela,
                                               ctPrimeiroHoraPulpito,
@@ -599,6 +613,13 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
                                               Textos.labelSegundoHoraPulpito),
                                         ],
                                       )),
+                                  Visibility(
+                                    visible: exibirSoCamposCooperadora,
+                                    child: camposFormulario(
+                                        larguraTela,
+                                        ctBanheiroFeminino,
+                                        Textos.labelBanheiroFeminino),
+                                  ),
                                   camposFormulario(
                                       larguraTela,
                                       ctPrimeiroHoraEntrada,

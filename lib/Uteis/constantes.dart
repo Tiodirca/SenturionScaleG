@@ -39,6 +39,8 @@ class Constantes {
 
   // dados da escala de trabalho
   static const idItem = "id";
+  static const porta01 = "porta01";
+  static const banheiroFeminino = "banheiroFeminino";
   static const primeiraHoraPulpito = "primeiraHoraPulpito";
   static const segundaHoraPulpito = "segundaHoraPulpito";
   static const primeiraHoraEntrada = "primeiraHoraEntrada";

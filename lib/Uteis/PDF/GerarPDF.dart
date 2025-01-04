@@ -27,10 +27,11 @@ class GerarPDF {
   pegarDados() {
     listaLegenda.addAll([Textos.labelData]);
     if (exibirMesaApoio) {
-      listaLegenda.addAll([Textos.labelMesaApoio]);
+      listaLegenda.addAll([Textos.labelBanheiroFeminino,Textos.labelMesaApoio]);
     }
     if (exibirMesaApoio == false) {
       listaLegenda.addAll([
+        Textos.labelPorta01,
         Textos.labelPrimeiroHoraPulpito,
         Textos.labelSegundoHoraPulpito,
       ]);
@@ -165,6 +166,7 @@ class GerarPDF {
         ...escala.map((e) {
           return [
             e.dataCulto,
+            e.banheiroFeminino,
             e.mesaApoio,
             e.primeiraHoraEntrada,
             e.segundaHoraEntrada,
@@ -181,6 +183,7 @@ class GerarPDF {
         listaLegenda,
         ...escala.map((e) => [
               e.dataCulto,
+              e.porta01,
               e.primeiraHoraPulpito,
               e.segundaHoraPulpito,
               e.primeiraHoraEntrada,

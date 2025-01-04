@@ -45,6 +45,8 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
   TextEditingController ctMesaApoio = TextEditingController(text: "");
   TextEditingController ctServirSantaCeia = TextEditingController(text: "");
   TextEditingController ctIrmaoReserva = TextEditingController(text: "");
+  TextEditingController ctPorta01 = TextEditingController(text: "");
+  TextEditingController ctBanheiroFeminino = TextEditingController(text: "");
 
   Widget camposFormulario(
           double larguraTela, TextEditingController controller, String label) =>
@@ -172,15 +174,21 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
     String mesaApoio = "";
     String servirSantaCeia = "";
     String irmaoReserva = "";
+    String porta01 = "";
+    String banheiroFeminino = "";
 
     if (exibirSoCamposCooperadora) {
       primeiroHoraPulpito = "";
       segundoHoraPulpito = "";
       mesaApoio = ctMesaApoio.text;
+      banheiroFeminino = ctBanheiroFeminino.text;
+      porta01 = "";
     } else {
       primeiroHoraPulpito = ctPrimeiroHoraPulpito.text;
       segundoHoraPulpito = ctSegundoHoraPulpito.text;
       mesaApoio = "";
+      porta01 = ctPorta01.text;
+      banheiroFeminino = "";
     }
     if (exibirCampoServirSantaCeia) {
       servirSantaCeia = ctServirSantaCeia.text;
@@ -201,6 +209,8 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
           .collection(Constantes.fireBaseDadosCadastrados)
           .doc()
           .set({
+        Constantes.porta01: porta01,
+        Constantes.banheiroFeminino: banheiroFeminino,
         Constantes.primeiraHoraPulpito: primeiroHoraPulpito,
         Constantes.segundaHoraPulpito: segundoHoraPulpito,
         Constantes.primeiraHoraEntrada: ctPrimeiroHoraEntrada.text,
@@ -213,16 +223,15 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
         Constantes.horarioTroca: horarioTroca,
         Constantes.irmaoReserva: irmaoReserva,
       });
-      MetodosAuxiliares.exibirMensagens(
-          Textos.sucessoMsgAdicionarItemEscala, Textos.tipoNotificacaoSucesso, context);
+      MetodosAuxiliares.exibirMensagens(Textos.sucessoMsgAdicionarItemEscala,
+          Textos.tipoNotificacaoSucesso, context);
       setState(() {
         limparValoresCampos();
         exibirTelaCarregamento = false;
       });
     } catch (e) {
-
-      MetodosAuxiliares.exibirMensagens(
-          Textos.erroMsgAdicionarItemEscala, Textos.tipoNotificacaoErro, context);
+      MetodosAuxiliares.exibirMensagens(Textos.erroMsgAdicionarItemEscala,
+          Textos.tipoNotificacaoErro, context);
       setState(() {
         exibirTelaCarregamento = false;
       });
@@ -540,6 +549,10 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                                         children: [
                                           camposFormulario(
                                               larguraTela,
+                                              ctPorta01,
+                                              Textos.labelPorta01),
+                                          camposFormulario(
+                                              larguraTela,
                                               ctPrimeiroHoraPulpito,
                                               Textos.labelPrimeiroHoraPulpito),
                                           camposFormulario(
@@ -548,6 +561,11 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                                               Textos.labelSegundoHoraPulpito),
                                         ],
                                       )),
+                                  Visibility(
+                                    visible: exibirSoCamposCooperadora,
+                                    child: camposFormulario(larguraTela,
+                                        ctBanheiroFeminino, Textos.labelBanheiroFeminino),
+                                  ),
                                   camposFormulario(
                                       larguraTela,
                                       ctPrimeiroHoraEntrada,

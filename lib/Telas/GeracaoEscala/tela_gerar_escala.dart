@@ -40,7 +40,9 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
 
   List<String> nomeVoluntarios = [];
   List<EscalaModelo> escalaSorteada = [];
-  List<String> locaisSorteioCooperadores = [
+  List<String> locaisSorteioVoluntarios = [
+    Constantes.porta01,
+    Constantes.banheiroFeminino,
     Constantes.primeiraHoraPulpito,
     Constantes.segundaHoraPulpito,
     Constantes.primeiraHoraEntrada,
@@ -72,7 +74,7 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
         Constantes.fireBaseDocumentoCooperadores) {
       // caso o tipo de voluntario seja diferente do parametro
       // passado entrar no if e remover os seguintes elementos
-      locaisSorteioCooperadores.removeWhere((element) =>
+      locaisSorteioVoluntarios.removeWhere((element) =>
           element.contains(
             Constantes.primeiraHoraPulpito,
           ) ||
@@ -81,10 +83,17 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
           ) ||
           element.contains(
             Constantes.recolherOferta,
+          ) ||
+          element.contains(
+            Constantes.porta01,
           ));
     } else {
-      locaisSorteioCooperadores.removeWhere((element) => element.contains(
+      locaisSorteioVoluntarios.removeWhere((element) =>
+          element.contains(
             Constantes.mesaApoio,
+          ) ||
+          element.contains(
+            Constantes.banheiroFeminino,
           ));
     }
     //adicionando o nome dos voluntarios a uma lista de String
@@ -105,7 +114,6 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
             Constantes.diaDomingo);
   }
 
-
   // metodo para realizar o sorteio dos nomes nos locais de trabalho
   fazerSorteio() {
     setState(() {
@@ -121,13 +129,13 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
     sortearNomesSemRepeticao(numeroRandomico);
     for (var elemento in widget.intervaloTrabalho) {
       // fazendo a iteracao baseado na quantidade de dias selecionados no intervalo de trabalho
-      for (int index = 0; index < locaisSorteioCooperadores.length; index++) {
+      for (int index = 0; index < locaisSorteioVoluntarios.length; index++) {
         // fazendo iteracao baseado na quantidade de locais de trabalho disponiveis
         // a cada interacao a LINHA vai receber um ELEMENTO/LOCAL de trabalho baseado
         // no index que esta e vai atribuir um NOME DE VOLUNTARIO a esse LOCAL da
         // LINHA baseado no valor que a LISTA de NUMEROS AUXILIAR recebeu para que
         // não haja repeticao de nomes na mesma LINHA
-        linha[locaisSorteioCooperadores.elementAt(index)] = nomeVoluntarios
+        linha[locaisSorteioVoluntarios.elementAt(index)] = nomeVoluntarios
             .elementAt(listaNumeroAuxiliarRepeticao.elementAt(index));
       }
       String horarioTroca = "";
@@ -148,6 +156,14 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
           // verificando qual o tipo de voluntario para
           // preencher o capo com a informacao
           // correspondente ao tipo de voluntario
+          porta01: widget.tipoCadastroVoluntarios ==
+                  Constantes.fireBaseDocumentoCooperadores
+              ? linha[Constantes.porta01]
+              : "",
+          banheiroFeminino: widget.tipoCadastroVoluntarios ==
+                  Constantes.fireBaseDocumentoCooperadores
+              ? ""
+              : linha[Constantes.banheiroFeminino],
           primeiraHoraEntrada: linha[Constantes.primeiraHoraEntrada],
           segundaHoraEntrada: linha[Constantes.segundaHoraEntrada],
           primeiraHoraPulpito: widget.tipoCadastroVoluntarios ==
@@ -188,7 +204,7 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
   // metodo para chamar o sorteio de nomes sem repeticao
   sortearNomesSemRepeticao(int numeroRandomico) {
     listaNumeroAuxiliarRepeticao.clear(); //limpando lista
-    for (var element in locaisSorteioCooperadores) {
+    for (var element in locaisSorteioVoluntarios) {
       // para cada interacao sortear um numero entre 0 e o
       // tamanho da lista de locais de trabalho
       numeroRandomico = random.nextInt(nomeVoluntarios.length);
@@ -273,6 +289,9 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
           .collection(Constantes.fireBaseDadosCadastrados)
           .doc()
           .set({
+        // adicionando cada item da escala para poder ser gravado online
+        Constantes.porta01 : escala.porta01.toString(),
+        Constantes.banheiroFeminino : escala.banheiroFeminino.toString(),
         Constantes.primeiraHoraPulpito: escala.primeiraHoraPulpito.toString(),
         Constantes.segundaHoraPulpito: escala.segundaHoraPulpito.toString(),
         Constantes.primeiraHoraEntrada: escala.primeiraHoraEntrada.toString(),

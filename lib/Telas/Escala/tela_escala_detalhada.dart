@@ -30,6 +30,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
   bool exibirOcultarCampoIrmaoReserva = false;
   bool exibirOcultarCampoMesaApoio = false;
   bool exibirOcultarServirSantaCeia = false;
+  bool exibirPortaBanheiroFeminino = false;
   late List<EscalaModelo> escala;
   bool exibirWidgetCarregamento = true;
   bool exibirOcultarBtnAcao = true;
@@ -139,6 +140,14 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
         break;
       } else {
         exibirOcultarServirSantaCeia = false;
+      }
+    }
+    for (var element in escala) {
+      if (element.banheiroFeminino.isNotEmpty) {
+        exibirPortaBanheiroFeminino = true;
+        break;
+      } else {
+        exibirPortaBanheiroFeminino = false;
       }
     }
   }
@@ -414,6 +423,25 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                       visible:
                                                           !exibirOcultarCampoMesaApoio,
                                                       child: Text(
+                                                          Textos.labelPorta01,
+                                                          textAlign:
+                                                              TextAlign.center),
+                                                    )),
+                                                    DataColumn(
+                                                        label: Visibility(
+                                                      visible:
+                                                          exibirOcultarCampoMesaApoio,
+                                                      child: Text(
+                                                          Textos
+                                                              .labelBanheiroFeminino,
+                                                          textAlign:
+                                                              TextAlign.center),
+                                                    )),
+                                                    DataColumn(
+                                                        label: Visibility(
+                                                      visible:
+                                                          !exibirOcultarCampoMesaApoio,
+                                                      child: Text(
                                                           Textos
                                                               .labelPrimeiroHoraPulpito,
                                                           textAlign:
@@ -531,6 +559,32 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                                         TextAlign
                                                                             .center),
                                                               ))),
+                                                          DataCell(Visibility(
+                                                            visible:
+                                                                !exibirOcultarCampoMesaApoio,
+                                                            child: SizedBox(
+                                                                width: 90,
+                                                                //SET width
+                                                                child: Text(
+                                                                    item
+                                                                        .porta01,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center)),
+                                                          )),
+                                                          DataCell(Visibility(
+                                                            visible:
+                                                                exibirOcultarCampoMesaApoio,
+                                                            child: SizedBox(
+                                                                width: 90,
+                                                                //SET width
+                                                                child: Text(
+                                                                    item
+                                                                        .banheiroFeminino,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center)),
+                                                          )),
                                                           DataCell(Visibility(
                                                             visible:
                                                                 !exibirOcultarCampoMesaApoio,
