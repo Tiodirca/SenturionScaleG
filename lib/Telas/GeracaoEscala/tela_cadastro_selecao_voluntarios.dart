@@ -357,6 +357,17 @@ class _TelaCadastroSelecaoVoluntariosState
                                                     : 200,
                                                 child: TextFormField(
                                                   controller: nomeVoluntario,
+                                                  onFieldSubmitted: (value) {
+                                                    // ao apertar a tecla ENTER ele faz o cadastro do usuario
+                                                    if (validacaoFormulario
+                                                        .currentState!
+                                                        .validate()) {
+                                                      setState(() {
+                                                        cadastrarNomeVoluntario(
+                                                            nomeVoluntario.text);
+                                                      });
+                                                    }
+                                                  },
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
                                                       return Textos

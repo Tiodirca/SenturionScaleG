@@ -15,6 +15,7 @@ class GerarPDF {
   bool exibirRecolherOferta;
   bool exibirIrmaoReserva;
   bool exibirServirSantaCeia;
+  String fechamentoIgreja;
 
   GerarPDF(
       {required this.escala,
@@ -22,12 +23,14 @@ class GerarPDF {
       required this.exibirMesaApoio,
       required this.exibirRecolherOferta,
       required this.exibirIrmaoReserva,
-      required this.exibirServirSantaCeia});
+      required this.exibirServirSantaCeia,
+      this.fechamentoIgreja = ""});
 
   pegarDados() {
     listaLegenda.addAll([Textos.labelData]);
     if (exibirMesaApoio) {
-      listaLegenda.addAll([Textos.labelBanheiroFeminino,Textos.labelMesaApoio]);
+      listaLegenda
+          .addAll([Textos.labelBanheiroFeminino, Textos.labelMesaApoio]);
     }
     if (exibirMesaApoio == false) {
       listaLegenda.addAll([
@@ -136,7 +139,10 @@ class GerarPDF {
                   } else {
                     return pdfLib.Container(
                       margin: pdfLib.EdgeInsets.all(10.0),
-                      child: pdfLib.Text(Textos.descricaoObsPDF,
+                      child: pdfLib.Text(
+                          Textos.inicioDescricaoFechamento +
+                              fechamentoIgreja +
+                              Textos.finalDescricaoFechamento,
                           textAlign: pdfLib.TextAlign.center,
                           style: pdfLib.TextStyle(
                               fontWeight: pdfLib.FontWeight.bold)),

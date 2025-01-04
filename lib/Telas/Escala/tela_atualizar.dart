@@ -440,15 +440,16 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
     // verificando se a data corresponde a um dia do fim de semana
     if (data.contains(Constantes.sabado) || data.contains(Constantes.domingo)) {
       setState(() {
-        horarioTroca = "Começa às : "
-            "${prefs.getString(Constantes.shareHorarioInicialFSemana) ?? ''}"
-            " e troca às : ${prefs.getString(Constantes.shareHorarioTrocaFsemana) ?? ''} ";
+        horarioTroca = Textos.msgComecoHorarioEscala +
+            "${prefs.getString(Constantes.shareHorarioInicialFSemana) ?? ''}" +
+            Textos.msgTrocaHorarioEscala +
+            "${prefs.getString(Constantes.shareHorarioTrocaFsemana) ?? ''} ";
       });
     } else {
       setState(() {
-        horarioTroca = "Começa às : "
-            "${prefs.getString(Constantes.shareHorarioInicialSemana) ?? ''}"
-            " e troca às : "
+        horarioTroca = Textos.msgComecoHorarioEscala +
+            "${prefs.getString(Constantes.shareHorarioInicialSemana) ?? ''}" +
+        Textos.msgTrocaHorarioEscala +
             "${prefs.getString(Constantes.shareHorarioTrocaSemana) ?? ''} ";
       });
     }

@@ -1,6 +1,6 @@
 class Textos {
   static String nomeApp = "Senturion Scale G";
-  static String versaoApp = "Versão : 1.1.0";
+  static String versaoApp = "Versão : 1.2.0";
 
   //BOTOES
   static String btnCooperadores = "Cooperadores";
@@ -27,8 +27,8 @@ class Textos {
   static String labelSwitchServirSantaCeia = "Servir Santa Ceia";
   static String labelSwitchIrmaoReserva = "Irmão(a) Reserva";
 
-  static String msgComecoHorarioEscala = "Começo : ";
-  static String msgTrocaHorarioEscala = "Troca às : ";
+  static String msgComecoHorarioEscala = "Começar às : ";
+  static String msgTrocaHorarioEscala = " Trocar às: ";
 
   // TELA CADASTRO E SELECAO DE VOLUNTARIOS
   static String tituloTelaCadastroSelecaoVoluntarios =
@@ -187,6 +187,9 @@ class Textos {
   static String alertaOpcoesData = "Selecione um opção";
   static String descricaoalertaOpcoesData =
       "Para indicar na data selecionada que será culto do departamento escolhido";
+  static String tituloFechamentoIgreja = "Seleção Fechamento Igreja";
+  static String descricaoFechamentoIgreja = "Selecione qual horario, ficará encarregado"
+      " de fechar a Igreja ao final do culto";
 
   //STRINGS PAGINA EM PDF
   static String txtCabecalhoPDF =
@@ -195,10 +198,12 @@ class Textos {
       "Quem sua mão ao arado já pois, constante precisa ser.";
   static String nomeIgreja = "ADTL Parque São Carlos";
   static String txtGeradoApk = "Escala criada por Senturion Scale G";
-  static String descricaoObsPDF = "OBS: O irmão que está escalado no 2° horário do pulpito,"
-      " está RESPONSAVEL por FECHAR a IGREJA ao final dos CULTOS. Deve-se esperar"
+
+  static String inicioDescricaoFechamento = "OBS: O irmão que está escalado no ";
+  static String finalDescricaoFechamento = " está responsavel por FECHAR a IGREJA ao final dos CULTOS."
+      " Deve-se esperar"
       " todos SAIREM da nave da igreja para fechar,principalmente aos domingos";
 
-  static String descricaoObsPDFConversa = "Obreiros(as) Escalados na PORTA fica PROIBIDO "
+  static String descricaoObsPDFConversa = "Obreiros(as) Escalados na PORTA DE ENTRADA /PORTAO fica PROIBIDO "
       "CONVERSAS PARELELAS no PERIODO do CULTO ou ANTES DO CULTO ";
 }
