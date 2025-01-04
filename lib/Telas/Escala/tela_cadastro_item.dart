@@ -401,6 +401,11 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
             complementoDataDepartamento = Textos.departamentoSede;
           });
           break;
+        case 10:
+          setState(() {
+            complementoDataDepartamento = Textos.departamentoFamilia;
+          });
+          break;
       }
     });
   }
@@ -434,6 +439,7 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                 radioButtonComplementoData(7, Textos.departamentoCampanha),
                 radioButtonComplementoData(8, Textos.departamentoEbom),
                 radioButtonComplementoData(9, Textos.departamentoSede),
+                radioButtonComplementoData(10, Textos.departamentoFamilia),
               ],
             ),
           ),

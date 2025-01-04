@@ -405,6 +405,13 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
                                                     : 200,
                                                 child: TextFormField(
                                                   controller: nomeEscala,
+                                                  onFieldSubmitted: (value) {
+                                                    if (validacaoFormulario
+                                                        .currentState!
+                                                        .validate()) {
+                                                      fazerSorteio();
+                                                    }
+                                                  },
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
                                                       return Textos

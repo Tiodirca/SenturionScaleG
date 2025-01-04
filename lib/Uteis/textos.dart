@@ -149,6 +149,7 @@ class Textos {
   static String departamentoCampanha = "Campanha";
   static String departamentoEbom = "EBOM";
   static String departamentoSede = "Evento Sede";
+  static String departamentoFamilia = "Familia";
 
   // mensagens de sucesso ou erro nas acoes de cadastro e exclusao
   static String tipoNotificacaoSucesso = "Sucesso";
