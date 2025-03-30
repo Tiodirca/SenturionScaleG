@@ -30,7 +30,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
   bool exibirOcultarCampoIrmaoReserva = false;
   bool exibirOcultarCampoMesaApoio = false;
   bool exibirOcultarServirSantaCeia = false;
-  bool exibirPortaBanheiroFeminino = false;
+  bool exibirPortaBanheiroFeminino = true;
   late List<EscalaModelo> escala;
   bool exibirWidgetCarregamento = true;
   bool exibirOcultarBtnAcao = true;
@@ -144,10 +144,10 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
     }
     for (var element in escala) {
       if (element.banheiroFeminino.isNotEmpty) {
-        exibirPortaBanheiroFeminino = true;
+        //exibirPortaBanheiroFeminino = true;
         break;
       } else {
-        exibirPortaBanheiroFeminino = false;
+        //exibirPortaBanheiroFeminino = false;
       }
     }
   }
@@ -175,19 +175,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
     );
   }
 
-  // metodo para chamar a geracao do arquivo em pdf
-  // e permitir o usuario baixar o arquivo
-  chamarGerarArquivoPDF(String fechamentoIgreja) {
-    GerarPDF gerarPDF = GerarPDF(
-        escala: escala,
-        nomeEscala: widget.nomeTabela,
-        exibirMesaApoio: exibirOcultarCampoMesaApoio,
-        exibirRecolherOferta: exibirOcultarCampoRecolherOferta,
-        exibirIrmaoReserva: exibirOcultarCampoIrmaoReserva,
-        exibirServirSantaCeia: exibirOcultarServirSantaCeia,
-        fechamentoIgreja: fechamentoIgreja);
-    gerarPDF.pegarDados();
-  }
+
 
   Widget botoesAcoes(
           String nomeBotao, IconData icone, double largura, double altura) =>
@@ -204,11 +192,15 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               onPressed: () async {
                 if (nomeBotao == Textos.btnBaixar) {
-                  if (exibirOcultarCampoMesaApoio) {
-                    chamarGerarArquivoPDF("");
-                  } else {
-                    alertaSelecaoFechamentoIgreja(context);
-                  }
+                  GerarPDF gerarPDF = GerarPDF(
+                      escala: escala,
+                      nomeEscala: widget.nomeTabela,
+                      exibirMesaApoio: exibirOcultarCampoMesaApoio,
+                      exibirRecolherOferta: exibirOcultarCampoRecolherOferta,
+                      exibirIrmaoReserva: exibirOcultarCampoIrmaoReserva,
+                      exibirServirSantaCeia: exibirOcultarServirSantaCeia,
+                      fechamentoIgreja: Textos.labelPrimeiroHoraPulpito);
+                  gerarPDF.pegarDados();
                 } else if (nomeBotao == Textos.btnAdicionar) {
                   var dados = {};
                   dados[Constantes.rotaArgumentoNomeEscala] = widget.nomeTabela;
@@ -237,62 +229,6 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                   )
                 ],
               )));
-
-  Future<void> alertaSelecaoFechamentoIgreja(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            Textos.tituloFechamentoIgreja,
-            style: const TextStyle(color: Colors.black),
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  Textos.descricaoFechamentoIgreja,
-                  style: const TextStyle(color: Colors.black),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                Textos.labelPrimeiroHoraPulpito,
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () {
-                setState(() {
-                  // falso PARA DEFINIR que quem está no primeiro horario ira fechar a igreja
-                  chamarGerarArquivoPDF(Textos.labelPrimeiroHoraPulpito);
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(
-                Textos.labelSegundoHoraPulpito,
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () {
-                setState(() {
-                  // true PARA DEFINIR que quem está no segundo horario ira fechar a igreja
-                  chamarGerarArquivoPDF(Textos.labelSegundoHoraPulpito);
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   Future<void> alertaExclusao(EscalaModelo escala, BuildContext context) async {
     return showDialog<void>(
@@ -475,29 +411,10 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                     DataColumn(
                                                       label: Text(
                                                           Textos
-                                                              .labelHorarioTroca,
+                                                              .labelHorario,
                                                           textAlign:
                                                               TextAlign.center),
                                                     ),
-                                                    DataColumn(
-                                                        label: Visibility(
-                                                      visible:
-                                                          !exibirOcultarCampoMesaApoio,
-                                                      child: Text(
-                                                          Textos.labelPorta01,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    )),
-                                                    DataColumn(
-                                                        label: Visibility(
-                                                      visible:
-                                                          exibirOcultarCampoMesaApoio,
-                                                      child: Text(
-                                                          Textos
-                                                              .labelBanheiroFeminino,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    )),
                                                     DataColumn(
                                                         label: Visibility(
                                                       visible:
@@ -509,28 +426,11 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                               TextAlign.center),
                                                     )),
                                                     DataColumn(
-                                                        label: Visibility(
-                                                      visible:
-                                                          !exibirOcultarCampoMesaApoio,
-                                                      child: Text(
-                                                          Textos
-                                                              .labelSegundoHoraPulpito,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    )),
-                                                    DataColumn(
                                                         label: Text(
                                                             Textos
                                                                 .labelPrimeiroHoraEntrada,
                                                             textAlign: TextAlign
                                                                 .center)),
-                                                    DataColumn(
-                                                      label: Text(
-                                                          Textos
-                                                              .labelSegundoHoraEntrada,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    ),
                                                     DataColumn(
                                                         label: Visibility(
                                                       visible:
@@ -628,46 +528,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                                 //SET width
                                                                 child: Text(
                                                                     item
-                                                                        .porta01,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center)),
-                                                          )),
-                                                          DataCell(Visibility(
-                                                            visible:
-                                                                exibirOcultarCampoMesaApoio,
-                                                            child: SizedBox(
-                                                                width: 90,
-                                                                //SET width
-                                                                child: Text(
-                                                                    item
-                                                                        .banheiroFeminino,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center)),
-                                                          )),
-                                                          DataCell(Visibility(
-                                                            visible:
-                                                                !exibirOcultarCampoMesaApoio,
-                                                            child: SizedBox(
-                                                                width: 90,
-                                                                //SET width
-                                                                child: Text(
-                                                                    item
                                                                         .primeiraHoraPulpito,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center)),
-                                                          )),
-                                                          DataCell(Visibility(
-                                                            visible:
-                                                                !exibirOcultarCampoMesaApoio,
-                                                            child: SizedBox(
-                                                                width: 90,
-                                                                //SET width
-                                                                child: Text(
-                                                                    item
-                                                                        .segundaHoraPulpito,
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center)),
@@ -678,15 +539,6 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                               child: Text(
                                                                   item
                                                                       .primeiraHoraEntrada,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center))),
-                                                          DataCell(SizedBox(
-                                                              width: 90,
-                                                              //SET width
-                                                              child: Text(
-                                                                  item
-                                                                      .segundaHoraEntrada,
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center))),

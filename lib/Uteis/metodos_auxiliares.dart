@@ -86,18 +86,14 @@ class MetodosAuxiliares {
 
     var horarioInicioSemana =
         prefs.getString(Constantes.shareHorarioInicialSemana) ?? '';
-    var horarioTrocaSemana =
-        prefs.getString(Constantes.shareHorarioTrocaSemana) ?? '';
     var horarioInicioFSemana =
         prefs.getString(Constantes.shareHorarioInicialFSemana) ?? '';
-    var horarioTrocaFSemana =
-        prefs.getString(Constantes.shareHorarioTrocaFsemana) ?? '';
 
     if (data.toString().contains(Constantes.diaSabado) ||
         data.toString().contains(Constantes.diaDomingo)) {
-      return "${Textos.msgComecoHorarioEscala} $horarioInicioFSemana ${Textos.msgTrocaHorarioEscala} $horarioTrocaFSemana";
+      return "${Textos.msgComecoHorarioEscala} $horarioInicioFSemana";
     } else {
-      return "${Textos.msgComecoHorarioEscala} $horarioInicioSemana ${Textos.msgTrocaHorarioEscala} $horarioTrocaSemana";
+      return "${Textos.msgComecoHorarioEscala} $horarioInicioSemana";
     }
   }
 }

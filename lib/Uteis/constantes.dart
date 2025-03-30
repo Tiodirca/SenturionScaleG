@@ -76,9 +76,9 @@ class Constantes {
   static const iconeDataCulto = Icons.date_range_outlined;
 
 // Horario padrao de trocas de cooperadores
-  static const horarioInicialSemana = "19:00";
+  static const horarioInicialSemana = "19:20";
   static const horarioTrocaSemana = "20:15";
-  static const horarioInicialFSemana = "18:00";
+  static const horarioInicialFSemana = "17:50";
   static const horarioTrocaFsemana = "19:00";
   static const horarioMudado = "sim";
 

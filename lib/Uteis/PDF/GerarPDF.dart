@@ -30,24 +30,21 @@ class GerarPDF {
     listaLegenda.addAll([Textos.labelData]);
     if (exibirMesaApoio) {
       listaLegenda
-          .addAll([Textos.labelBanheiroFeminino, Textos.labelMesaApoio]);
+          .addAll([Textos.labelMesaApoio]);
     }
     if (exibirMesaApoio == false) {
       listaLegenda.addAll([
-        Textos.labelPorta01,
         Textos.labelPrimeiroHoraPulpito,
-        Textos.labelSegundoHoraPulpito,
       ]);
     }
     listaLegenda.addAll([
       Textos.labelPrimeiroHoraEntrada,
-      Textos.labelSegundoHoraEntrada,
     ]);
 
     listaLegenda.addAll([
       Textos.labelUniforme,
     ]);
-    listaLegenda.addAll([Textos.labelHorarioTroca]);
+    listaLegenda.addAll([Textos.labelHorario]);
     if (exibirServirSantaCeia) {
       listaLegenda.add(Textos.labelServirSantaCeia);
     } else {
@@ -172,10 +169,8 @@ class GerarPDF {
         ...escala.map((e) {
           return [
             e.dataCulto,
-            e.banheiroFeminino,
             e.mesaApoio,
             e.primeiraHoraEntrada,
-            e.segundaHoraEntrada,
             e.uniforme,
             e.horarioTroca,
             e.servirSantaCeia,
@@ -189,11 +184,8 @@ class GerarPDF {
         listaLegenda,
         ...escala.map((e) => [
               e.dataCulto,
-              e.porta01,
               e.primeiraHoraPulpito,
-              e.segundaHoraPulpito,
               e.primeiraHoraEntrada,
-              e.segundaHoraEntrada,
               e.uniforme,
               e.horarioTroca,
               e.servirSantaCeia,

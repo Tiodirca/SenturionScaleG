@@ -248,16 +248,12 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
     if (data.contains(Constantes.sabado) || data.contains(Constantes.domingo)) {
       setState(() {
         horarioTroca = Textos.msgComecoHorarioEscala +
-            "${prefs.getString(Constantes.shareHorarioInicialFSemana) ?? ''}" +
-        Textos.msgTrocaHorarioEscala + "${prefs.getString(
-            Constantes.shareHorarioTrocaFsemana) ?? ''} ";
+            "${prefs.getString(Constantes.shareHorarioInicialFSemana) ?? ''}";
       });
     } else {
       setState(() {
         horarioTroca = Textos.msgComecoHorarioEscala +
-            "${prefs.getString(Constantes.shareHorarioInicialSemana) ?? ''}" +
-        Textos.msgTrocaHorarioEscala +
-            "${prefs.getString(Constantes.shareHorarioTrocaSemana) ?? ''} ";
+            "${prefs.getString(Constantes.shareHorarioInicialSemana) ?? ''}";
       });
     }
   }
