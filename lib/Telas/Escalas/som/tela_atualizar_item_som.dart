@@ -107,7 +107,6 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
                 ],
               )));
 
-
   @override
   void initState() {
     super.initState();
@@ -343,7 +342,12 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
   // ela nos moldes exigidos
   formatarData(DateTime data) {
     String dataFormatada = DateFormat("dd/MM/yyyy EEEE", "pt_BR").format(data);
+    if (complementoDataDepartamento.isNotEmpty &&
+        complementoDataDepartamento != Textos.departamentoCultoLivre) {
+      return "$dataFormatada ( $complementoDataDepartamento )";
+    } else {
       return dataFormatada;
+    }
   }
 
   // metodo para exibir data picker para
@@ -413,7 +417,7 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
                           Navigator.pushReplacementNamed(
                               arguments: dados,
                               context,
-                              Constantes.rotaEscalaDetalhada);
+                              Constantes.rotaEscalaDetalhadaSom);
                         },
                         icon: const Icon(
                           Icons.arrow_back_ios,

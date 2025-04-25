@@ -157,7 +157,12 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
   // ela nos moldes exigidos
   formatarData(DateTime data) {
     String dataFormatada = DateFormat("dd/MM/yyyy EEEE", "pt_BR").format(data);
-    return dataFormatada;
+    if (complementoDataDepartamento.isNotEmpty &&
+        complementoDataDepartamento != Textos.departamentoCultoLivre) {
+      return "$dataFormatada ( $complementoDataDepartamento )";
+    } else {
+      return dataFormatada;
+    }
   }
 
   // metodo para exibir data picker para
