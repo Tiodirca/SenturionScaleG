@@ -29,6 +29,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
   bool exibirOcultarCampoRecolherOferta = false;
   bool exibirOcultarCampoIrmaoReserva = false;
   bool exibirOcultarCampoMesaApoio = false;
+  bool exibirOcultarCampoUniforme = true;
   bool exibirOcultarServirSantaCeia = false;
   bool exibirPortaBanheiroFeminino = true;
   late List<EscalaModelo> escala;
@@ -175,8 +176,6 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
     );
   }
 
-
-
   Widget botoesAcoes(
           String nomeBotao, IconData icone, double largura, double altura) =>
       Container(
@@ -199,7 +198,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                       exibirRecolherOferta: exibirOcultarCampoRecolherOferta,
                       exibirIrmaoReserva: exibirOcultarCampoIrmaoReserva,
                       exibirServirSantaCeia: exibirOcultarServirSantaCeia,
-                      fechamentoIgreja: Textos.labelPrimeiroHoraPulpito);
+                      exibirUniformes: exibirOcultarCampoUniforme);
                   gerarPDF.pegarDados();
                 } else if (nomeBotao == Textos.btnAdicionar) {
                   var dados = {};
@@ -229,6 +228,34 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                   )
                 ],
               )));
+
+  Widget botoesSwitch(String label, bool valorBotao) => SizedBox(
+        width: 180,
+        child: Row(
+          children: [
+            Text(label),
+            Switch(
+                inactiveThumbColor: PaletaCores.corAzulMagenta,
+                value: valorBotao,
+                activeColor: PaletaCores.corAzulMagenta,
+                onChanged: (bool valor) {
+                  setState(() {
+                    mudarSwitch(label, valor);
+                  });
+                })
+          ],
+        ),
+      );
+
+  // metodo para mudar status dos switch
+  mudarSwitch(String label, bool valor) {
+    print(label);
+    if (label == Textos.labelSwitchUniforme) {
+      setState(() {
+        exibirOcultarCampoUniforme = !exibirOcultarCampoUniforme;
+      });
+    }
+  }
 
   Future<void> alertaExclusao(EscalaModelo escala, BuildContext context) async {
     return showDialog<void>(
@@ -410,8 +437,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                                 .center)),
                                                     DataColumn(
                                                       label: Text(
-                                                          Textos
-                                                              .labelHorario,
+                                                          Textos.labelHorario,
                                                           textAlign:
                                                               TextAlign.center),
                                                     ),
@@ -441,11 +467,14 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                               TextAlign.center),
                                                     )),
                                                     DataColumn(
-                                                      label: Text(
+                                                        label: Visibility(
+                                                      visible:
+                                                          exibirOcultarCampoUniforme,
+                                                      child: Text(
                                                           Textos.labelUniforme,
                                                           textAlign:
                                                               TextAlign.center),
-                                                    ),
+                                                    )),
                                                     DataColumn(
                                                         label: Visibility(
                                                       visible:
@@ -555,18 +584,22 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                                         TextAlign
                                                                             .center)),
                                                           )),
-                                                          DataCell(SizedBox(
-                                                              width: 150,
-                                                              //SET width
-                                                              child:
-                                                                  SingleChildScrollView(
-                                                                child: Text(
-                                                                    item
-                                                                        .uniforme,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center),
-                                                              ))),
+                                                          DataCell(Visibility(
+                                                            visible:
+                                                                exibirOcultarCampoUniforme,
+                                                            child: SizedBox(
+                                                                width: 150,
+                                                                //SET width
+                                                                child:
+                                                                    SingleChildScrollView(
+                                                                  child: Text(
+                                                                      item
+                                                                          .uniforme,
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center),
+                                                                )),
+                                                          )),
                                                           DataCell(Visibility(
                                                             visible:
                                                                 exibirOcultarCampoRecolherOferta,
@@ -720,6 +753,8 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                 children: [
                                   botoesAcoes(Textos.btnBaixar,
                                       Constantes.iconeBaixar, 100, 60),
+                                  botoesSwitch(Textos.labelSwitchUniforme,
+                                      exibirOcultarCampoUniforme),
                                   botoesAcoes(Textos.btnAdicionar,
                                       Constantes.iconeAdicionar, 100, 60),
                                 ],

@@ -14,8 +14,8 @@ class GerarPDF {
   bool exibirMesaApoio;
   bool exibirRecolherOferta;
   bool exibirIrmaoReserva;
+  bool exibirUniformes;
   bool exibirServirSantaCeia;
-  String fechamentoIgreja;
 
   GerarPDF(
       {required this.escala,
@@ -24,13 +24,12 @@ class GerarPDF {
       required this.exibirRecolherOferta,
       required this.exibirIrmaoReserva,
       required this.exibirServirSantaCeia,
-      this.fechamentoIgreja = ""});
+      required this.exibirUniformes});
 
   pegarDados() {
     listaLegenda.addAll([Textos.labelData]);
     if (exibirMesaApoio) {
-      listaLegenda
-          .addAll([Textos.labelMesaApoio]);
+      listaLegenda.addAll([Textos.labelMesaApoio]);
     }
     if (exibirMesaApoio == false) {
       listaLegenda.addAll([
@@ -41,9 +40,11 @@ class GerarPDF {
       Textos.labelPrimeiroHoraEntrada,
     ]);
 
-    listaLegenda.addAll([
-      Textos.labelUniforme,
-    ]);
+    if (exibirUniformes) {
+      listaLegenda.addAll([
+        Textos.labelUniforme,
+      ]);
+    }
     listaLegenda.addAll([Textos.labelHorario]);
     if (exibirServirSantaCeia) {
       listaLegenda.add(Textos.labelServirSantaCeia);
@@ -65,7 +66,7 @@ class GerarPDF {
     final pdfLib.Document pdf = pdfLib.Document();
     //definindo que a variavel vai receber o caminho da
     // imagem para serem exibidas
-    final image = (await rootBundle.load('assets/imagens/logo_adtl.png'))
+    final image = (await rootBundle.load('assets/imagens/logo_nova_adtl_psc.png'))
         .buffer
         .asUint8List();
     final imageLogo =
@@ -82,8 +83,7 @@ class GerarPDF {
                   alignment: pdfLib.Alignment.centerRight,
                   child: pdfLib.Column(children: [
                     pdfLib.Image(pdfLib.MemoryImage(image),
-                        width: 50, height: 50),
-                    pdfLib.Text(Textos.nomeIgreja),
+                        width: 60, height: 60),
                   ]),
                 ),
                 pdfLib.SizedBox(height: 5),
@@ -108,13 +108,7 @@ class GerarPDF {
                     alignment: pdfLib.Alignment.centerRight,
                     child: pdfLib.Row(
                         mainAxisAlignment: pdfLib.MainAxisAlignment.end,
-                        children: [
-                          pdfLib.Text(Textos.txtGeradoApk,
-                              textAlign: pdfLib.TextAlign.center),
-                          pdfLib.SizedBox(width: 10),
-                          pdfLib.Image(pdfLib.MemoryImage(imageLogo),
-                              width: 20, height: 20),
-                        ]),
+                        children: []),
                   )),
             ]),
         pageFormat: PdfPageFormat.a4,
@@ -136,10 +130,7 @@ class GerarPDF {
                   } else {
                     return pdfLib.Container(
                       margin: pdfLib.EdgeInsets.all(10.0),
-                      child: pdfLib.Text(
-                          Textos.inicioDescricaoFechamento +
-                              fechamentoIgreja +
-                              Textos.finalDescricaoFechamento,
+                      child: pdfLib.Text(Textos.descricaoFechamento,
                           textAlign: pdfLib.TextAlign.center,
                           style: pdfLib.TextStyle(
                               fontWeight: pdfLib.FontWeight.bold)),
@@ -163,7 +154,7 @@ class GerarPDF {
   }
 
   listagemDados() {
-    if (exibirMesaApoio) {
+    if (exibirMesaApoio && exibirUniformes == true) {
       return <List<String>>[
         listaLegenda,
         ...escala.map((e) {
@@ -179,7 +170,7 @@ class GerarPDF {
           ];
         }),
       ];
-    } else {
+    } else if (exibirMesaApoio == false && exibirUniformes == true) {
       return <List<String>>[
         listaLegenda,
         ...escala.map((e) => [
@@ -187,6 +178,35 @@ class GerarPDF {
               e.primeiraHoraPulpito,
               e.primeiraHoraEntrada,
               e.uniforme,
+              e.horarioTroca,
+              e.servirSantaCeia,
+              e.recolherOferta,
+              e.irmaoReserva
+            ])
+      ];
+    }
+    if (exibirMesaApoio && exibirUniformes == false) {
+      return <List<String>>[
+        listaLegenda,
+        ...escala.map((e) {
+          return [
+            e.dataCulto,
+            e.mesaApoio,
+            e.primeiraHoraEntrada,
+            e.horarioTroca,
+            e.servirSantaCeia,
+            e.recolherOferta,
+            e.irmaoReserva
+          ];
+        }),
+      ];
+    } else if (exibirMesaApoio == false && exibirUniformes == false) {
+      return <List<String>>[
+        listaLegenda,
+        ...escala.map((e) => [
+              e.dataCulto,
+              e.primeiraHoraPulpito,
+              e.primeiraHoraEntrada,
               e.horarioTroca,
               e.servirSantaCeia,
               e.recolherOferta,

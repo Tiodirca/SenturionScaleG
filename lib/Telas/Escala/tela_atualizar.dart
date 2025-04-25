@@ -34,7 +34,7 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
   Estilo estilo = Estilo();
   bool exibirCampoServirSantaCeia = false;
   bool exibirSoCamposCooperadora = false;
-  bool exbirCampoIrmaoReserva = false;
+  bool exibirOcultarCamposNaoUsados = false;
   bool exibirWidgetCarregamento = true;
   String complementoDataDepartamento = Textos.departamentoCultoLivre;
   int valorRadioButton = 0;
@@ -145,10 +145,9 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
         exibirSoCamposCooperadora = !valor;
         exibirSoCamposCooperadora = valor;
       });
-    } else if (label == Textos.labelSwitchIrmaoReserva) {
+    } else if (label == Textos.labelSwitchExibirCampos) {
       setState(() {
-        exbirCampoIrmaoReserva = !valor;
-        exbirCampoIrmaoReserva = valor;
+        exibirOcultarCamposNaoUsados = !exibirOcultarCamposNaoUsados;
       });
     } else if (label == Textos.labelSwitchServirSantaCeia) {
       setState(() {
@@ -198,11 +197,6 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
     if (element.servirSantaCeia.isNotEmpty) {
       setState(() {
         exibirCampoServirSantaCeia = true;
-      });
-    }
-    if (element.irmaoReserva.isNotEmpty) {
-      setState(() {
-        exbirCampoIrmaoReserva = true;
       });
     }
     if (element.primeiraHoraPulpito.isEmpty &&
@@ -374,7 +368,6 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
     String segundoHoraPulpito = "";
     String mesaApoio = "";
     String servirSantaCeia = "";
-    String irmaoReserva = "";
     String porta01 = "";
     String banheiroFeminino = "";
 
@@ -397,11 +390,6 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
       servirSantaCeia = "";
     }
 
-    if (exbirCampoIrmaoReserva) {
-      irmaoReserva = ctIrmaoReserva.text;
-    } else {
-      irmaoReserva = "";
-    }
     try {
       var db = FirebaseFirestore.instance;
       db
@@ -421,8 +409,11 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
         Constantes.mesaApoio: mesaApoio,
         Constantes.servirSantaCeia: servirSantaCeia,
         Constantes.dataCulto: formatarData(dataSelecionada),
-        Constantes.horarioTroca: horarioTroca,
-        Constantes.irmaoReserva: irmaoReserva,
+        Constantes.horarioTroca:
+            complementoDataDepartamento == Textos.departamentoEbom
+                ? Textos.departamentoEbom
+                : horarioTroca,
+        Constantes.irmaoReserva: ctIrmaoReserva.text,
       });
       MetodosAuxiliares.exibirMensagens(Textos.sucessoMsgAtualizarItemEscala,
           Textos.tipoNotificacaoSucesso, context);
@@ -604,37 +595,53 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
                                       visible: !exibirSoCamposCooperadora,
                                       child: Wrap(
                                         children: [
-                                          camposFormulario(larguraTela,
-                                              ctPorta01, Textos.labelPorta01),
+                                          Visibility(
+                                            visible:
+                                                exibirOcultarCamposNaoUsados,
+                                            child: camposFormulario(larguraTela,
+                                                ctPorta01, Textos.labelPorta01),
+                                          ),
                                           camposFormulario(
                                               larguraTela,
                                               ctPrimeiroHoraPulpito,
                                               Textos.labelPrimeiroHoraPulpito),
-                                          camposFormulario(
-                                              larguraTela,
-                                              ctSegundoHoraPulpito,
-                                              Textos.labelSegundoHoraPulpito),
+                                          Visibility(
+                                            visible:
+                                                exibirOcultarCamposNaoUsados,
+                                            child: camposFormulario(
+                                                larguraTela,
+                                                ctSegundoHoraPulpito,
+                                                Textos.labelSegundoHoraPulpito),
+                                          )
                                         ],
                                       )),
                                   Visibility(
-                                    visible: exibirSoCamposCooperadora,
-                                    child: camposFormulario(
-                                        larguraTela,
-                                        ctBanheiroFeminino,
-                                        Textos.labelBanheiroFeminino),
-                                  ),
+                                      visible: exibirSoCamposCooperadora,
+                                      child: Visibility(
+                                        visible: exibirOcultarCamposNaoUsados,
+                                        child: camposFormulario(
+                                            larguraTela,
+                                            ctBanheiroFeminino,
+                                            Textos.labelBanheiroFeminino),
+                                      )),
                                   camposFormulario(
                                       larguraTela,
                                       ctPrimeiroHoraEntrada,
                                       Textos.labelPrimeiroHoraEntrada),
-                                  camposFormulario(
-                                      larguraTela,
-                                      ctSegundoHoraEntrada,
-                                      Textos.labelSegundoHoraEntrada),
-                                  camposFormulario(
-                                      larguraTela,
-                                      ctRecolherOferta,
-                                      Textos.labelRecolherOferta),
+                                  Visibility(
+                                    visible: exibirOcultarCamposNaoUsados,
+                                    child: camposFormulario(
+                                        larguraTela,
+                                        ctSegundoHoraEntrada,
+                                        Textos.labelSegundoHoraEntrada),
+                                  ),
+                                  Visibility(
+                                    visible: !exibirSoCamposCooperadora,
+                                    child: camposFormulario(
+                                        larguraTela,
+                                        ctRecolherOferta,
+                                        Textos.labelRecolherOferta),
+                                  ),
                                   camposFormulario(larguraTela, ctUniforme,
                                       Textos.labelUniforme),
                                   Visibility(
@@ -649,13 +656,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
                                         ctServirSantaCeia,
                                         Textos.labelServirSantaCeia),
                                   ),
-                                  Visibility(
-                                    visible: exbirCampoIrmaoReserva,
-                                    child: camposFormulario(
-                                        larguraTela,
-                                        ctIrmaoReserva,
-                                        Textos.labelIrmaoReserva),
-                                  )
+                                  camposFormulario(larguraTela, ctIrmaoReserva,
+                                      Textos.labelIrmaoReserva),
                                 ],
                               ),
                             ),
@@ -681,8 +683,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
                                     botoesSwitch(
                                         Textos.labelSwitchServirSantaCeia,
                                         exibirCampoServirSantaCeia),
-                                    botoesSwitch(Textos.labelSwitchIrmaoReserva,
-                                        exbirCampoIrmaoReserva)
+                                    botoesSwitch(Textos.labelSwitchExibirCampos,
+                                        exibirOcultarCamposNaoUsados)
                                   ],
                                 ),
                               ),
