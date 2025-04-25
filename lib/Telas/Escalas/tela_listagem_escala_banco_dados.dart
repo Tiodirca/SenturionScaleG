@@ -16,7 +16,6 @@ class TelaListagemTabelasBancoDados extends StatefulWidget {
       _TelaListagemTabelasBancoDadosState();
 }
 
-
 class _TelaListagemTabelasBancoDadosState
     extends State<TelaListagemTabelasBancoDados> {
   String nomeItemDrop = "";
@@ -428,11 +427,21 @@ class _TelaListagemTabelasBancoDadosState
                                                   dados[Constantes
                                                           .rotaArgumentoIDEscalaSelecionada] =
                                                       idTabelaSelecionada;
-                                                  Navigator.pushReplacementNamed(
-                                                      context,
-                                                      Constantes
-                                                          .rotaEscalaDetalhada,
-                                                      arguments: dados);
+                                                  if (nomeTabelaSelecionada
+                                                      .contains(Constantes
+                                                          .argumentoDiferenciarEscalaSom)) {
+                                                    Navigator.pushReplacementNamed(
+                                                        context,
+                                                        Constantes
+                                                            .rotaEscalaDetalhadaSom,
+                                                        arguments: dados);
+                                                  } else {
+                                                    Navigator.pushReplacementNamed(
+                                                        context,
+                                                        Constantes
+                                                            .rotaEscalaDetalhada,
+                                                        arguments: dados);
+                                                  }
                                                 },
                                               ),
                                             )

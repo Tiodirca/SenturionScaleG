@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:senturionscaleg/Telas/Escala/tela_cadastro_item.dart';
-import 'package:senturionscaleg/Telas/Escala/tela_escala_detalhada.dart';
-import 'package:senturionscaleg/Telas/Escala/tela_listagem_escala_banco_dados.dart';
 import 'package:senturionscaleg/Telas/GeracaoEscala/tela_cadastro_selecao_voluntarios.dart';
 import 'package:senturionscaleg/Telas/GeracaoEscala/tela_gerar_escala.dart';
 import 'package:senturionscaleg/Telas/GeracaoEscala/tela_selecao_dias_especifico.dart';
 import 'package:senturionscaleg/Telas/GeracaoEscala/tela_selecao_dias_semana.dart';
 import 'package:senturionscaleg/Telas/GeracaoEscala/tela_selecao_intervalo_trabalho.dart';
-import 'package:senturionscaleg/Telas/Escala/tela_atualizar.dart';
 import 'package:senturionscaleg/Telas/tela_configuracoes.dart';
 import 'package:senturionscaleg/Telas/tela_splash.dart';
 
+import '../Telas/Escalas/som/tela_atualizar_item_som.dart';
+import '../Telas/Escalas/som/tela_cadastro_item_som.dart';
+import '../Telas/Escalas/som/tela_escala_detalhada_som.dart';
+import '../Telas/Escalas/tela_atualizar_item.dart';
+import '../Telas/Escalas/tela_cadastro_item.dart';
+import '../Telas/Escalas/tela_escala_detalhada.dart';
+import '../Telas/Escalas/tela_listagem_escala_banco_dados.dart';
 import '../Telas/tela_inicial.dart';
 import 'constantes.dart';
 
@@ -112,6 +115,18 @@ class Rotas {
         } else {
           return erroRota(settings);
         }
+      case Constantes.rotaEscalaDetalhadaSom:
+        if (args is Map) {
+          return MaterialPageRoute(
+            builder: (_) => TelaEscalaDetalhadaSom(
+              nomeTabela: args[Constantes.rotaArgumentoNomeEscala],
+              idTabelaSelecionada:
+                  args[Constantes.rotaArgumentoIDEscalaSelecionada],
+            ),
+          );
+        } else {
+          return erroRota(settings);
+        }
       case Constantes.rotaCadastroItemEscala:
         if (args is Map) {
           return MaterialPageRoute(
@@ -124,10 +139,35 @@ class Rotas {
         } else {
           return erroRota(settings);
         }
+      case Constantes.rotaCadastroItemEscalaSom:
+        if (args is Map) {
+          return MaterialPageRoute(
+            builder: (_) => TelaCadastroItemSom(
+              nomeTabela: args[Constantes.rotaArgumentoNomeEscala],
+              idTabelaSelecionada:
+                  args[Constantes.rotaArgumentoIDEscalaSelecionada],
+            ),
+          );
+        } else {
+          return erroRota(settings);
+        }
       case Constantes.rotaAtualizarItemEscala:
         if (args is Map) {
           return MaterialPageRoute(
             builder: (_) => TelaAtualizar(
+              nomeTabela: args[Constantes.rotaArgumentoNomeEscala],
+              idTabelaSelecionada:
+                  args[Constantes.rotaArgumentoIDEscalaSelecionada],
+              escalaModelo: args[Constantes.escalaModelo],
+            ),
+          );
+        } else {
+          return erroRota(settings);
+        }
+      case Constantes.rotaAtualizarItemEscalaSom:
+        if (args is Map) {
+          return MaterialPageRoute(
+            builder: (_) => TelaAtualizarItemSom(
               nomeTabela: args[Constantes.rotaArgumentoNomeEscala],
               idTabelaSelecionada:
                   args[Constantes.rotaArgumentoIDEscalaSelecionada],

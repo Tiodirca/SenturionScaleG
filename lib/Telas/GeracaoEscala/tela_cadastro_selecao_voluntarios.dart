@@ -27,6 +27,9 @@ class _TelaCadastroSelecaoVoluntariosState
   List<CheckBoxModelo> listaVoluntariosCadastrados = [];
   List<CheckBoxModelo> listaVoluntariosSelecionados = [];
   bool exibirWidgetCarregamento = true;
+  //quantidade corresponde a quantidade de locais de trabalhos
+  int quantVoluntarios = 6;
+  int quantVoluntariosSom = 3;
   final validacaoFormulario = GlobalKey<FormState>();
   Estilo estilo = Estilo();
   TextEditingController nomeVoluntario = TextEditingController(text: "");
@@ -37,6 +40,9 @@ class _TelaCadastroSelecaoVoluntariosState
     if (widget.tipoCadastroVoluntarios ==
         Constantes.fireBaseDocumentoCooperadores) {
       ordenarCadastroVoluntarios = Constantes.fireBaseDocumentoCooperadores;
+    } else if (widget.tipoCadastroVoluntarios ==
+        Constantes.fireBaseDocumentoSonoplastas) {
+      ordenarCadastroVoluntarios = Constantes.fireBaseDocumentoSonoplastas;
     } else {
       ordenarCadastroVoluntarios = Constantes.fireBaseDocumentoCooperadoras;
     }
@@ -333,7 +339,6 @@ class _TelaCadastroSelecaoVoluntariosState
                                                 widget.tipoCadastroVoluntarios,
                                             textAlign: TextAlign.end),
                                       ),
-
                                       Container(
                                         margin: const EdgeInsets.symmetric(
                                             horizontal: 10.0),
@@ -364,7 +369,8 @@ class _TelaCadastroSelecaoVoluntariosState
                                                         .validate()) {
                                                       setState(() {
                                                         cadastrarNomeVoluntario(
-                                                            nomeVoluntario.text);
+                                                            nomeVoluntario
+                                                                .text);
                                                       });
                                                     }
                                                   },
@@ -489,11 +495,26 @@ class _TelaCadastroSelecaoVoluntariosState
                         heroTag: "avancar",
                         onPressed: () {
                           if (listaVoluntariosSelecionados.isEmpty ||
-                              (listaVoluntariosSelecionados.length < 6)) {
-                            MetodosAuxiliares.exibirMensagens(
-                                Textos.descricaoNoficacaoSelecaoVoluntarios,
-                                Textos.tipoNotificacaoErro,
-                                context);
+                              (listaVoluntariosSelecionados.length < quantVoluntarios &&
+                                  (widget.tipoCadastroVoluntarios !=
+                                          Constantes
+                                              .fireBaseDocumentoSonoplastas ||
+                                      widget.tipoCadastroVoluntarios ==
+                                              Constantes
+                                                  .fireBaseDocumentoSonoplastas &&
+                                          listaVoluntariosSelecionados.length <
+                                              quantVoluntariosSom))) {
+                            if(widget.tipoCadastroVoluntarios == Constantes.fireBaseDocumentoSonoplastas){
+                              MetodosAuxiliares.exibirMensagens(
+                                  Textos.descricaoNoficacaoSelecaoVoluntariosSom,
+                                  Textos.tipoNotificacaoErro,
+                                  context);
+                            }else{
+                              MetodosAuxiliares.exibirMensagens(
+                                  Textos.descricaoNoficacaoSelecaoVoluntarios,
+                                  Textos.tipoNotificacaoErro,
+                                  context);
+                            }
                           } else {
                             redirecionarTela();
                           }

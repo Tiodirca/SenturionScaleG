@@ -1,32 +1,27 @@
 class Textos {
   static String nomeApp = "Senturion Scale G";
-  static String versaoApp = "Versão : 1.3.0";
+  static String versaoApp = "Versão : 2.1.0";
 
   //BOTOES
   static String btnCooperadores = "Cooperadores";
   static String btnCooperadoras = "Cooperadoras";
+  static String btnSonoplastas = "Sonoplastas";
   static String btnCadastro = "Cadastro";
   static String btnAvancar = "Avançar";
   static String btnConfiguracoes = "Configurações";
-  static String btnGerarEscala = "Gerar Escala";
-  static String btnUsarTabela = "Usar está Escala";
+  static String btnGerarEscala = "Gerar Escalas";
+  static String btnUsarTabela = "Usar está Escalas";
   static String btnListarEscalas = "Lista de escalas";
-  static String btnBaixar = "Baixar Escala";
+  static String btnBaixar = "Baixar Escalas";
   static String btnAdicionar = "Adicionar";
   static String btnSalvar = "Salvar";
   static String btnRecarregar = "Recarregar";
   static String btnExcluir = "Excluir";
   static String btnData = "Data";
   static String btnAtualizar = "Atualizar";
-  static String btnVerEscalaAtual = "Escala atual";
+  static String btnVerEscalaAtual = "Escalas atual";
   static String btnOpcoesData = "Opções da data";
   static String btnTelaInicial = "Tela Inicial";
-
-  // label dos switch
-  static String labelSwitchCooperadora = "Cooperadora";
-  static String labelSwitchServirSantaCeia = "Servir Santa Ceia";
-  static String labelSwitchIrmaoReserva = "Irmão(a) Reserva";
-  static String labelSwitchUniforme = "Exibir Uniformes";
 
   static String msgComecoHorarioEscala = "Iniciar às : ";
   static String msgTrocaHorarioEscala = " Trocar às: ";
@@ -71,28 +66,28 @@ class Textos {
   static String descricaoGerarEscala = "Defina o nome que a escala irá receber";
 
   // TELA SELECAO TABELAS
-  static String tituloTelaSelecaoTabelas = "Seleção de Escala";
+  static String tituloTelaSelecaoTabelas = "Seleção de Escalas";
   static String descricaoDropDownTabelas =
       "Utilize o menu abaixo para selecionar uma "
-      "Escala para estar sendo utilizada.";
-  static String descricaoTabelaSelecionada = "A Escala selecionada foi : ";
+      "Escalas para estar sendo utilizada.";
+  static String descricaoTabelaSelecionada = "A Escalas selecionada foi : ";
 
   // LISTAGEM
-  static String tituloTelaEscalaDetalhada = "Escala Detalhada";
+  static String tituloTelaEscalaDetalhada = "Escalas Detalhada";
   static String descricaoTelaListagemItens =
       "Aqui você pode estar vendo a escala completa,"
       "com todos os itens já adicionados. se for necessario"
       " araste a lista para os lados para ver os demais campos.";
 
   // TELA DE CADASTRO DE ITEM
-  static String tituloTelaCadastro = "Cadastro de item na Escala";
+  static String tituloTelaCadastro = "Cadastro de item na Escalas";
 
   static String descricaoTelaCadastro =
       "Preencha os campos abaixo para adicionar "
       "um item a lista que ira compor a escala";
 
   // TELA DE ATUALIZAR ITEM
-  static String tituloTelaAtualizarItem = "Atualizar Item da Escala";
+  static String tituloTelaAtualizarItem = "Atualizar Item da Escalas";
   static String descricaoTelaAtualizarItem =
       "Aqui você pode estar editando os campos para estar "
       "atualizando o item na escala";
@@ -118,6 +113,14 @@ class Textos {
   //TELA DE CARREGAMENTO
   static String descricaoTelaCarregamento = "Aguarde Carregando";
   static String descricaoTipoVoluntario = "Gerando escala de : ";
+
+  // label dos switch
+  static String labelSwitchCooperadora = "Cooperadora";
+  static String labelSwitchServirSantaCeia = "Servir Santa Ceia";
+  static String labelSwitchIrmaoReserva = "Irmão(a) Reserva";
+  static String labelSwitchUniforme = "Exibir Uniformes";
+  static String labelSwitchExibirCampos = "Demais campos";
+
   static String labelEditar = "Editar";
   static String labelExcluir = "Excluir";
   static String labelHorario = "Horario Trabalho";
@@ -134,7 +137,8 @@ class Textos {
   static String labelServirSantaCeia = "Servir Santa Ceia";
   static String labelDataSemana = "dataSemana";
   static String labelIrmaoReserva = "Irmão(a) Reserva";
-  static String labelSwitchExibirCampos = "Demais campos";
+  static String labelSomMesa = "Mesa de Som";
+  static String labelSomNotebook = "Notebook/Projetor";
 
   // data PICKER selecao de data manual
   static String descricaoDataPicker = "Selecione uma data que contenha culto";
@@ -160,6 +164,8 @@ class Textos {
       "Ao realizar a ação solicitada";
   static String descricaoNoficacaoSelecaoVoluntarios =
       "Selecione pelo menos 6 voluntarios";
+  static String descricaoNoficacaoSelecaoVoluntariosSom =
+      "Selecione pelo menos 3 voluntarios";
   static String descricaoNotificacaoSelecaoDiasSemana =
       "Selecione pelo menos 1 dia da semana";
 
@@ -190,13 +196,15 @@ class Textos {
   static String alertaOpcoesData = "Selecione um opção";
   static String descricaoalertaOpcoesData =
       "Para indicar na data selecionada que será culto do departamento escolhido";
+
   //STRINGS PAGINA EM PDF
   static String txtCabecalhoPDF =
-      "Escala  voluntaria de cooperador(a) da ADTL Parque São Carlos";
+      "Escalas  voluntaria de cooperador(a) da ADTL Parque São Carlos";
+
+  static String txtCabecalhoPDFEscalaSom =
+      "Escalas  voluntaria de Sonoplastas da ADTL Parque São Carlos";
   static String txtRodapePDF =
       "Quem sua mão ao arado já pois, constante precisa ser.";
-  static String nomeIgreja = "ADTL Parque São Carlos";
-  static String txtGeradoApk = "Escala criada por Senturion Scale G";
 
   static String descricaoFechamento =
       "OBS: O irmão que está escalado no Pulpito  está responsavel por FECHAR a IGREJA ao final dos CULTOS."

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:senturionscaleg/Modelo/escala_modelo.dart';
+import 'package:senturionscaleg/Modelo/escala_sonoplastas.dart';
 import 'package:senturionscaleg/Uteis/metodos_auxiliares.dart';
 import 'package:senturionscaleg/Widgets/tela_carregamento.dart';
 import '../../Modelo/check_box_modelo.dart';
@@ -40,6 +41,7 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
 
   List<String> nomeVoluntarios = [];
   List<EscalaModelo> escalaSorteada = [];
+  List<EscalaSonoplatasModelo> escalaSorteadaSom = [];
   List<String> locaisSorteioVoluntarios = [
     Constantes.porta01,
     Constantes.banheiroFeminino,
@@ -51,6 +53,7 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
     Constantes.recolherOferta,
     Constantes.irmaoReserva
   ];
+
   String horarioSemana = "";
   String horarioFinalSemana = "";
 
@@ -70,31 +73,43 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
     super.initState();
     // removendo da lista de locais de trabalho os pontos
     // que nao irao receber voluntarios baseado no tipo de voluntario
-    if (widget.tipoCadastroVoluntarios !=
-        Constantes.fireBaseDocumentoCooperadores) {
-      // caso o tipo de voluntario seja diferente do parametro
-      // passado entrar no if e remover os seguintes elementos
-      locaisSorteioVoluntarios.removeWhere((element) =>
-          element.contains(
-            Constantes.primeiraHoraPulpito,
-          ) ||
-          element.contains(
-            Constantes.segundaHoraPulpito,
-          ) ||
-          element.contains(
-            Constantes.recolherOferta,
-          ) ||
-          element.contains(
-            Constantes.porta01,
-          ));
+    if (widget.tipoCadastroVoluntarios ==
+        Constantes.fireBaseDocumentoSonoplastas) {
+      print("Antes : ${locaisSorteioVoluntarios}");
+      locaisSorteioVoluntarios.clear();
+      locaisSorteioVoluntarios = [
+        Constantes.mesaSom,
+        Constantes.notebook,
+        Constantes.irmaoReserva
+      ];
+      print("Depois : ${locaisSorteioVoluntarios}");
     } else {
-      locaisSorteioVoluntarios.removeWhere((element) =>
-          element.contains(
-            Constantes.mesaApoio,
-          ) ||
-          element.contains(
-            Constantes.banheiroFeminino,
-          ));
+      if (widget.tipoCadastroVoluntarios !=
+          Constantes.fireBaseDocumentoCooperadores) {
+        // caso o tipo de voluntario seja diferente do parametro
+        // passado entrar no if e remover os seguintes elementos
+        locaisSorteioVoluntarios.removeWhere((element) =>
+            element.contains(
+              Constantes.primeiraHoraPulpito,
+            ) ||
+            element.contains(
+              Constantes.segundaHoraPulpito,
+            ) ||
+            element.contains(
+              Constantes.recolherOferta,
+            ) ||
+            element.contains(
+              Constantes.porta01,
+            ));
+      } else {
+        locaisSorteioVoluntarios.removeWhere((element) =>
+            element.contains(
+              Constantes.mesaApoio,
+            ) ||
+            element.contains(
+              Constantes.banheiroFeminino,
+            ));
+      }
     }
     //adicionando o nome dos voluntarios a uma lista de String
     for (var element in widget.voluntariosSelecionados) {
@@ -138,62 +153,77 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
         linha[locaisSorteioVoluntarios.elementAt(index)] = nomeVoluntarios
             .elementAt(listaNumeroAuxiliarRepeticao.elementAt(index));
       }
-      String horarioTroca = "";
-      //verificando se a data Contem algum dos parametros a abaixo para
-      // definir qual sera o horario de troca de turno
-      if (elemento.contains(Constantes.diaDomingo.toLowerCase()) ||
-          elemento.contains(Constantes.diaSabado.toLowerCase())) {
-        horarioTroca = horarioFinalSemana;
+      if (widget.tipoCadastroVoluntarios ==
+          Constantes.fireBaseDocumentoSonoplastas) {
+        print("entrou");
+        escalaSorteadaSom.add(EscalaSonoplatasModelo(
+            dataCulto: elemento,
+            notebook: linha[Constantes.notebook],
+            mesaSom: linha[Constantes.mesaSom],
+            irmaoReserva: linha[Constantes.irmaoReserva]));
       } else {
-        horarioTroca = horarioSemana;
-      }
+        String horarioTroca = "";
+        //verificando se a data Contem algum dos parametros a abaixo para
+        // definir qual sera o horario de troca de turno
+        if (elemento.contains(Constantes.diaDomingo.toLowerCase()) ||
+            elemento.contains(Constantes.diaSabado.toLowerCase())) {
+          horarioTroca = horarioFinalSemana;
+        } else {
+          horarioTroca = horarioSemana;
+        }
 
-      //adiocionando os itens sorteados em uma
-      // LISTA do MODELO DE ESCALA para poder trabalhar
-      // com cada item separadamente depois
-      escalaSorteada.add(EscalaModelo(
-          dataCulto: elemento,
-          // verificando qual o tipo de voluntario para
-          // preencher o capo com a informacao
-          // correspondente ao tipo de voluntario
-          porta01: widget.tipoCadastroVoluntarios ==
-                  Constantes.fireBaseDocumentoCooperadores
-              ? linha[Constantes.porta01]
-              : "",
-          banheiroFeminino: widget.tipoCadastroVoluntarios ==
-                  Constantes.fireBaseDocumentoCooperadores
-              ? ""
-              : linha[Constantes.banheiroFeminino],
-          primeiraHoraEntrada: linha[Constantes.primeiraHoraEntrada],
-          segundaHoraEntrada: linha[Constantes.segundaHoraEntrada],
-          primeiraHoraPulpito: widget.tipoCadastroVoluntarios ==
-                  Constantes.fireBaseDocumentoCooperadores
-              ? linha[Constantes.primeiraHoraPulpito]
-              : "",
-          segundaHoraPulpito: widget.tipoCadastroVoluntarios ==
-                  Constantes.fireBaseDocumentoCooperadores
-              ? linha[Constantes.segundaHoraPulpito]
-              : "",
-          recolherOferta: widget.tipoCadastroVoluntarios ==
-                  Constantes.fireBaseDocumentoCooperadores
-              ? linha[Constantes.recolherOferta]
-              : "",
-          mesaApoio: widget.tipoCadastroVoluntarios ==
-                  Constantes.fireBaseDocumentoCooperadores
-              ? ""
-              : linha[Constantes.mesaApoio],
-          uniforme: widget.tipoCadastroVoluntarios ==
-                  Constantes.fireBaseDocumentoCooperadores
-              ? sortearGravata()
-              : "",
-          horarioTroca: horarioTroca,
-          servirSantaCeia: "",
-          irmaoReserva: linha[Constantes.irmaoReserva]));
+        //adiocionando os itens sorteados em uma
+        // LISTA do MODELO DE ESCALA para poder trabalhar
+        // com cada item separadamente depois
+        escalaSorteada.add(EscalaModelo(
+            dataCulto: elemento,
+            // verificando qual o tipo de voluntario para
+            // preencher o capo com a informacao
+            // correspondente ao tipo de voluntario
+            porta01: widget.tipoCadastroVoluntarios ==
+                    Constantes.fireBaseDocumentoCooperadores
+                ? linha[Constantes.porta01]
+                : "",
+            banheiroFeminino: widget.tipoCadastroVoluntarios ==
+                    Constantes.fireBaseDocumentoCooperadores
+                ? ""
+                : linha[Constantes.banheiroFeminino],
+            primeiraHoraEntrada: linha[Constantes.primeiraHoraEntrada],
+            segundaHoraEntrada: linha[Constantes.segundaHoraEntrada],
+            primeiraHoraPulpito: widget.tipoCadastroVoluntarios ==
+                    Constantes.fireBaseDocumentoCooperadores
+                ? linha[Constantes.primeiraHoraPulpito]
+                : "",
+            segundaHoraPulpito: widget.tipoCadastroVoluntarios ==
+                    Constantes.fireBaseDocumentoCooperadores
+                ? linha[Constantes.segundaHoraPulpito]
+                : "",
+            recolherOferta: widget.tipoCadastroVoluntarios ==
+                    Constantes.fireBaseDocumentoCooperadores
+                ? linha[Constantes.recolherOferta]
+                : "",
+            mesaApoio: widget.tipoCadastroVoluntarios ==
+                    Constantes.fireBaseDocumentoCooperadores
+                ? ""
+                : linha[Constantes.mesaApoio],
+            uniforme: widget.tipoCadastroVoluntarios ==
+                    Constantes.fireBaseDocumentoCooperadores
+                ? sortearGravata()
+                : "",
+            horarioTroca: horarioTroca,
+            servirSantaCeia: "",
+            irmaoReserva: linha[Constantes.irmaoReserva]));
+      }
       //chamando metodo para sortear
       // novas combinacoes de nome
       sortearNomesSemRepeticao(numeroRandomico);
     }
-    chamarCadastroItens(escalaSorteada);
+    if (widget.tipoCadastroVoluntarios ==
+        Constantes.fireBaseDocumentoSonoplastas) {
+      chamarCadastroItensSom(escalaSorteadaSom);
+    } else {
+      chamarCadastroItens(escalaSorteada);
+    }
   }
 
   sortearGravata() {
@@ -249,10 +279,64 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
         Map dados = {};
         dados[Constantes.rotaArgumentoNomeEscala] =
             MetodosAuxiliares.removerEspacoNomeTabelas(nomeEscala.text);
+        Navigator.pushReplacementNamed(
+            arguments: dados, context, Constantes.rotaEscalaDetalhada);
+      }
+    }
+  }
+
+  // metodo para chamar o cadastro de itens no banco de dados
+  chamarCadastroItensSom(List<EscalaSonoplatasModelo> escalaModelo) async {
+    int contador = 0;
+    var db = FirebaseFirestore.instance;
+    db
+        // definindo a COLECAO no Firebase
+        .collection(Constantes.fireBaseColecaoEscala)
+        // definindo o nome do DOCUMENTO
+        .add({
+      Constantes.fireBaseDocumentoEscala:
+          MetodosAuxiliares.removerEspacoNomeTabelas(
+              "${Constantes.argumentoDiferenciarEscalaSom}${nomeEscala.text}")
+    });
+    String idDocumentoFirebase = await buscarIDDocumentoFirebase();
+    for (var element in escalaModelo) {
+      cadastrarItensSom(element, idDocumentoFirebase);
+      contador++;
+      if (contador == escalaModelo.length) {
+        Map dados = {};
+        dados[Constantes.rotaArgumentoNomeEscala] =
+            MetodosAuxiliares.removerEspacoNomeTabelas(
+                "${Constantes.argumentoDiferenciarEscalaSom}${nomeEscala.text}");
         dados[Constantes.rotaArgumentoIDEscalaSelecionada] =
             idDocumentoFirebase;
         Navigator.pushReplacementNamed(
-            arguments: dados, context, Constantes.rotaEscalaDetalhada);
+            arguments: dados, context, Constantes.rotaEscalaDetalhadaSom);
+      }
+    }
+  }
+
+  // metodo para cadastrar item no banco de dados
+  cadastrarItensSom(
+      EscalaSonoplatasModelo escala, String idDocumentoFirebase) async {
+    try {
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(Constantes.fireBaseColecaoEscala)
+          .doc(idDocumentoFirebase)
+          .collection(Constantes.fireBaseDadosCadastrados)
+          .doc()
+          .set({
+        // adicionando cada item da escala para poder ser gravado online
+        Constantes.mesaSom: escala.mesaSom.toString(),
+        Constantes.notebook: escala.notebook.toString(),
+        Constantes.irmaoReserva: escala.irmaoReserva.toString(),
+        Constantes.dataCulto: escala.dataCulto.toString(),
+      });
+    } catch (e) {
+      MetodosAuxiliares.exibirMensagens(Textos.descricaoNotificacaoSucessoErro,
+          Textos.tipoNotificacaoErro, context);
+      if (kDebugMode) {
+        print(e.toString());
       }
     }
   }
@@ -268,11 +352,22 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
         .get()
         .then((querySnapshot) {
       for (var docSnapshot in querySnapshot.docs) {
-        // verificando se o valor do campo e o mesmo do parametro
-        if (docSnapshot.data().values.contains(
-            MetodosAuxiliares.removerEspacoNomeTabelas(nomeEscala.text))) {
-          // caso seja definir que a variavel vai receber o valor
-          idDocumentoFirebase = docSnapshot.id;
+        if (widget.tipoCadastroVoluntarios ==
+            Constantes.fireBaseDocumentoSonoplastas) {
+          // verificando se o valor do campo e o mesmo do parametro
+          if (docSnapshot.data().values.contains(
+              MetodosAuxiliares.removerEspacoNomeTabelas(
+                  "${Constantes.argumentoDiferenciarEscalaSom}${nomeEscala.text}"))) {
+            // caso seja definir que a variavel vai receber o valor
+            idDocumentoFirebase = docSnapshot.id;
+          }
+        } else {
+          // verificando se o valor do campo e o mesmo do parametro
+          if (docSnapshot.data().values.contains(
+              MetodosAuxiliares.removerEspacoNomeTabelas(nomeEscala.text))) {
+            // caso seja definir que a variavel vai receber o valor
+            idDocumentoFirebase = docSnapshot.id;
+          }
         }
       }
     });
@@ -290,8 +385,8 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
           .doc()
           .set({
         // adicionando cada item da escala para poder ser gravado online
-        Constantes.porta01 : escala.porta01.toString(),
-        Constantes.banheiroFeminino : escala.banheiroFeminino.toString(),
+        Constantes.porta01: escala.porta01.toString(),
+        Constantes.banheiroFeminino: escala.banheiroFeminino.toString(),
         Constantes.primeiraHoraPulpito: escala.primeiraHoraPulpito.toString(),
         Constantes.segundaHoraPulpito: escala.segundaHoraPulpito.toString(),
         Constantes.primeiraHoraEntrada: escala.primeiraHoraEntrada.toString(),

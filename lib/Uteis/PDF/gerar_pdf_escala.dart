@@ -7,7 +7,7 @@ import '../textos.dart';
 import 'salvarPDF/SavePDFWeb.dart'
     if (dart.library.html) 'salvarPDF/SavePDFWeb.dart';
 
-class GerarPDF {
+class GerarPDFEscala {
   static List<String> listaLegenda = [];
   List<EscalaModelo> escala;
   String nomeEscala;
@@ -17,7 +17,7 @@ class GerarPDF {
   bool exibirUniformes;
   bool exibirServirSantaCeia;
 
-  GerarPDF(
+  GerarPDFEscala(
       {required this.escala,
       required this.nomeEscala,
       required this.exibirMesaApoio,

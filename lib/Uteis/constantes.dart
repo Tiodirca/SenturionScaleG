@@ -13,21 +13,25 @@ class Constantes {
 
   static const rotaListarEscalas = "telaListarEscalas";
   static const rotaEscalaDetalhada = "telaEscalaDetalhada";
+  static const rotaEscalaDetalhadaSom = "telaEscalaDetalhadaSom";
   static const rotaCadastroItemEscala = "telaCadastroItem";
   static const rotaAtualizarItemEscala = "telaAtualizarItemEscala";
-
+  static const rotaAtualizarItemEscalaSom = "telaAtualizarItemEscalaSom";
+  static const rotaCadastroItemEscalaSom = "telaCadastroItemSom";
   static const rotaArgumentoTipoVoluntario = "tipoVoluntario";
   static const rotaArgumentoListaVoluntarios = "listaVoluntarios";
   static const rotaArgumentoListaDiasSemana = "listaDiasSemana";
   static const rotaArgumentoListaIntervaloTrabalho = "listaIntervaloTrabalho";
   static const rotaArgumentoNomeEscala = "nomeEscala";
   static const rotaArgumentoIDEscalaSelecionada = "IDEscalaSelecionada";
+  static const argumentoDiferenciarEscalaSom = "som_";
 
   // variaveis responsaveis pela gravacao e consulta no firebase
   // referente aos nomes de voluntarios masculino e feminino
   static const fireBaseColecaoVoluntarios = "nome_voluntarios";
   static const fireBaseDocumentoCooperadoras = "cooperadoras";
   static const fireBaseDocumentoCooperadores = "cooperadores";
+  static const fireBaseDocumentoSonoplastas = "sonoplastas";
   static const fireBaseNomeVoluntario = "NomeVoluntario";
   static const fireBaseDadosVoluntarios = "dadosVoluntarios";
 
@@ -52,6 +56,9 @@ class Constantes {
   static const dataCulto = "dataCulto";
   static const horarioTroca = "horarioTroca";
   static const irmaoReserva = "irmaoReserva";
+
+  static const mesaSom = "mesaSom";
+  static const notebook = "notebook";
 
   static const gravataPreta = "Gravata Preta";
   static const gravataAzul = "Gravata Azul";

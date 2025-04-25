@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:senturionscaleg/Modelo/escala_modelo.dart';
-import 'package:senturionscaleg/Uteis/PDF/GerarPDF.dart';
+import 'package:senturionscaleg/Modelo/escala_sonoplastas.dart';
+import 'package:senturionscaleg/Uteis/PDF/gerar_pdf_escala_som.dart';
 import 'package:senturionscaleg/Uteis/constantes.dart';
 import 'package:senturionscaleg/Uteis/estilo.dart';
 import 'package:senturionscaleg/Uteis/metodos_auxiliares.dart';
@@ -13,28 +13,23 @@ import 'package:senturionscaleg/Uteis/textos.dart';
 import 'package:senturionscaleg/Widgets/barra_navegacao_widget.dart';
 import 'package:senturionscaleg/Widgets/tela_carregamento.dart';
 
-class TelaEscalaDetalhada extends StatefulWidget {
-  const TelaEscalaDetalhada(
+class TelaEscalaDetalhadaSom extends StatefulWidget {
+  const TelaEscalaDetalhadaSom(
       {super.key, required this.nomeTabela, required this.idTabelaSelecionada});
 
   final String nomeTabela;
   final String idTabelaSelecionada;
 
   @override
-  State<TelaEscalaDetalhada> createState() => _TelaEscalaDetalhadaState();
+  State<TelaEscalaDetalhadaSom> createState() => _TelaEscalaDetalhadaSomState();
 }
 
-class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
+class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
   Estilo estilo = Estilo();
-  bool exibirOcultarCampoRecolherOferta = false;
-  bool exibirOcultarCampoIrmaoReserva = false;
-  bool exibirOcultarCampoMesaApoio = false;
-  bool exibirOcultarCampoUniforme = true;
-  bool exibirOcultarServirSantaCeia = false;
-  bool exibirPortaBanheiroFeminino = true;
-  late List<EscalaModelo> escala;
+  late List<EscalaSonoplatasModelo> escala;
   bool exibirWidgetCarregamento = true;
   bool exibirOcultarBtnAcao = true;
+  bool exibirOcultarIrmaoReserva = true;
 
   @override
   void initState() {
@@ -81,8 +76,8 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
         .doc(id)
         // chamando conversao
         .withConverter(
-          fromFirestore: EscalaModelo.fromFirestore,
-          toFirestore: (EscalaModelo escalaModelo, _) =>
+          fromFirestore: EscalaSonoplatasModelo.fromFirestore,
+          toFirestore: (EscalaSonoplatasModelo escalaModelo, _) =>
               escalaModelo.toFirestore(),
         );
 
@@ -94,7 +89,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
       escala.add(dados);
       setState(() {
         ordenarLista();
-        chamarVerificarColunaVazia();
+        //chamarVerificarColunaVazia();
         exibirWidgetCarregamento = false;
       });
     }
@@ -108,53 +103,8 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
         .compareTo(DateFormat("dd/MM/yyyy EEEE", "pt_BR").parse(b.dataCulto)));
   }
 
-  // metodo para chamar metodo para verificar
-  // se a coluna esta vazia
-  chamarVerificarColunaVazia() {
-    for (var element in escala) {
-      if (element.mesaApoio.isNotEmpty) {
-        exibirOcultarCampoMesaApoio = true;
-        break;
-      } else {
-        exibirOcultarCampoMesaApoio = false;
-      }
-    }
-    for (var element in escala) {
-      if (element.irmaoReserva.isNotEmpty) {
-        exibirOcultarCampoIrmaoReserva = true;
-        break;
-      } else {
-        exibirOcultarCampoIrmaoReserva = false;
-      }
-    }
-    for (var element in escala) {
-      if (element.recolherOferta.isNotEmpty) {
-        exibirOcultarCampoRecolherOferta = true;
-        break;
-      } else {
-        exibirOcultarCampoRecolherOferta = false;
-      }
-    }
-    for (var element in escala) {
-      if (element.servirSantaCeia.isNotEmpty) {
-        exibirOcultarServirSantaCeia = true;
-        break;
-      } else {
-        exibirOcultarServirSantaCeia = false;
-      }
-    }
-    for (var element in escala) {
-      if (element.banheiroFeminino.isNotEmpty) {
-        //exibirPortaBanheiroFeminino = true;
-        break;
-      } else {
-        //exibirPortaBanheiroFeminino = false;
-      }
-    }
-  }
-
   // Metodo para chamar deletar tabela
-  chamarDeletar(EscalaModelo escalaModelo) async {
+  chamarDeletar(EscalaSonoplatasModelo escalaModelo) async {
     var db = FirebaseFirestore.instance;
     await db
         .collection(Constantes.fireBaseColecaoEscala)
@@ -191,14 +141,11 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               onPressed: () async {
                 if (nomeBotao == Textos.btnBaixar) {
-                  GerarPDF gerarPDF = GerarPDF(
-                      escala: escala,
-                      nomeEscala: widget.nomeTabela,
-                      exibirMesaApoio: exibirOcultarCampoMesaApoio,
-                      exibirRecolherOferta: exibirOcultarCampoRecolherOferta,
-                      exibirIrmaoReserva: exibirOcultarCampoIrmaoReserva,
-                      exibirServirSantaCeia: exibirOcultarServirSantaCeia,
-                      exibirUniformes: exibirOcultarCampoUniforme);
+                  GerarPdfEscalaSom gerarPDF = GerarPdfEscalaSom(
+                    escala: escala,
+                    exibirIrmaoReserva: exibirOcultarIrmaoReserva,
+                    nomeEscala: widget.nomeTabela,
+                  );
                   gerarPDF.pegarDados();
                 } else if (nomeBotao == Textos.btnAdicionar) {
                   var dados = {};
@@ -206,7 +153,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                   dados[Constantes.rotaArgumentoIDEscalaSelecionada] =
                       widget.idTabelaSelecionada;
                   Navigator.pushReplacementNamed(
-                      context, Constantes.rotaCadastroItemEscala,
+                      context, Constantes.rotaCadastroItemEscalaSom,
                       arguments: dados);
                 } else if (nomeBotao == Textos.btnRecarregar) {
                   setState(() {
@@ -229,35 +176,8 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                 ],
               )));
 
-  Widget botoesSwitch(String label, bool valorBotao) => SizedBox(
-        width: 180,
-        child: Row(
-          children: [
-            Text(label),
-            Switch(
-                inactiveThumbColor: PaletaCores.corAzulMagenta,
-                value: valorBotao,
-                activeColor: PaletaCores.corAzulMagenta,
-                onChanged: (bool valor) {
-                  setState(() {
-                    mudarSwitch(label, valor);
-                  });
-                })
-          ],
-        ),
-      );
-
-  // metodo para mudar status dos switch
-  mudarSwitch(String label, bool valor) {
-    print(label);
-    if (label == Textos.labelSwitchUniforme) {
-      setState(() {
-        exibirOcultarCampoUniforme = !exibirOcultarCampoUniforme;
-      });
-    }
-  }
-
-  Future<void> alertaExclusao(EscalaModelo escala, BuildContext context) async {
+  Future<void> alertaExclusao(
+      EscalaSonoplatasModelo escala, BuildContext context) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -315,6 +235,34 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
         );
       },
     );
+  }
+
+  Widget botoesSwitch(String label, bool valorBotao) => SizedBox(
+        width: 180,
+        child: Row(
+          children: [
+            Text(label),
+            Switch(
+                inactiveThumbColor: PaletaCores.corAzulMagenta,
+                value: valorBotao,
+                activeColor: PaletaCores.corAzulMagenta,
+                onChanged: (bool valor) {
+                  setState(() {
+                    mudarSwitch(label, valor);
+                  });
+                })
+          ],
+        ),
+      );
+
+  // metodo para mudar status dos switch
+  mudarSwitch(String label, bool valor) {
+    print(label);
+    if (label == Textos.labelIrmaoReserva) {
+      setState(() {
+        exibirOcultarIrmaoReserva = !exibirOcultarIrmaoReserva;
+      });
+    }
   }
 
   @override
@@ -411,7 +359,9 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                       height: Platform.isWindows
                                           ? alturaTela * 0.6
                                           : alturaTela * 0.5,
-                                      width: larguraTela,
+                                      width: Platform.isWindows
+                                          ? larguraTela * 0.5
+                                          : larguraTela,
                                       child: Card(
                                         color: Colors.white,
                                         shape: const OutlineInputBorder(
@@ -436,75 +386,26 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                             textAlign: TextAlign
                                                                 .center)),
                                                     DataColumn(
-                                                      label: Text(
-                                                          Textos.labelHorario,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    ),
-                                                    DataColumn(
-                                                        label: Visibility(
-                                                      visible:
-                                                          !exibirOcultarCampoMesaApoio,
-                                                      child: Text(
-                                                          Textos
-                                                              .labelPrimeiroHoraPulpito,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    )),
-                                                    DataColumn(
                                                         label: Text(
                                                             Textos
-                                                                .labelPrimeiroHoraEntrada,
+                                                                .labelSomNotebook,
+                                                            textAlign: TextAlign
+                                                                .center)),
+                                                    DataColumn(
+                                                        label: Text(
+                                                            Textos.labelSomMesa,
                                                             textAlign: TextAlign
                                                                 .center)),
                                                     DataColumn(
                                                         label: Visibility(
-                                                      visible:
-                                                          exibirOcultarCampoMesaApoio,
-                                                      child: Text(
-                                                          Textos.labelMesaApoio,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    )),
-                                                    DataColumn(
-                                                        label: Visibility(
-                                                      visible:
-                                                          exibirOcultarCampoUniforme,
-                                                      child: Text(
-                                                          Textos.labelUniforme,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    )),
-                                                    DataColumn(
-                                                        label: Visibility(
-                                                      visible:
-                                                          exibirOcultarCampoRecolherOferta,
-                                                      child: Text(
-                                                          Textos
-                                                              .labelRecolherOferta,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    )),
-                                                    DataColumn(
-                                                        label: Visibility(
-                                                      visible:
-                                                          exibirOcultarServirSantaCeia,
-                                                      child: Text(
-                                                          Textos
-                                                              .labelServirSantaCeia,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    )),
-                                                    DataColumn(
-                                                        label: Visibility(
-                                                      visible:
-                                                          exibirOcultarCampoIrmaoReserva,
-                                                      child: Text(
-                                                          Textos
-                                                              .labelIrmaoReserva,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    )),
+                                                            visible:
+                                                                exibirOcultarIrmaoReserva,
+                                                            child: Text(
+                                                                Textos
+                                                                    .labelIrmaoReserva,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center))),
                                                     DataColumn(
                                                       label: Text(
                                                           Textos.labelEditar,
@@ -534,101 +435,31 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                                         TextAlign
                                                                             .center),
                                                               ))),
-                                                          DataCell(Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              width: 150,
-                                                              //SET width
-                                                              child:
-                                                                  SingleChildScrollView(
-                                                                child: Text(
-                                                                    item
-                                                                        .horarioTroca,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center),
-                                                              ))),
-                                                          DataCell(Visibility(
-                                                            visible:
-                                                                !exibirOcultarCampoMesaApoio,
-                                                            child: SizedBox(
+                                                          DataCell(
+                                                            SizedBox(
                                                                 width: 90,
                                                                 //SET width
                                                                 child: Text(
                                                                     item
-                                                                        .primeiraHoraPulpito,
+                                                                        .notebook,
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center)),
-                                                          )),
-                                                          DataCell(SizedBox(
-                                                              width: 90,
-                                                              //SET width
-                                                              child: Text(
-                                                                  item
-                                                                      .primeiraHoraEntrada,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center))),
-                                                          DataCell(Visibility(
-                                                            visible:
-                                                                exibirOcultarCampoMesaApoio,
-                                                            child: SizedBox(
+                                                          ),
+                                                          DataCell(
+                                                            SizedBox(
                                                                 width: 90,
                                                                 //SET width
                                                                 child: Text(
                                                                     item
-                                                                        .mesaApoio,
+                                                                        .mesaSom,
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center)),
-                                                          )),
+                                                          ),
                                                           DataCell(Visibility(
                                                             visible:
-                                                                exibirOcultarCampoUniforme,
-                                                            child: SizedBox(
-                                                                width: 150,
-                                                                //SET width
-                                                                child:
-                                                                    SingleChildScrollView(
-                                                                  child: Text(
-                                                                      item
-                                                                          .uniforme,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center),
-                                                                )),
-                                                          )),
-                                                          DataCell(Visibility(
-                                                            visible:
-                                                                exibirOcultarCampoRecolherOferta,
-                                                            child: SizedBox(
-                                                                width: 90,
-                                                                //SET width
-                                                                child: Text(
-                                                                    item
-                                                                        .recolherOferta,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center)),
-                                                          )),
-                                                          DataCell(Visibility(
-                                                            visible:
-                                                                exibirOcultarServirSantaCeia,
-                                                            child: SizedBox(
-                                                                width: 90,
-                                                                //SET width
-                                                                child: Text(
-                                                                    item
-                                                                        .servirSantaCeia,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center)),
-                                                          )),
-                                                          DataCell(Visibility(
-                                                            visible:
-                                                                exibirOcultarCampoIrmaoReserva,
+                                                                exibirOcultarIrmaoReserva,
                                                             child: SizedBox(
                                                                 width: 90,
                                                                 //SET width
@@ -674,7 +505,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                                 Navigator.pushReplacementNamed(
                                                                     context,
                                                                     Constantes
-                                                                        .rotaAtualizarItemEscala,
+                                                                        .rotaAtualizarItemEscalaSom,
                                                                     arguments:
                                                                         dados);
                                                               },
@@ -753,8 +584,8 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                 children: [
                                   botoesAcoes(Textos.btnBaixar,
                                       Constantes.iconeBaixar, 100, 60),
-                                  botoesSwitch(Textos.labelSwitchUniforme,
-                                      exibirOcultarCampoUniforme),
+                                  botoesSwitch(Textos.labelIrmaoReserva,
+                                      exibirOcultarIrmaoReserva),
                                   botoesAcoes(Textos.btnAdicionar,
                                       Constantes.iconeAdicionar, 100, 60),
                                 ],

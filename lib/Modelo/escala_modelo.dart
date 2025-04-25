@@ -33,22 +33,6 @@ class EscalaModelo {
       required this.horarioTroca,
       required this.irmaoReserva});
 
-  factory EscalaModelo.fromJson(Map<dynamic, dynamic> json) {
-    return EscalaModelo(
-        porta01: json['porta01'] as String,
-        banheiroFeminino: json['banheiroFeminino'] as String,
-        primeiraHoraPulpito: json['primeiraHoraPulpito'] as String,
-        segundaHoraPulpito: json['segundaHoraPulpito'] as String,
-        primeiraHoraEntrada: json['primeiraHoraEntrada'] as String,
-        segundaHoraEntrada: json['segundaHoraEntrada'] as String,
-        recolherOferta: json['recolherOferta'] as String,
-        uniforme: json['uniforme'] as String,
-        mesaApoio: json['mesaApoio'] as String,
-        servirSantaCeia: json['servirSantaCeia'] as String,
-        dataCulto: json['dataCulto'] as String,
-        horarioTroca: json['horarioTroca'] as String,
-        irmaoReserva: json['irmaoReserva'] as String);
-  }
 
   factory EscalaModelo.fromFirestore(
     DocumentSnapshot<Map<dynamic, dynamic>> snapshot,
