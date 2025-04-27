@@ -208,7 +208,11 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
               value: valor,
               groupValue: valorRadioButton,
               onChanged: (value) {
-                mudarRadioButton(valor);
+                setState(() {
+                  valorRadioButton = valor;
+                  complementoDataDepartamento =
+                      MetodosAuxiliares.mudarRadioButton(valor);
+                });
                 Navigator.of(context).pop();
               },
             ),
@@ -216,70 +220,6 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
           ],
         ),
       );
-
-  mudarRadioButton(int value) {
-    //metodo para mudar o estado do radio button
-    setState(() {
-      valorRadioButton = value;
-      switch (valorRadioButton) {
-        case 0:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoCultoLivre;
-          });
-          break;
-        case 1:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoMissao;
-          });
-          break;
-        case 2:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoCirculoOracao;
-          });
-          break;
-        case 3:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoJovens;
-          });
-          break;
-        case 4:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoAdolecentes;
-          });
-          break;
-        case 5:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoInfantil;
-          });
-          break;
-        case 6:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoVaroes;
-          });
-          break;
-        case 7:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoCampanha;
-          });
-          break;
-        case 8:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoEbom;
-          });
-          break;
-        case 9:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoSede;
-          });
-          break;
-        case 10:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoFamilia;
-          });
-          break;
-      }
-    });
-  }
 
   Future<void> alertaSelecaoOpcaoData(BuildContext context) async {
     return showDialog<void>(
@@ -311,6 +251,9 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                 radioButtonComplementoData(8, Textos.departamentoEbom),
                 radioButtonComplementoData(9, Textos.departamentoSede),
                 radioButtonComplementoData(10, Textos.departamentoFamilia),
+                radioButtonComplementoData(11, Textos.departamentoDeboras),
+                radioButtonComplementoData(12, Textos.departamentoConferencia),
+                radioButtonComplementoData(13, Textos.departamentoManha),
               ],
             ),
           ),

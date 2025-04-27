@@ -128,38 +128,15 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
     ctNotebook.text = element.notebook;
     ctMesaSom.text = element.mesaSom;
     ctIrmaoReserva.text = element.irmaoReserva;
-
+    valorRadioButton = MetodosAuxiliares.recuperarValorRadioButtonComplementoData(element.dataCulto);
+    complementoDataDepartamento = MetodosAuxiliares.mudarRadioButton(valorRadioButton);
     dataSelecionada =
         DateFormat("dd/MM/yyyy EEEE", "pt_BR").parse(element.dataCulto);
-    recuperarValorRadioButtonComplementoData(element.dataCulto);
-    mudarRadioButton(valorRadioButton);
+    formatarData(dataSelecionada);
+    MetodosAuxiliares.mudarRadioButton(valorRadioButton);
     setState(() {
       exibirWidgetCarregamento = false;
     });
-  }
-
-  recuperarValorRadioButtonComplementoData(String data) {
-    if (data.toString().contains(Textos.departamentoCultoLivre)) {
-      valorRadioButton = 0;
-    } else if (data.toString().contains(Textos.departamentoMissao)) {
-      valorRadioButton = 1;
-    } else if (data.toString().contains(Textos.departamentoCirculoOracao)) {
-      valorRadioButton = 2;
-    } else if (data.toString().contains(Textos.departamentoJovens)) {
-      valorRadioButton = 3;
-    } else if (data.toString().contains(Textos.departamentoAdolecentes)) {
-      valorRadioButton = 4;
-    } else if (data.toString().contains(Textos.departamentoInfantil)) {
-      valorRadioButton = 5;
-    } else if (data.toString().contains(Textos.departamentoVaroes)) {
-      valorRadioButton = 6;
-    } else if (data.toString().contains(Textos.departamentoCampanha)) {
-      valorRadioButton = 7;
-    } else if (data.toString().contains(Textos.departamentoEbom)) {
-      valorRadioButton = 8;
-    } else if (data.toString().contains(Textos.departamentoSede)) {
-      valorRadioButton = 9;
-    }
   }
 
   Widget radioButtonComplementoData(int valor, String nomeBtn) => SizedBox(
@@ -171,7 +148,10 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
               value: valor,
               groupValue: valorRadioButton,
               onChanged: (value) {
-                mudarRadioButton(valor);
+                setState(() {
+                  valorRadioButton = valor;
+                  complementoDataDepartamento = MetodosAuxiliares.mudarRadioButton(valor);
+                });
                 Navigator.of(context).pop();
               },
             ),
@@ -179,70 +159,6 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
           ],
         ),
       );
-
-  mudarRadioButton(int value) {
-    //metodo para mudar o estado do radio button
-    setState(() {
-      valorRadioButton = value;
-      switch (valorRadioButton) {
-        case 0:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoCultoLivre;
-          });
-          break;
-        case 1:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoMissao;
-          });
-          break;
-        case 2:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoCirculoOracao;
-          });
-          break;
-        case 3:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoJovens;
-          });
-          break;
-        case 4:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoAdolecentes;
-          });
-          break;
-        case 5:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoInfantil;
-          });
-          break;
-        case 6:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoVaroes;
-          });
-          break;
-        case 7:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoCampanha;
-          });
-          break;
-        case 8:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoEbom;
-          });
-          break;
-        case 9:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoSede;
-          });
-          break;
-        case 10:
-          setState(() {
-            complementoDataDepartamento = Textos.departamentoFamilia;
-          });
-          break;
-      }
-    });
-  }
 
   Future<void> alertaSelecaoOpcaoData(BuildContext context) async {
     return showDialog<void>(
@@ -268,6 +184,9 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
                 radioButtonComplementoData(8, Textos.departamentoEbom),
                 radioButtonComplementoData(9, Textos.departamentoSede),
                 radioButtonComplementoData(10, Textos.departamentoFamilia),
+                radioButtonComplementoData(11, Textos.departamentoDeboras),
+                radioButtonComplementoData(12, Textos.departamentoConferencia),
+                radioButtonComplementoData(13, Textos.departamentoManha),
               ],
             ),
           ),

@@ -148,6 +148,7 @@ class Textos {
   static String departamentoMissao = "Missões";
   static String departamentoInfantil = "Infantil";
   static String departamentoCirculoOracao = "Circulo de oração";
+  static String departamentoDeboras = "Desperta Déboras";
   static String departamentoJovens = "Jovens";
   static String departamentoAdolecentes = "Adolecentes";
   static String departamentoCultoLivre = "Culto Livre";
@@ -156,6 +157,8 @@ class Textos {
   static String departamentoEbom = "EBOM";
   static String departamentoSede = "Evento Sede";
   static String departamentoFamilia = "Familia";
+  static String departamentoConferencia = "Conferencia";
+  static String departamentoManha= "Periodo Manhã";
 
   // mensagens de sucesso ou erro nas acoes de cadastro e exclusao
   static String tipoNotificacaoSucesso = "Sucesso";

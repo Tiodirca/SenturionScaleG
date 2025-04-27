@@ -27,8 +27,10 @@ class TelaEscalaDetalhadaSom extends StatefulWidget {
 class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
   Estilo estilo = Estilo();
   late List<EscalaSonoplatasModelo> escala;
+  late List<EscalaSonoplatasModelo> escalaAuxiliarOriginal;
   bool exibirWidgetCarregamento = true;
   bool exibirOcultarBtnAcao = true;
+  TextEditingController ctPesquisa = TextEditingController(text: "");
   bool exibirOcultarIrmaoReserva = true;
 
   @override
@@ -61,6 +63,7 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
             exibirWidgetCarregamento = false;
           });
         }
+        print("fdsfsdf");
       },
     );
   }
@@ -89,7 +92,7 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
       escala.add(dados);
       setState(() {
         ordenarLista();
-        //chamarVerificarColunaVazia();
+        escalaAuxiliarOriginal = escala;
         exibirWidgetCarregamento = false;
       });
     }
@@ -354,10 +357,55 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                                         textAlign: TextAlign.center),
                                   ),
                                   Container(
+                                    width: larguraTela,
+                                    height: alturaTela * 0.1,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: larguraTela * 0.4,
+                                            height: 100,
+                                            child: TextFormField(
+                                              controller: ctPesquisa,
+                                            )),
+                                        Container(
+                                            width: 50,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            height: 50,
+                                            child: FloatingActionButton(
+                                              child: Icon(Icons.search),
+                                              onPressed: () {
+
+                                                // escalaAuxiliarOriginal.forEach(
+                                                //   (element) {
+                                                //     if (element.mesaSom
+                                                //         .toLowerCase()
+                                                //         .contains(ctPesquisa
+                                                //             .text
+                                                //             .toLowerCase())) {
+                                                //       setState(() {
+                                                //         print(element.mesaSom);
+                                                //         escala.add(element);
+                                                //       });
+                                                //     } else {
+                                                //       print("cxzcx");
+                                                //     }
+                                                //   },
+                                                // );
+                                              },
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
                                       margin: const EdgeInsets.symmetric(
                                           horizontal: 10.0, vertical: 0.0),
                                       height: Platform.isWindows
-                                          ? alturaTela * 0.6
+                                          ? alturaTela * 0.5
                                           : alturaTela * 0.5,
                                       width: Platform.isWindows
                                           ? larguraTela * 0.5
