@@ -357,51 +357,6 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                                         textAlign: TextAlign.center),
                                   ),
                                   Container(
-                                    width: larguraTela,
-                                    height: alturaTela * 0.1,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                            width: larguraTela * 0.4,
-                                            height: 100,
-                                            child: TextFormField(
-                                              controller: ctPesquisa,
-                                            )),
-                                        Container(
-                                            width: 50,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            height: 50,
-                                            child: FloatingActionButton(
-                                              child: Icon(Icons.search),
-                                              onPressed: () {
-
-                                                // escalaAuxiliarOriginal.forEach(
-                                                //   (element) {
-                                                //     if (element.mesaSom
-                                                //         .toLowerCase()
-                                                //         .contains(ctPesquisa
-                                                //             .text
-                                                //             .toLowerCase())) {
-                                                //       setState(() {
-                                                //         print(element.mesaSom);
-                                                //         escala.add(element);
-                                                //       });
-                                                //     } else {
-                                                //       print("cxzcx");
-                                                //     }
-                                                //   },
-                                                // );
-                                              },
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
                                       margin: const EdgeInsets.symmetric(
                                           horizontal: 10.0, vertical: 0.0),
                                       height: Platform.isWindows

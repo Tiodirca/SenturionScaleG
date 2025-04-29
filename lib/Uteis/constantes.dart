@@ -41,6 +41,8 @@ class Constantes {
 
   static const escalaModelo = "escala_modelo";
 
+  static const opcaoDataSelecaoDepartamento = "selecaoDepartamento";
+
   // dados da escala de trabalho
   static const idItem = "id";
   static const porta01 = "porta01";

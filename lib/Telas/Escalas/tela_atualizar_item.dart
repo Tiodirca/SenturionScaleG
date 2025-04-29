@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,8 +37,10 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
   bool exibirSoCamposCooperadora = false;
   bool exibirOcultarCamposNaoUsados = false;
   bool exibirWidgetCarregamento = true;
+  bool alterarEstado = false;
   String complementoDataDepartamento = Textos.departamentoCultoLivre;
   int valorRadioButton = 0;
+  int valorRadioButtonPeriodo = 0;
   String horarioTroca = "";
 
   late DateTime dataSelecionada = DateTime.now();
@@ -90,7 +93,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
                     chamarAtualizarItensBancoDados();
                   }
                 } else if (nomeBotao == Textos.btnOpcoesData) {
-                  alertaSelecaoOpcaoData(context);
+                  alertaSelecaoOpcaoData(
+                      context, Constantes.opcaoDataSelecaoDepartamento);
                 } else if (nomeBotao == Textos.btnVerEscalaAtual) {
                   redirecionarTela();
                 } else {
@@ -162,6 +166,7 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
     super.initState();
     exibirWidgetCarregamento = false;
     recuperarHorarioTroca();
+    complementoDataDepartamento = Textos.departamentoCultoLivre;
     preencherCampos(widget.escalaModelo);
   }
 
@@ -173,6 +178,7 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
     Navigator.pushReplacementNamed(context, Constantes.rotaEscalaDetalhada,
         arguments: dados);
   }
+
 
   preencherCampos(EscalaModelo element) {
     ctPrimeiroHoraPulpito.text = element.primeiraHoraPulpito;
@@ -189,9 +195,11 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
 
     dataSelecionada =
         DateFormat("dd/MM/yyyy EEEE", "pt_BR").parse(element.dataCulto);
-    valorRadioButton = MetodosAuxiliares.recuperarValorRadioButtonComplementoData(element.dataCulto);
-    complementoDataDepartamento = MetodosAuxiliares.mudarRadioButton(valorRadioButton);
-    MetodosAuxiliares.mudarRadioButton(valorRadioButton);
+    valorRadioButton =
+        MetodosAuxiliares.recuperarValorRadioButtonComplementoData(
+            element.dataCulto);
+    complementoDataDepartamento =
+        MetodosAuxiliares.mudarRadioButton(valorRadioButton);
     //verificando se os campos nao estao vazios
     // para exibi-los
     recuperarHorarioTroca();
@@ -211,7 +219,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
     });
   }
 
-  Widget radioButtonComplementoData(int valor, String nomeBtn) => SizedBox(
+  Widget radioButtonComplementoDataDepartamento(int valor, String nomeBtn) =>
+      SizedBox(
         width: 250,
         height: 60,
         child: Row(
@@ -220,10 +229,34 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
               value: valor,
               groupValue: valorRadioButton,
               onChanged: (value) {
-             setState(() {
-               valorRadioButton = valor;
-               complementoDataDepartamento = MetodosAuxiliares.mudarRadioButton(valor);
-             });
+                setState(() {
+                  valorRadioButton = valor;
+                  complementoDataDepartamento =
+                      MetodosAuxiliares.mudarRadioButton(valor);
+                });
+                Navigator.of(context).pop();
+                alertaSelecaoOpcaoData(context, "");
+              },
+            ),
+            Text(nomeBtn)
+          ],
+        ),
+      );
+
+  Widget radioButtonSelecaoPeriodo(int valor, String nomeBtn) => SizedBox(
+        width: 250,
+        height: 60,
+        child: Row(
+          children: [
+            Radio(
+              value: valor,
+              groupValue: valorRadioButtonPeriodo,
+              onChanged: (value) {
+                setState(() {
+                  valorRadioButton = valor;
+                  complementoDataDepartamento = complementoDataDepartamento +
+                      MetodosAuxiliares.mudarRadioButton(valor);
+                });
                 Navigator.of(context).pop();
               },
             ),
@@ -232,7 +265,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
         ),
       );
 
-  Future<void> alertaSelecaoOpcaoData(BuildContext context) async {
+  Future<void> alertaSelecaoOpcaoData(
+      BuildContext context, String selecaoDepartamento) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -242,30 +276,71 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
             Textos.alertaOpcoesData,
             style: const TextStyle(color: Colors.black),
           ),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                radioButtonComplementoData(0, Textos.departamentoCultoLivre),
-                radioButtonComplementoData(1, Textos.departamentoMissao),
-                radioButtonComplementoData(2, Textos.departamentoCirculoOracao),
-                radioButtonComplementoData(3, Textos.departamentoJovens),
-                radioButtonComplementoData(4, Textos.departamentoAdolecentes),
-                radioButtonComplementoData(5, Textos.departamentoInfantil),
-                radioButtonComplementoData(6, Textos.departamentoVaroes),
-                radioButtonComplementoData(7, Textos.departamentoCampanha),
-                radioButtonComplementoData(8, Textos.departamentoEbom),
-                radioButtonComplementoData(9, Textos.departamentoSede),
-                radioButtonComplementoData(10, Textos.departamentoFamilia),
-                radioButtonComplementoData(11, Textos.departamentoDeboras),
-                radioButtonComplementoData(12, Textos.departamentoConferencia),
-                radioButtonComplementoData(13, Textos.departamentoManha),
-              ],
+          content: Container(
+            width: 300,
+            height: 500,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                if (selecaoDepartamento ==
+                    Constantes.opcaoDataSelecaoDepartamento) {
+                  return SingleChildScrollView(
+                      child: Column(
+                    children: [
+                      radioButtonComplementoDataDepartamento(
+                          0, Textos.departamentoCultoLivre),
+                      radioButtonComplementoDataDepartamento(
+                          1, Textos.departamentoMissao),
+                      radioButtonComplementoDataDepartamento(
+                          2, Textos.departamentoCirculoOracao),
+                      radioButtonComplementoDataDepartamento(
+                          3, Textos.departamentoJovens),
+                      radioButtonComplementoDataDepartamento(
+                          4, Textos.departamentoAdolecentes),
+                      radioButtonComplementoDataDepartamento(
+                          5, Textos.departamentoInfantil),
+                      radioButtonComplementoDataDepartamento(
+                          6, Textos.departamentoVaroes),
+                      radioButtonComplementoDataDepartamento(
+                          7, Textos.departamentoCampanha),
+                      radioButtonComplementoDataDepartamento(
+                          8, Textos.departamentoEbom),
+                      radioButtonComplementoDataDepartamento(
+                          9, Textos.departamentoSede),
+                      radioButtonComplementoDataDepartamento(
+                          10, Textos.departamentoFamilia),
+                      radioButtonComplementoDataDepartamento(
+                          11, Textos.departamentoDeboras),
+                      radioButtonComplementoDataDepartamento(
+                          12, Textos.departamentoConferencia),
+                    ],
+                  ));
+                } else {
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        radioButtonSelecaoPeriodo(
+                            0, Textos.departamentoPeriodoNenhum),
+                        radioButtonSelecaoPeriodo(
+                            13, Textos.departamentoPeriodoManha),
+                        radioButtonSelecaoPeriodo(
+                            14, Textos.departamentoPeriodoTarde),
+                        radioButtonSelecaoPeriodo(
+                            15, Textos.departamentoPeriodoNoite),
+                        radioButtonSelecaoPeriodo(
+                            16, Textos.departamentoPrimeiroHorario),
+                        radioButtonSelecaoPeriodo(
+                            17, Textos.departamentoSegundoHorario),
+                      ],
+                    ),
+                  );
+                }
+              },
             ),
           ),
           actions: <Widget>[
             TextButton(
               child: const Text(
-                'Cancelar',
+                'OK',
                 style: TextStyle(color: Colors.black),
               ),
               onPressed: () {
@@ -329,7 +404,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
         Constantes.servirSantaCeia: servirSantaCeia,
         Constantes.dataCulto: formatarData(dataSelecionada),
         Constantes.horarioTroca:
-            complementoDataDepartamento == Textos.departamentoEbom
+            complementoDataDepartamento == Textos.departamentoEbom ||
+                    complementoDataDepartamento == Textos.departamentoSede
                 ? Textos.departamentoEbom
                 : horarioTroca,
         Constantes.irmaoReserva: ctIrmaoReserva.text,
@@ -399,7 +475,6 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
               surface: PaletaCores.corAzulMagenta,
               onSurface: Colors.white,
             ),
-            dialogBackgroundColor: Colors.white,
           ),
           child: child!,
         );
@@ -416,6 +491,7 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
       recuperarHorarioTroca();
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

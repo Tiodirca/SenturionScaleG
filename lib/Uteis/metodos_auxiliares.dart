@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'constantes.dart';
 
 class MetodosAuxiliares {
+  static String complementoDataDepartamento = Textos.departamentoCultoLivre;
+
   static removerEspacoNomeTabelas(String texto) {
     return texto.replaceAll(" ", "_");
   }
@@ -98,7 +100,6 @@ class MetodosAuxiliares {
   }
 
   static mudarRadioButton(int valorRadioButton) {
-    String complementoDataDepartamento;
     switch (valorRadioButton) {
       case 0:
         return complementoDataDepartamento = Textos.departamentoCultoLivre;
@@ -127,7 +128,15 @@ class MetodosAuxiliares {
       case 12:
         return complementoDataDepartamento = Textos.departamentoConferencia;
       case 13:
-        return complementoDataDepartamento = Textos.departamentoManha;
+        return complementoDataDepartamento = Textos.departamentoPeriodoManha;
+      case 14:
+        return complementoDataDepartamento = Textos.departamentoPeriodoTarde;
+      case 15:
+        return complementoDataDepartamento = Textos.departamentoPeriodoNoite;
+      case 16:
+        return complementoDataDepartamento = Textos.departamentoPrimeiroHorario;
+      case 17:
+        return complementoDataDepartamento = Textos.departamentoSegundoHorario;
     }
   }
 
@@ -159,8 +168,18 @@ class MetodosAuxiliares {
       valorRadioButton = 11;
     } else if (data.toString().contains(Textos.departamentoConferencia)) {
       valorRadioButton = 12;
-    }else if (data.toString().contains(Textos.departamentoManha)) {
+    } else if (data.toString().contains(Textos.departamentoPeriodoManha)) {
       valorRadioButton = 13;
+    } else if (data.toString().contains(Textos.departamentoPeriodoTarde)) {
+      valorRadioButton = 14;
+    } else if (data.toString().contains(Textos.departamentoPeriodoNoite)) {
+      valorRadioButton = 15;
+    } else if (data.toString().contains(Textos.departamentoPrimeiroHorario)) {
+      valorRadioButton = 16;
+    } else if (data.toString().contains(Textos.departamentoSegundoHorario)) {
+      valorRadioButton = 17;
+    } else if (data.toString().contains(Textos.departamentoPeriodoNenhum)) {
+      valorRadioButton = 0;
     }
     return valorRadioButton;
   }

@@ -29,7 +29,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
   bool exibirOcultarCampoRecolherOferta = false;
   bool exibirOcultarCampoIrmaoReserva = false;
   bool exibirOcultarCampoMesaApoio = false;
-  bool exibirOcultarCampoUniforme = true;
+  bool exibirOcultarCampoUniforme = false;
   bool exibirOcultarServirSantaCeia = false;
   bool exibirPortaBanheiroFeminino = true;
   late List<EscalaModelo> escala;
@@ -229,7 +229,8 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                 ],
               )));
 
-  Widget botoesSwitch(String label, bool valorBotao) => SizedBox(
+  Widget botoesSwitch(String label, bool valorBotao) => Container(
+    margin: EdgeInsets.symmetric(horizontal: 1.0),
         width: 180,
         child: Row(
           children: [

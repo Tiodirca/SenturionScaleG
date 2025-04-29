@@ -66,11 +66,10 @@ class GerarPDFEscala {
     final pdfLib.Document pdf = pdfLib.Document();
     //definindo que a variavel vai receber o caminho da
     // imagem para serem exibidas
-    final image = (await rootBundle.load('assets/imagens/logo_nova_adtl_psc.png'))
-        .buffer
-        .asUint8List();
-    final imageLogo =
-        (await rootBundle.load('assets/imagens/Logo.png')).buffer.asUint8List();
+    final image =
+        (await rootBundle.load('assets/imagens/logo_nova_adtl_psc.png'))
+            .buffer
+            .asUint8List();
     //adicionando a pagina ao pdf
     pdf.addPage(pdfLib.MultiPage(
         //definindo formato
@@ -117,10 +116,12 @@ class GerarPDFEscala {
         build: (context) => [
               pdfLib.SizedBox(height: 20),
               pdfLib.TableHelper.fromTextArray(
-                  cellPadding: const pdfLib.EdgeInsets.symmetric(
-                      horizontal: 0.0, vertical: 0.0),
-                  headerPadding: const pdfLib.EdgeInsets.symmetric(
-                      horizontal: 0.0, vertical: 5.0),
+                  cellPadding: pdfLib.EdgeInsets.symmetric(
+                      horizontal: 0.0,
+                      vertical: exibirMesaApoio == true ? 5.0 : 1.0),
+                  headerPadding: pdfLib.EdgeInsets.symmetric(
+                      horizontal: 0.0,
+                      vertical: exibirMesaApoio == true ? 2.0 : 1.0),
                   cellAlignment: pdfLib.Alignment.center,
                   data: listagemDados()),
               pdfLib.LayoutBuilder(

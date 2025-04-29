@@ -155,10 +155,16 @@ class Textos {
   static String departamentoVaroes = "Varões";
   static String departamentoCampanha = "Campanha";
   static String departamentoEbom = "EBOM";
-  static String departamentoSede = "Evento Sede";
+  static String departamentoSede = "Santa Ceia na SEDE";
   static String departamentoFamilia = "Familia";
   static String departamentoConferencia = "Conferencia";
-  static String departamentoManha= "Periodo Manhã";
+
+  static String departamentoPeriodoNenhum = "Nenhum/Normal";
+  static String departamentoPeriodoManha = " Período Manhã";
+  static String departamentoPeriodoTarde = " Período Tarde";
+  static String departamentoPeriodoNoite = " Período Noite";
+  static String departamentoPrimeiroHorario = " Primeiro Horário";
+  static String departamentoSegundoHorario = " Segundo Horário";
 
   // mensagens de sucesso ou erro nas acoes de cadastro e exclusao
   static String tipoNotificacaoSucesso = "Sucesso";
@@ -209,11 +215,17 @@ class Textos {
   static String txtRodapePDF =
       "Quem sua mão ao arado já pois, constante precisa ser.";
 
+  static String descricaoObsPDFSomHorario =
+      "OBS: Sempre CHEGAR entre 10 a 15 minutos ANTES do culto começar, para ligar mesa de som,"
+      " notebook e verificar se está tudo funcionando corretamente"
+      "\n\n"
+      "OBS : Pilhas alcalinas NÃO SÃO RECARREGAVEIS, jamais colocar para carregar, RISCO DE EXPLOSAO.";
+
   static String descricaoFechamento =
       "OBS: O irmão que está escalado no Pulpito  está responsavel por FECHAR a IGREJA ao final dos CULTOS."
       " Deve-se esperar"
-      " todos SAIREM da nave da igreja para fechar,principalmente aos domingos \n\n OBS: Obreiro que está na ENTRADA,ficar para o lado de DENTRO DO MURO da igreja";
+      " todos SAIREM da nave da igreja para fechar \n\n OBS: Obreiro que está na ENTRADA,ficar para o lado de DENTRO DO MURO da igreja";
   static String descricaoObsPDFConversa =
-      "OBS: Obreiros(as) Escalados na ENTRADA DA IGREJA fica PROIBIDO "
+      "OBS: Os Uniformes foram retirados, sendo livre utilizar ou nao\n\n OBS: Obreiros(as) Escalados na ENTRADA DA IGREJA fica PROIBIDO "
       "CONVERSAS PARELELAS no PERIODO do CULTO ou ANTES DO CULTO ";
 }

@@ -28,6 +28,7 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
   bool exibirTelaCarregamento = false;
   String complementoDataDepartamento = Textos.departamentoCultoLivre;
   int valorRadioButton = 0;
+  int valorRadioButtonPeriodo = 0;
   DateTime dataSelecionada = DateTime.now();
   final _formKeyFormulario = GlobalKey<FormState>();
   TextEditingController ctMesaSom = TextEditingController(text: "");
@@ -78,7 +79,8 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                       context, Constantes.rotaEscalaDetalhadaSom,
                       arguments: dados);
                 } else if (nomeBotao == Textos.btnOpcoesData) {
-                  alertaSelecaoOpcaoData(context);
+                  alertaSelecaoOpcaoData(
+                      context, Constantes.opcaoDataSelecaoDepartamento);
                 } else {
                   exibirDataPicker();
                 }
@@ -199,7 +201,8 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
     });
   }
 
-  Widget radioButtonComplementoData(int valor, String nomeBtn) => SizedBox(
+  Widget radioButtonComplementoDataDepartamento(int valor, String nomeBtn) =>
+      SizedBox(
         width: 250,
         height: 60,
         child: Row(
@@ -214,6 +217,7 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                       MetodosAuxiliares.mudarRadioButton(valor);
                 });
                 Navigator.of(context).pop();
+                alertaSelecaoOpcaoData(context, "");
               },
             ),
             Text(nomeBtn)
@@ -221,7 +225,30 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
         ),
       );
 
-  Future<void> alertaSelecaoOpcaoData(BuildContext context) async {
+  Widget radioButtonSelecaoPeriodo(int valor, String nomeBtn) => SizedBox(
+        width: 250,
+        height: 60,
+        child: Row(
+          children: [
+            Radio(
+              value: valor,
+              groupValue: valorRadioButtonPeriodo,
+              onChanged: (value) {
+                setState(() {
+                  valorRadioButton = valor;
+                  complementoDataDepartamento = complementoDataDepartamento +
+                      MetodosAuxiliares.mudarRadioButton(valor);
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            Text(nomeBtn)
+          ],
+        ),
+      );
+
+  Future<void> alertaSelecaoOpcaoData(
+      BuildContext context, String selecaoDepartamento) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -231,36 +258,71 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
             Textos.alertaOpcoesData,
             style: const TextStyle(color: Colors.black),
           ),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                Text(
-                  Textos.descricaoalertaOpcoesData,
-                  style: const TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                radioButtonComplementoData(0, Textos.departamentoCultoLivre),
-                radioButtonComplementoData(1, Textos.departamentoMissao),
-                radioButtonComplementoData(2, Textos.departamentoCirculoOracao),
-                radioButtonComplementoData(3, Textos.departamentoJovens),
-                radioButtonComplementoData(4, Textos.departamentoAdolecentes),
-                radioButtonComplementoData(5, Textos.departamentoInfantil),
-                radioButtonComplementoData(6, Textos.departamentoVaroes),
-                radioButtonComplementoData(7, Textos.departamentoCampanha),
-                radioButtonComplementoData(8, Textos.departamentoEbom),
-                radioButtonComplementoData(9, Textos.departamentoSede),
-                radioButtonComplementoData(10, Textos.departamentoFamilia),
-                radioButtonComplementoData(11, Textos.departamentoDeboras),
-                radioButtonComplementoData(12, Textos.departamentoConferencia),
-                radioButtonComplementoData(13, Textos.departamentoManha),
-              ],
+          content: Container(
+            width: 300,
+            height: 500,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                if (selecaoDepartamento ==
+                    Constantes.opcaoDataSelecaoDepartamento) {
+                  return SingleChildScrollView(
+                      child: Column(
+                    children: [
+                      radioButtonComplementoDataDepartamento(
+                          0, Textos.departamentoCultoLivre),
+                      radioButtonComplementoDataDepartamento(
+                          1, Textos.departamentoMissao),
+                      radioButtonComplementoDataDepartamento(
+                          2, Textos.departamentoCirculoOracao),
+                      radioButtonComplementoDataDepartamento(
+                          3, Textos.departamentoJovens),
+                      radioButtonComplementoDataDepartamento(
+                          4, Textos.departamentoAdolecentes),
+                      radioButtonComplementoDataDepartamento(
+                          5, Textos.departamentoInfantil),
+                      radioButtonComplementoDataDepartamento(
+                          6, Textos.departamentoVaroes),
+                      radioButtonComplementoDataDepartamento(
+                          7, Textos.departamentoCampanha),
+                      radioButtonComplementoDataDepartamento(
+                          8, Textos.departamentoEbom),
+                      radioButtonComplementoDataDepartamento(
+                          9, Textos.departamentoSede),
+                      radioButtonComplementoDataDepartamento(
+                          10, Textos.departamentoFamilia),
+                      radioButtonComplementoDataDepartamento(
+                          11, Textos.departamentoDeboras),
+                      radioButtonComplementoDataDepartamento(
+                          12, Textos.departamentoConferencia),
+                    ],
+                  ));
+                } else {
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        radioButtonSelecaoPeriodo(
+                            0, Textos.departamentoPeriodoNenhum),
+                        radioButtonSelecaoPeriodo(
+                            13, Textos.departamentoPeriodoManha),
+                        radioButtonSelecaoPeriodo(
+                            14, Textos.departamentoPeriodoTarde),
+                        radioButtonSelecaoPeriodo(
+                            15, Textos.departamentoPeriodoNoite),
+                        radioButtonSelecaoPeriodo(
+                            16, Textos.departamentoPrimeiroHorario),
+                        radioButtonSelecaoPeriodo(
+                            17, Textos.departamentoSegundoHorario),
+                      ],
+                    ),
+                  );
+                }
+              },
             ),
           ),
           actions: <Widget>[
             TextButton(
               child: const Text(
-                'Cancelar',
+                'OK',
                 style: TextStyle(color: Colors.black),
               ),
               onPressed: () {

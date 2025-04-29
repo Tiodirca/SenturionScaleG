@@ -93,6 +93,17 @@ class GerarPdfEscalaSom {
                       horizontal: 0.0, vertical: 5.0),
                   cellAlignment: pdfLib.Alignment.center,
                   data: listagemDados()),
+              pdfLib.LayoutBuilder(
+                builder: (context, constraints) {
+                  return pdfLib.Container(
+                    margin: pdfLib.EdgeInsets.all(10.0),
+                    child: pdfLib.Text(Textos.descricaoObsPDFSomHorario,
+                        textAlign: pdfLib.TextAlign.center,
+                        style: pdfLib.TextStyle(
+                            fontWeight: pdfLib.FontWeight.bold)),
+                  );
+                },
+              ),
             ]));
 
     List<int> bytes = await pdf.save();
