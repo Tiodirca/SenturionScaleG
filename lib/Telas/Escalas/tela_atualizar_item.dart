@@ -569,15 +569,15 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
                               ],
                             ),
                             Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 20.0, horizontal: 0),
+                              margin: const EdgeInsets.only(top: 20.0),
                               width: larguraTela,
                               child: Text(
                                   Textos.descricaoDataSelecionada +
                                       formatarData(dataSelecionada),
                                   textAlign: TextAlign.center),
                             ),
-                            SizedBox(
+                            Container(
+                              margin: EdgeInsets.only(bottom: 10.0),
                               width: larguraTela,
                               child: Text(horarioTroca,
                                   textAlign: TextAlign.center),

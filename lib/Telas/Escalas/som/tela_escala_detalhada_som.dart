@@ -590,7 +590,7 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                                   botoesSwitch(Textos.labelIrmaoReserva,
                                       exibirOcultarIrmaoReserva),
                                   botoesAcoes(Textos.btnAdicionar,
-                                      Constantes.iconeAdicionar, 100, 60),
+                                      Constantes.iconeAdicionar, 80, 60),
                                 ],
                               ),
                             ),

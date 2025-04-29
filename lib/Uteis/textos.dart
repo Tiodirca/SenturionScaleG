@@ -1,11 +1,11 @@
 class Textos {
   static String nomeApp = "Senturion Scale G";
-  static String versaoApp = "Versão : 2.1.0";
+  static String versaoApp = "Versão : 2.3.2";
 
   //BOTOES
-  static String btnCooperadores = "Cooperadores";
-  static String btnCooperadoras = "Cooperadoras";
-  static String btnSonoplastas = "Sonoplastas";
+  static String btnCooperadores = "Criar Escala Cooperadores";
+  static String btnCooperadoras = "Criar Escala Cooperadoras";
+  static String btnSonoplastas = "Criar Escala Sonoplastas";
   static String btnCadastro = "Cadastro";
   static String btnAvancar = "Avançar";
   static String btnConfiguracoes = "Configurações";
@@ -25,6 +25,9 @@ class Textos {
 
   static String msgComecoHorarioEscala = "Iniciar às : ";
   static String msgTrocaHorarioEscala = " Trocar às: ";
+
+  //TELA INICIAL
+  static String descricaoTelaInicial = "Selecione uma das opções para começar a criar a escala ou selecionar uma escala já existente";
 
   // TELA CADASTRO E SELECAO DE VOLUNTARIOS
   static String tituloTelaCadastroSelecaoVoluntarios =
@@ -77,7 +80,7 @@ class Textos {
   static String descricaoTelaListagemItens =
       "Aqui você pode estar vendo a escala completa,"
       "com todos os itens já adicionados. se for necessario"
-      " araste a lista para os lados para ver os demais campos.";
+      " arraste a lista para os lados para ver os demais campos.";
 
   // TELA DE CADASTRO DE ITEM
   static String tituloTelaCadastro = "Cadastro de item na Escalas";

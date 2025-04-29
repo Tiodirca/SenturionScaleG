@@ -18,9 +18,9 @@ class _TelaInicialState extends State<TelaInicial> {
       Container(
         margin: const EdgeInsets.all(10),
         width: nomeBtn != Textos.btnConfiguracoes ? 200 : 50,
-        height:nomeBtn != Textos.btnConfiguracoes ? 50 : 50,
+        height: nomeBtn != Textos.btnConfiguracoes ? 60 : 50,
         child: FloatingActionButton(
-          heroTag: nomeBtn,
+            heroTag: nomeBtn,
             onPressed: () {
               if (nomeBtn == Textos.btnCooperadoras) {
                 Navigator.pushReplacementNamed(
@@ -51,7 +51,8 @@ class _TelaInicialState extends State<TelaInicial> {
               } else {
                 return Text(
                   nomeBtn,
-                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,),
                 );
               }
             },)
@@ -80,40 +81,43 @@ class _TelaInicialState extends State<TelaInicial> {
             ),
           ),
           body: Container(
-              width: larguraTela,
-              height: alturaTela,
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  botao(Textos.btnConfiguracoes),
-                  Container(
-                    width: larguraTela,
-                    height: alturaTela * 0.6,
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      runAlignment: WrapAlignment.center,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        botao(Textos.btnCooperadores),
-                        botao(Textos.btnCooperadoras),
-                        botao(Textos.btnSonoplastas),
-                        botao(Textos.btnListarEscalas),
-                      ],
-                    ),
-                  )
-                ],
-              )),
-          bottomNavigationBar: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            color: Colors.white,
             width: larguraTela,
-            height: 40,
-            child: Text(
-              Textos.versaoApp,
-              textAlign: TextAlign.end,
+            height: alturaTela,
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                botao(Textos.btnConfiguracoes),
+                Container(
+                  width: larguraTela,
+                  height: alturaTela * 0.6,
+                  child: Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                      Container(
+                      width: larguraTela,
+                      child: Text(Textos.descricaoTelaInicial,
+                          style: const TextStyle(fontSize: 18),
+                          textAlign: TextAlign.center)),
+                botao(Textos.btnCooperadores),
+                botao(Textos.btnCooperadoras),
+                botao(Textos.btnSonoplastas),
+                botao(Textos.btnListarEscalas),
+              ],
             ),
-          ),
-        ));
+          )
+          ],
+        )),
+    bottomNavigationBar: Container(
+    padding: EdgeInsets.symmetric(horizontal: 10.0),
+    color: Colors.white,
+    width: larguraTela,
+    height: 40,
+    child: Text(
+    Textos.versaoApp,
+    textAlign: TextAlign.end,
+    ),
+    ),
+    ));
   }
 }

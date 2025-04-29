@@ -750,14 +750,14 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   botoesAcoes(Textos.btnBaixar,
                                       Constantes.iconeBaixar, 100, 60),
                                   botoesSwitch(Textos.labelSwitchUniforme,
                                       exibirOcultarCampoUniforme),
                                   botoesAcoes(Textos.btnAdicionar,
-                                      Constantes.iconeAdicionar, 100, 60),
+                                      Constantes.iconeAdicionar, 80, 60),
                                 ],
                               ),
                             ),
