@@ -577,7 +577,7 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                               Visibility(
                                 visible: exibirOpcoesData,
                                 child: botoesAcoes(Textos.btnSalvarOpcoesData,
-                                    Constantes.iconeSalvarOpcoes, 120, 70),
+                                    Constantes.iconeSalvarOpcoes, 150, 60),
                               ),
                               botoesAcoes(Textos.btnVerEscalaAtual,
                                   Constantes.iconeLista, 90, 60),

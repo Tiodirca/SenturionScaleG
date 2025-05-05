@@ -248,13 +248,13 @@ class _WidgetOpcoesDataState extends State<WidgetOpcoesData> {
     return Column(
       children: [
         Text(
-          Textos.descricaoSelecaoDepartamentos,
+          Textos.descricaoSelecaoDepartamentos,textAlign: TextAlign.center,
           style: TextStyle(fontSize: 16),
         ),
         Text(
           dataSelecionadaComDepartamento
               .replaceAll("(", "")
-              .replaceAll(")", ""),
+              .replaceAll(")", ""),textAlign: TextAlign.center,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         Container(
@@ -282,7 +282,7 @@ class _WidgetOpcoesDataState extends State<WidgetOpcoesData> {
         ),
         Container(
             width: Platform.isIOS || Platform.isAndroid ? 300 : 500,
-            height: Platform.isIOS || Platform.isAndroid ? 150 : 250,
+            height: Platform.isIOS || Platform.isAndroid ? 200 : 250,
             child: Card(
               color: Colors.white,
               shape: OutlineInputBorder(
