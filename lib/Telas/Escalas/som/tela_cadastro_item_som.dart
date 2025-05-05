@@ -8,6 +8,7 @@ import 'package:senturionscaleg/Uteis/paleta_cores.dart';
 import 'package:senturionscaleg/Uteis/textos.dart';
 import 'package:senturionscaleg/Widgets/barra_navegacao_widget.dart';
 import 'package:senturionscaleg/Widgets/tela_carregamento.dart';
+import 'package:senturionscaleg/Widgets/widget_opcoes_data.dart';
 
 @immutable
 class TelaCadastroItemSom extends StatefulWidget {
@@ -26,14 +27,20 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
   Estilo estilo = Estilo();
   bool exibirWidgetCarregamento = false;
   bool exibirTelaCarregamento = false;
-  String complementoDataDepartamento = Textos.departamentoCultoLivre;
-  int valorRadioButton = 0;
-  int valorRadioButtonPeriodo = 0;
+  bool exibirOpcoesData = false;
+  String opcaoDataComplemento = Textos.departamentoCultoLivre;
   DateTime dataSelecionada = DateTime.now();
   final _formKeyFormulario = GlobalKey<FormState>();
   TextEditingController ctMesaSom = TextEditingController(text: "");
   TextEditingController ctNotebook = TextEditingController(text: "");
   TextEditingController ctIrmaoReserva = TextEditingController(text: "");
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    MetodosAuxiliares.passarDepartamentoSelecionado("");
+  }
 
   Widget camposFormulario(
           double larguraTela, TextEditingController controller, String label) =>
@@ -79,8 +86,15 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                       context, Constantes.rotaEscalaDetalhadaSom,
                       arguments: dados);
                 } else if (nomeBotao == Textos.btnOpcoesData) {
-                  alertaSelecaoOpcaoData(
-                      context, Constantes.opcaoDataSelecaoDepartamento);
+                  setState(() {
+                    exibirOpcoesData = true;
+                  });
+                } else if (nomeBotao == Textos.btnSalvarOpcoesData) {
+                  setState(() {
+                    exibirOpcoesData = false;
+                    opcaoDataComplemento =
+                        MetodosAuxiliares.recuperarDepartamentoSelecionado();
+                  });
                 } else {
                   exibirDataPicker();
                 }
@@ -100,6 +114,7 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                   ),
                   Text(
                     nomeBotao,
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -107,11 +122,6 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                   )
                 ],
               )));
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   adicionarItensBancoDados() async {
     setState(() {
@@ -159,9 +169,9 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
   // ela nos moldes exigidos
   formatarData(DateTime data) {
     String dataFormatada = DateFormat("dd/MM/yyyy EEEE", "pt_BR").format(data);
-    if (complementoDataDepartamento.isNotEmpty &&
-        complementoDataDepartamento != Textos.departamentoCultoLivre) {
-      return "$dataFormatada ( $complementoDataDepartamento )";
+    if (opcaoDataComplemento.isNotEmpty &&
+        opcaoDataComplemento != Textos.departamentoCultoLivre) {
+      return "$dataFormatada ( $opcaoDataComplemento )";
     } else {
       return dataFormatada;
     }
@@ -199,140 +209,6 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
       });
       formatarData(dataSelecionada);
     });
-  }
-
-  Widget radioButtonComplementoDataDepartamento(int valor, String nomeBtn) =>
-      SizedBox(
-        width: 250,
-        height: 60,
-        child: Row(
-          children: [
-            Radio(
-              value: valor,
-              groupValue: valorRadioButton,
-              onChanged: (value) {
-                setState(() {
-                  valorRadioButton = valor;
-                  complementoDataDepartamento =
-                      MetodosAuxiliares.mudarRadioButton(valor);
-                });
-                Navigator.of(context).pop();
-                alertaSelecaoOpcaoData(context, "");
-              },
-            ),
-            Text(nomeBtn)
-          ],
-        ),
-      );
-
-  Widget radioButtonSelecaoPeriodo(int valor, String nomeBtn) => SizedBox(
-        width: 250,
-        height: 60,
-        child: Row(
-          children: [
-            Radio(
-              value: valor,
-              groupValue: valorRadioButtonPeriodo,
-              onChanged: (value) {
-                setState(() {
-                  valorRadioButton = valor;
-                  complementoDataDepartamento = complementoDataDepartamento +
-                      MetodosAuxiliares.mudarRadioButton(valor);
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-            Text(nomeBtn)
-          ],
-        ),
-      );
-
-  Future<void> alertaSelecaoOpcaoData(
-      BuildContext context, String selecaoDepartamento) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            Textos.alertaOpcoesData,
-            style: const TextStyle(color: Colors.black),
-          ),
-          content: Container(
-            width: 300,
-            height: 500,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                if (selecaoDepartamento ==
-                    Constantes.opcaoDataSelecaoDepartamento) {
-                  return SingleChildScrollView(
-                      child: Column(
-                    children: [
-                      radioButtonComplementoDataDepartamento(
-                          0, Textos.departamentoCultoLivre),
-                      radioButtonComplementoDataDepartamento(
-                          1, Textos.departamentoMissao),
-                      radioButtonComplementoDataDepartamento(
-                          2, Textos.departamentoCirculoOracao),
-                      radioButtonComplementoDataDepartamento(
-                          3, Textos.departamentoJovens),
-                      radioButtonComplementoDataDepartamento(
-                          4, Textos.departamentoAdolecentes),
-                      radioButtonComplementoDataDepartamento(
-                          5, Textos.departamentoInfantil),
-                      radioButtonComplementoDataDepartamento(
-                          6, Textos.departamentoVaroes),
-                      radioButtonComplementoDataDepartamento(
-                          7, Textos.departamentoCampanha),
-                      radioButtonComplementoDataDepartamento(
-                          8, Textos.departamentoEbom),
-                      radioButtonComplementoDataDepartamento(
-                          9, Textos.departamentoSede),
-                      radioButtonComplementoDataDepartamento(
-                          10, Textos.departamentoFamilia),
-                      radioButtonComplementoDataDepartamento(
-                          11, Textos.departamentoDeboras),
-                      radioButtonComplementoDataDepartamento(
-                          12, Textos.departamentoConferencia),
-                    ],
-                  ));
-                } else {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        radioButtonSelecaoPeriodo(
-                            0, Textos.departamentoPeriodoNenhum),
-                        radioButtonSelecaoPeriodo(
-                            13, Textos.departamentoPeriodoManha),
-                        radioButtonSelecaoPeriodo(
-                            14, Textos.departamentoPeriodoTarde),
-                        radioButtonSelecaoPeriodo(
-                            15, Textos.departamentoPeriodoNoite),
-                        radioButtonSelecaoPeriodo(
-                            16, Textos.departamentoPrimeiroHorario),
-                        radioButtonSelecaoPeriodo(
-                            17, Textos.departamentoSegundoHorario),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'OK',
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -379,62 +255,91 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                       height: alturaTela - alturaAppBar - alturaBarraStatus,
                       child: SingleChildScrollView(
                           child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 0),
-                        width: larguraTela,
-                        child: Column(
-                          children: [
-                            Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              width: larguraTela,
-                              child: Text(
-                                  Textos.descricaoTabelaSelecionada +
-                                      widget.nomeTabela,
-                                  textAlign: TextAlign.end),
-                            ),
-                            Container(
                               margin: const EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 0),
+                                  vertical: 0, horizontal: 0),
                               width: larguraTela,
-                              child: Text(Textos.descricaoTelaCadastro,
-                                  style: const TextStyle(fontSize: 18),
-                                  textAlign: TextAlign.center),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                botoesAcoes(Textos.btnData,
-                                    Constantes.iconeDataCulto, 60, 60),
-                                botoesAcoes(Textos.btnOpcoesData,
-                                    Constantes.iconeOpcoesData, 120, 40)
-                              ],
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 20.0, horizontal: 0),
-                              width: larguraTela,
-                              child: Text(
-                                  Textos.descricaoDataSelecionada +
-                                      formatarData(dataSelecionada),
-                                  textAlign: TextAlign.center),
-                            ),
-                            Form(
-                              key: _formKeyFormulario,
-                              child: Wrap(
-                                children: [
-                                  camposFormulario(larguraTela, ctNotebook,
-                                      Textos.labelSomNotebook),
-                                  camposFormulario(larguraTela, ctMesaSom,
-                                      Textos.labelSomMesa),
-                                  camposFormulario(larguraTela, ctIrmaoReserva,
-                                      Textos.labelIrmaoReserva),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ))),
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  if (exibirOpcoesData) {
+                                    return Column(
+                                      children: [
+                                        WidgetOpcoesData(
+                                          dataSelecionada:
+                                              formatarData(dataSelecionada),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Column(
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          width: larguraTela,
+                                          child: Text(
+                                              Textos.descricaoTabelaSelecionada +
+                                                  widget.nomeTabela,
+                                              textAlign: TextAlign.end),
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 10.0, horizontal: 0),
+                                          width: larguraTela,
+                                          child: Text(
+                                              Textos.descricaoTelaCadastro,
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                              textAlign: TextAlign.center),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            botoesAcoes(
+                                                Textos.btnData,
+                                                Constantes.iconeDataCulto,
+                                                60,
+                                                60),
+                                            botoesAcoes(
+                                                Textos.btnOpcoesData,
+                                                Constantes.iconeOpcoesData,
+                                                120,
+                                                40),
+                                          ],
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 20.0, horizontal: 0),
+                                          width: larguraTela,
+                                          child: Text(
+                                              Textos.descricaoDataSelecionada +
+                                                  formatarData(dataSelecionada),
+                                              textAlign: TextAlign.center),
+                                        ),
+                                        Form(
+                                          key: _formKeyFormulario,
+                                          child: Wrap(
+                                            children: [
+                                              camposFormulario(
+                                                  larguraTela,
+                                                  ctNotebook,
+                                                  Textos.labelSomNotebook),
+                                              camposFormulario(
+                                                  larguraTela,
+                                                  ctMesaSom,
+                                                  Textos.labelSomMesa),
+                                              camposFormulario(
+                                                  larguraTela,
+                                                  ctIrmaoReserva,
+                                                  Textos.labelIrmaoReserva),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                },
+                              )))),
                   bottomNavigationBar: Container(
                       alignment: Alignment.center,
                       color: Colors.white,
@@ -447,8 +352,16 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              botoesAcoes(Textos.btnSalvar,
-                                  Constantes.iconeSalvar, 90, 60),
+                              Visibility(
+                                visible: !exibirOpcoesData,
+                                child: botoesAcoes(Textos.btnSalvar,
+                                    Constantes.iconeSalvar, 90, 60),
+                              ),
+                              Visibility(
+                                visible: exibirOpcoesData,
+                                child: botoesAcoes(Textos.btnSalvarOpcoesData,
+                                    Constantes.iconeSalvarOpcoes, 120, 70),
+                              ),
                               botoesAcoes(Textos.btnVerEscalaAtual,
                                   Constantes.iconeLista, 90, 60),
                             ],

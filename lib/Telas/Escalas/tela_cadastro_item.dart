@@ -9,6 +9,7 @@ import 'package:senturionscaleg/Uteis/paleta_cores.dart';
 import 'package:senturionscaleg/Uteis/textos.dart';
 import 'package:senturionscaleg/Widgets/barra_navegacao_widget.dart';
 import 'package:senturionscaleg/Widgets/tela_carregamento.dart';
+import 'package:senturionscaleg/Widgets/widget_opcoes_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @immutable
@@ -30,11 +31,10 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
   bool exibirTelaCarregamento = false;
   bool exibirCampoServirSantaCeia = false;
   bool exibirSoCamposCooperadora = false;
+  bool exibirOpcoesData = false;
   String horarioTroca = "";
   bool exibirWidgetCarregamento = false;
-  String complementoDataDepartamento = Textos.departamentoCultoLivre;
-  int valorRadioButton = 0;
-  int valorRadioButtonPeriodo = 0;
+  String opcaoDataComplemento = Textos.departamentoCultoLivre;
   DateTime dataSelecionada = DateTime.now();
   final _formKeyFormulario = GlobalKey<FormState>();
   TextEditingController ctPrimeiroHoraPulpito = TextEditingController(text: "");
@@ -93,8 +93,15 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                       context, Constantes.rotaEscalaDetalhada,
                       arguments: dados);
                 } else if (nomeBotao == Textos.btnOpcoesData) {
-                  alertaSelecaoOpcaoData(
-                      context, Constantes.opcaoDataSelecaoDepartamento);
+                  setState(() {
+                    exibirOpcoesData = true;
+                  });
+                } else if (nomeBotao == Textos.btnSalvarOpcoesData) {
+                  setState(() {
+                    exibirOpcoesData = false;
+                    opcaoDataComplemento =
+                        MetodosAuxiliares.recuperarDepartamentoSelecionado();
+                  });
                 } else {
                   exibirDataPicker();
                 }
@@ -113,7 +120,7 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                     },
                   ),
                   Text(
-                    nomeBotao,
+                    nomeBotao, textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -163,6 +170,12 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
   void initState() {
     super.initState();
     recuperarHorarioTroca();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    MetodosAuxiliares.passarDepartamentoSelecionado("");
   }
 
   adicionarItensBancoDados() async {
@@ -215,10 +228,9 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
         Constantes.mesaApoio: mesaApoio,
         Constantes.servirSantaCeia: servirSantaCeia,
         Constantes.dataCulto: formatarData(dataSelecionada),
-        Constantes.horarioTroca:
-            complementoDataDepartamento == Textos.departamentoEbom
-                ? Textos.departamentoEbom
-                : horarioTroca,
+        Constantes.horarioTroca: opcaoDataComplemento == Textos.departamentoEbom
+            ? Textos.departamentoEbom
+            : horarioTroca,
         Constantes.irmaoReserva: ctIrmaoReserva.text,
       });
       MetodosAuxiliares.exibirMensagens(Textos.sucessoMsgAdicionarItemEscala,
@@ -276,9 +288,9 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
     String dataFormatada = DateFormat("dd/MM/yyyy EEEE", "pt_BR").format(data);
     if (exibirCampoServirSantaCeia) {
       return dataFormatada = "$dataFormatada ( Santa Ceia )";
-    } else if (complementoDataDepartamento.isNotEmpty &&
-        complementoDataDepartamento != Textos.departamentoCultoLivre) {
-      return "$dataFormatada ( $complementoDataDepartamento )";
+    } else if (opcaoDataComplemento.isNotEmpty &&
+        opcaoDataComplemento != Textos.departamentoCultoLivre) {
+      return "$dataFormatada ( $opcaoDataComplemento )";
     } else {
       return dataFormatada;
     }
@@ -317,140 +329,6 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
       formatarData(dataSelecionada);
       recuperarHorarioTroca();
     });
-  }
-
-  Widget radioButtonComplementoDataDepartamento(int valor, String nomeBtn) =>
-      SizedBox(
-        width: 250,
-        height: 60,
-        child: Row(
-          children: [
-            Radio(
-              value: valor,
-              groupValue: valorRadioButton,
-              onChanged: (value) {
-                setState(() {
-                  valorRadioButton = valor;
-                  complementoDataDepartamento =
-                      MetodosAuxiliares.mudarRadioButton(valor);
-                });
-                Navigator.of(context).pop();
-                alertaSelecaoOpcaoData(context, "");
-              },
-            ),
-            Text(nomeBtn)
-          ],
-        ),
-      );
-
-  Widget radioButtonSelecaoPeriodo(int valor, String nomeBtn) => SizedBox(
-        width: 250,
-        height: 60,
-        child: Row(
-          children: [
-            Radio(
-              value: valor,
-              groupValue: valorRadioButtonPeriodo,
-              onChanged: (value) {
-                setState(() {
-                  valorRadioButton = valor;
-                  complementoDataDepartamento = complementoDataDepartamento +
-                      MetodosAuxiliares.mudarRadioButton(valor);
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-            Text(nomeBtn)
-          ],
-        ),
-      );
-
-  Future<void> alertaSelecaoOpcaoData(
-      BuildContext context, String selecaoDepartamento) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            Textos.alertaOpcoesData,
-            style: const TextStyle(color: Colors.black),
-          ),
-          content: Container(
-            width: 300,
-            height: 500,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                if (selecaoDepartamento ==
-                    Constantes.opcaoDataSelecaoDepartamento) {
-                  return SingleChildScrollView(
-                      child: Column(
-                    children: [
-                      radioButtonComplementoDataDepartamento(
-                          0, Textos.departamentoCultoLivre),
-                      radioButtonComplementoDataDepartamento(
-                          1, Textos.departamentoMissao),
-                      radioButtonComplementoDataDepartamento(
-                          2, Textos.departamentoCirculoOracao),
-                      radioButtonComplementoDataDepartamento(
-                          3, Textos.departamentoJovens),
-                      radioButtonComplementoDataDepartamento(
-                          4, Textos.departamentoAdolecentes),
-                      radioButtonComplementoDataDepartamento(
-                          5, Textos.departamentoInfantil),
-                      radioButtonComplementoDataDepartamento(
-                          6, Textos.departamentoVaroes),
-                      radioButtonComplementoDataDepartamento(
-                          7, Textos.departamentoCampanha),
-                      radioButtonComplementoDataDepartamento(
-                          8, Textos.departamentoEbom),
-                      radioButtonComplementoDataDepartamento(
-                          9, Textos.departamentoSede),
-                      radioButtonComplementoDataDepartamento(
-                          10, Textos.departamentoFamilia),
-                      radioButtonComplementoDataDepartamento(
-                          11, Textos.departamentoDeboras),
-                      radioButtonComplementoDataDepartamento(
-                          12, Textos.departamentoConferencia),
-                    ],
-                  ));
-                } else {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        radioButtonSelecaoPeriodo(
-                            0, Textos.departamentoPeriodoNenhum),
-                        radioButtonSelecaoPeriodo(
-                            13, Textos.departamentoPeriodoManha),
-                        radioButtonSelecaoPeriodo(
-                            14, Textos.departamentoPeriodoTarde),
-                        radioButtonSelecaoPeriodo(
-                            15, Textos.departamentoPeriodoNoite),
-                        radioButtonSelecaoPeriodo(
-                            16, Textos.departamentoPrimeiroHorario),
-                        radioButtonSelecaoPeriodo(
-                            17, Textos.departamentoSegundoHorario),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'OK',
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -500,154 +378,183 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                         margin: const EdgeInsets.symmetric(
                             vertical: 0, horizontal: 0),
                         width: larguraTela,
-                        child: Column(
-                          children: [
-                            Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              width: larguraTela,
-                              child: Text(
-                                  Textos.descricaoTabelaSelecionada +
-                                      widget.nomeTabela,
-                                  textAlign: TextAlign.end),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 0),
-                              width: larguraTela,
-                              child: Text(Textos.descricaoTelaCadastro,
-                                  style: const TextStyle(fontSize: 18),
-                                  textAlign: TextAlign.center),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                botoesAcoes(Textos.btnData,
-                                    Constantes.iconeDataCulto, 60, 60),
-                                botoesAcoes(Textos.btnOpcoesData,
-                                    Constantes.iconeOpcoesData, 120, 40)
-                              ],
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 20.0, horizontal: 0),
-                              width: larguraTela,
-                              child: Text(
-                                  Textos.descricaoDataSelecionada +
-                                      formatarData(dataSelecionada),
-                                  textAlign: TextAlign.center),
-                            ),
-                            SizedBox(
-                              width: larguraTela,
-                              child: Text(horarioTroca,
-                                  textAlign: TextAlign.center),
-                            ),
-                            Form(
-                              key: _formKeyFormulario,
-                              child: Wrap(
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            if (exibirOpcoesData) {
+                              return Column(
                                 children: [
-                                  Visibility(
-                                      visible: !exibirSoCamposCooperadora,
-                                      child: Wrap(
-                                        children: [
-                                          Visibility(
-                                            visible:
-                                                exibirOcultarCamposNaoUsados,
-                                            child: camposFormulario(larguraTela,
-                                                ctPorta01, Textos.labelPorta01),
-                                          ),
-                                          camposFormulario(
-                                              larguraTela,
-                                              ctPrimeiroHoraPulpito,
-                                              Textos.labelPrimeiroHoraPulpito),
-                                          Visibility(
-                                            visible:
-                                                exibirOcultarCamposNaoUsados,
-                                            child: camposFormulario(
-                                                larguraTela,
-                                                ctSegundoHoraPulpito,
-                                                Textos.labelSegundoHoraPulpito),
-                                          )
-                                        ],
-                                      )),
-                                  Visibility(
-                                      visible: exibirSoCamposCooperadora,
-                                      child: Visibility(
-                                        visible: exibirOcultarCamposNaoUsados,
-                                        child: camposFormulario(
-                                            larguraTela,
-                                            ctBanheiroFeminino,
-                                            Textos.labelBanheiroFeminino),
-                                      )),
-                                  camposFormulario(
-                                      larguraTela,
-                                      ctPrimeiroHoraEntrada,
-                                      Textos.labelPrimeiroHoraEntrada),
-                                  Visibility(
-                                    visible: exibirOcultarCamposNaoUsados,
-                                    child: camposFormulario(
-                                        larguraTela,
-                                        ctSegundoHoraEntrada,
-                                        Textos.labelSegundoHoraEntrada),
+                                  WidgetOpcoesData(
+                                    dataSelecionada:
+                                        formatarData(dataSelecionada),
                                   ),
-                                  Visibility(
-                                    visible: !exibirSoCamposCooperadora,
-                                    child: camposFormulario(
-                                        larguraTela,
-                                        ctRecolherOferta,
-                                        Textos.labelRecolherOferta),
-                                  ),
-                                  Visibility(
-                                    visible: exibirOcultarCamposNaoUsados,
-                                    child: camposFormulario(larguraTela,
-                                        ctUniforme, Textos.labelUniforme),
-                                  ),
-                                  Visibility(
-                                    visible: exibirSoCamposCooperadora,
-                                    child: camposFormulario(larguraTela,
-                                        ctMesaApoio, Textos.labelMesaApoio),
-                                  ),
-                                  Visibility(
-                                    visible: exibirCampoServirSantaCeia,
-                                    child: camposFormulario(
-                                        larguraTela,
-                                        ctServirSantaCeia,
-                                        Textos.labelServirSantaCeia),
-                                  ),
-                                  camposFormulario(larguraTela, ctIrmaoReserva,
-                                      Textos.labelIrmaoReserva),
                                 ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: Platform.isAndroid || Platform.isIOS
-                                  ? larguraTela
-                                  : larguraTela * 0.9,
-                              height: 100,
-                              child: Card(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                        width: 1,
-                                        color: PaletaCores.corAzulMagenta),
-                                    borderRadius: BorderRadius.circular(20)),
-                                elevation: 1,
-                                child: Wrap(
-                                  runAlignment: WrapAlignment.center,
-                                  alignment: WrapAlignment.center,
-                                  children: [
-                                    botoesSwitch(Textos.labelSwitchCooperadora,
-                                        exibirSoCamposCooperadora),
-                                    botoesSwitch(
-                                        Textos.labelSwitchServirSantaCeia,
-                                        exibirCampoServirSantaCeia),
-                                    botoesSwitch(Textos.labelSwitchExibirCampos,
-                                        exibirOcultarCamposNaoUsados)
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                              );
+                            } else {
+                              return Column(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    width: larguraTela,
+                                    child: Text(
+                                        Textos.descricaoTabelaSelecionada +
+                                            widget.nomeTabela,
+                                        textAlign: TextAlign.end),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 0),
+                                    width: larguraTela,
+                                    child: Text(Textos.descricaoTelaCadastro,
+                                        style: const TextStyle(fontSize: 18),
+                                        textAlign: TextAlign.center),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      botoesAcoes(Textos.btnData,
+                                          Constantes.iconeDataCulto, 60, 60),
+                                      botoesAcoes(Textos.btnOpcoesData,
+                                          Constantes.iconeOpcoesData, 120, 40)
+                                    ],
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 20.0, horizontal: 0),
+                                    width: larguraTela,
+                                    child: Text(
+                                        Textos.descricaoDataSelecionada +
+                                            formatarData(dataSelecionada),
+                                        textAlign: TextAlign.center),
+                                  ),
+                                  SizedBox(
+                                    width: larguraTela,
+                                    child: Text(horarioTroca,
+                                        textAlign: TextAlign.center),
+                                  ),
+                                  Form(
+                                    key: _formKeyFormulario,
+                                    child: Wrap(
+                                      children: [
+                                        Visibility(
+                                            visible: !exibirSoCamposCooperadora,
+                                            child: Wrap(
+                                              children: [
+                                                Visibility(
+                                                  visible:
+                                                      exibirOcultarCamposNaoUsados,
+                                                  child: camposFormulario(
+                                                      larguraTela,
+                                                      ctPorta01,
+                                                      Textos.labelPorta01),
+                                                ),
+                                                camposFormulario(
+                                                    larguraTela,
+                                                    ctPrimeiroHoraPulpito,
+                                                    Textos
+                                                        .labelPrimeiroHoraPulpito),
+                                                Visibility(
+                                                  visible:
+                                                      exibirOcultarCamposNaoUsados,
+                                                  child: camposFormulario(
+                                                      larguraTela,
+                                                      ctSegundoHoraPulpito,
+                                                      Textos
+                                                          .labelSegundoHoraPulpito),
+                                                )
+                                              ],
+                                            )),
+                                        Visibility(
+                                            visible: exibirSoCamposCooperadora,
+                                            child: Visibility(
+                                              visible:
+                                                  exibirOcultarCamposNaoUsados,
+                                              child: camposFormulario(
+                                                  larguraTela,
+                                                  ctBanheiroFeminino,
+                                                  Textos.labelBanheiroFeminino),
+                                            )),
+                                        camposFormulario(
+                                            larguraTela,
+                                            ctPrimeiroHoraEntrada,
+                                            Textos.labelPrimeiroHoraEntrada),
+                                        Visibility(
+                                          visible: exibirOcultarCamposNaoUsados,
+                                          child: camposFormulario(
+                                              larguraTela,
+                                              ctSegundoHoraEntrada,
+                                              Textos.labelSegundoHoraEntrada),
+                                        ),
+                                        Visibility(
+                                          visible: !exibirSoCamposCooperadora,
+                                          child: camposFormulario(
+                                              larguraTela,
+                                              ctRecolherOferta,
+                                              Textos.labelRecolherOferta),
+                                        ),
+                                        Visibility(
+                                          visible: exibirOcultarCamposNaoUsados,
+                                          child: camposFormulario(larguraTela,
+                                              ctUniforme, Textos.labelUniforme),
+                                        ),
+                                        Visibility(
+                                          visible: exibirSoCamposCooperadora,
+                                          child: camposFormulario(
+                                              larguraTela,
+                                              ctMesaApoio,
+                                              Textos.labelMesaApoio),
+                                        ),
+                                        Visibility(
+                                          visible: exibirCampoServirSantaCeia,
+                                          child: camposFormulario(
+                                              larguraTela,
+                                              ctServirSantaCeia,
+                                              Textos.labelServirSantaCeia),
+                                        ),
+                                        camposFormulario(
+                                            larguraTela,
+                                            ctIrmaoReserva,
+                                            Textos.labelIrmaoReserva),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: Platform.isAndroid || Platform.isIOS
+                                        ? larguraTela
+                                        : larguraTela * 0.9,
+                                    height: 100,
+                                    child: Card(
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                              width: 1,
+                                              color:
+                                                  PaletaCores.corAzulMagenta),
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      elevation: 1,
+                                      child: Wrap(
+                                        runAlignment: WrapAlignment.center,
+                                        alignment: WrapAlignment.center,
+                                        children: [
+                                          botoesSwitch(
+                                              Textos.labelSwitchCooperadora,
+                                              exibirSoCamposCooperadora),
+                                          botoesSwitch(
+                                              Textos.labelSwitchServirSantaCeia,
+                                              exibirCampoServirSantaCeia),
+                                          botoesSwitch(
+                                              Textos.labelSwitchExibirCampos,
+                                              exibirOcultarCamposNaoUsados)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                          },
                         ),
                       ))),
                   bottomNavigationBar: Container(
@@ -662,8 +569,16 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              botoesAcoes(Textos.btnSalvar,
-                                  Constantes.iconeSalvar, 90, 60),
+                              Visibility(
+                                visible: !exibirOpcoesData,
+                                child: botoesAcoes(Textos.btnSalvar,
+                                    Constantes.iconeSalvar, 90, 60),
+                              ),
+                              Visibility(
+                                visible: exibirOpcoesData,
+                                child: botoesAcoes(Textos.btnSalvarOpcoesData,
+                                    Constantes.iconeSalvarOpcoes, 120, 70),
+                              ),
                               botoesAcoes(Textos.btnVerEscalaAtual,
                                   Constantes.iconeLista, 90, 60),
                             ],

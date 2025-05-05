@@ -82,6 +82,7 @@ class Constantes {
   static const iconeBaixar = Icons.download_rounded;
 
   static const iconeSalvar = Icons.save;
+  static const iconeSalvarOpcoes = Icons.save_as;
   static const iconeDataCulto = Icons.date_range_outlined;
 
 // Horario padrao de trocas de cooperadores

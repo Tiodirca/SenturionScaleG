@@ -9,9 +9,19 @@ import 'constantes.dart';
 
 class MetodosAuxiliares {
   static String complementoDataDepartamento = Textos.departamentoCultoLivre;
+  static String opcaoDataDepartamento = Textos.departamentoCultoLivre;
 
   static removerEspacoNomeTabelas(String texto) {
     return texto.replaceAll(" ", "_");
+  }
+
+  static String passarDepartamentoSelecionado(String departamento) {
+    opcaoDataDepartamento = departamento;
+    return opcaoDataDepartamento;
+  }
+
+  static String recuperarDepartamentoSelecionado() {
+    return opcaoDataDepartamento;
   }
 
   static exibirMensagens(String msg, String tipoAlerta, BuildContext context) {
@@ -97,90 +107,5 @@ class MetodosAuxiliares {
     } else {
       return "${Textos.msgComecoHorarioEscala} $horarioInicioSemana";
     }
-  }
-
-  static mudarRadioButton(int valorRadioButton) {
-    switch (valorRadioButton) {
-      case 0:
-        return complementoDataDepartamento = Textos.departamentoCultoLivre;
-      case 1:
-        return complementoDataDepartamento = Textos.departamentoMissao;
-      case 2:
-        return complementoDataDepartamento = Textos.departamentoCirculoOracao;
-      case 3:
-        return complementoDataDepartamento = Textos.departamentoJovens;
-      case 4:
-        return complementoDataDepartamento = Textos.departamentoAdolecentes;
-      case 5:
-        return complementoDataDepartamento = Textos.departamentoInfantil;
-      case 6:
-        return complementoDataDepartamento = Textos.departamentoVaroes;
-      case 7:
-        return complementoDataDepartamento = Textos.departamentoCampanha;
-      case 8:
-        return complementoDataDepartamento = Textos.departamentoEbom;
-      case 9:
-        return complementoDataDepartamento = Textos.departamentoSede;
-      case 10:
-        return complementoDataDepartamento = Textos.departamentoFamilia;
-      case 11:
-        return complementoDataDepartamento = Textos.departamentoDeboras;
-      case 12:
-        return complementoDataDepartamento = Textos.departamentoConferencia;
-      case 13:
-        return complementoDataDepartamento = Textos.departamentoPeriodoManha;
-      case 14:
-        return complementoDataDepartamento = Textos.departamentoPeriodoTarde;
-      case 15:
-        return complementoDataDepartamento = Textos.departamentoPeriodoNoite;
-      case 16:
-        return complementoDataDepartamento = Textos.departamentoPrimeiroHorario;
-      case 17:
-        return complementoDataDepartamento = Textos.departamentoSegundoHorario;
-    }
-  }
-
-  static recuperarValorRadioButtonComplementoData(String data) {
-    int valorRadioButton = 0;
-    if (data.toString().contains(Textos.departamentoCultoLivre)) {
-      valorRadioButton = 0;
-    } else if (data.toString().contains(Textos.departamentoMissao)) {
-      valorRadioButton = 1;
-    } else if (data.toString().contains(Textos.departamentoCirculoOracao)) {
-      valorRadioButton = 2;
-    } else if (data.toString().contains(Textos.departamentoJovens)) {
-      valorRadioButton = 3;
-    } else if (data.toString().contains(Textos.departamentoAdolecentes)) {
-      valorRadioButton = 4;
-    } else if (data.toString().contains(Textos.departamentoInfantil)) {
-      valorRadioButton = 5;
-    } else if (data.toString().contains(Textos.departamentoVaroes)) {
-      valorRadioButton = 6;
-    } else if (data.toString().contains(Textos.departamentoCampanha)) {
-      valorRadioButton = 7;
-    } else if (data.toString().contains(Textos.departamentoEbom)) {
-      valorRadioButton = 8;
-    } else if (data.toString().contains(Textos.departamentoSede)) {
-      valorRadioButton = 9;
-    } else if (data.toString().contains(Textos.departamentoFamilia)) {
-      valorRadioButton = 10;
-    } else if (data.toString().contains(Textos.departamentoDeboras)) {
-      valorRadioButton = 11;
-    } else if (data.toString().contains(Textos.departamentoConferencia)) {
-      valorRadioButton = 12;
-    } else if (data.toString().contains(Textos.departamentoPeriodoManha)) {
-      valorRadioButton = 13;
-    } else if (data.toString().contains(Textos.departamentoPeriodoTarde)) {
-      valorRadioButton = 14;
-    } else if (data.toString().contains(Textos.departamentoPeriodoNoite)) {
-      valorRadioButton = 15;
-    } else if (data.toString().contains(Textos.departamentoPrimeiroHorario)) {
-      valorRadioButton = 16;
-    } else if (data.toString().contains(Textos.departamentoSegundoHorario)) {
-      valorRadioButton = 17;
-    } else if (data.toString().contains(Textos.departamentoPeriodoNenhum)) {
-      valorRadioButton = 0;
-    }
-    return valorRadioButton;
   }
 }

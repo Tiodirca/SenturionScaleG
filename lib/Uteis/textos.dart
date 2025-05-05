@@ -8,6 +8,7 @@ class Textos {
   static String btnSonoplastas = "Criar Escala Sonoplastas";
   static String btnCadastro = "Cadastro";
   static String btnAvancar = "Avançar";
+  static String btnSalvarOpcoesData = "Salvar Opçoes data";
   static String btnConfiguracoes = "Configurações";
   static String btnGerarEscala = "Gerar Escalas";
   static String btnUsarTabela = "Usar está Escalas";
@@ -27,7 +28,8 @@ class Textos {
   static String msgTrocaHorarioEscala = " Trocar às: ";
 
   //TELA INICIAL
-  static String descricaoTelaInicial = "Selecione uma das opções para começar a criar a escala ou selecionar uma escala já existente";
+  static String descricaoTelaInicial =
+      "Selecione uma das opções para começar a criar a escala ou selecionar uma escala já existente";
 
   // TELA CADASTRO E SELECAO DE VOLUNTARIOS
   static String tituloTelaCadastroSelecaoVoluntarios =
@@ -147,27 +149,36 @@ class Textos {
   static String descricaoDataPicker = "Selecione uma data que contenha culto";
   static String descricaoDataSelecionada = "A data Selecionada foi : ";
 
+  static String descricaoSelecaoDepartamentos =
+      "Selecione qual será o departamento responsável pelo culto da data: ";
+
   // DEPARTAMENTOS
   static String departamentoMissao = "Missões";
   static String departamentoInfantil = "Infantil";
-  static String departamentoCirculoOracao = "Circulo de oração";
+  static String departamentoCirculoOracao = "Círculo de oração";
   static String departamentoDeboras = "Desperta Déboras";
   static String departamentoJovens = "Jovens";
-  static String departamentoAdolecentes = "Adolecentes";
+  static String departamentoAdolecentes = "Adolescentes";
   static String departamentoCultoLivre = "Culto Livre";
   static String departamentoVaroes = "Varões";
   static String departamentoCampanha = "Campanha";
   static String departamentoEbom = "EBOM";
   static String departamentoSede = "Santa Ceia na SEDE";
-  static String departamentoFamilia = "Familia";
+  static String departamentoFamilia = "Família";
   static String departamentoConferencia = "Conferencia";
+  static String departamentoGrupoLouvor = "Grupo de Louvor";
+  static String departamentoMusicos = "Músicos";
 
-  static String departamentoPeriodoNenhum = "Nenhum/Normal";
+  static String descricaoDepartamentoPeriodo =
+      "Selecione se o culto haverá alguma informação adicional";
+
+  static String departamentoPeriodoNenhum = " Nenhum/Normal";
   static String departamentoPeriodoManha = " Período Manhã";
   static String departamentoPeriodoTarde = " Período Tarde";
   static String departamentoPeriodoNoite = " Período Noite";
   static String departamentoPrimeiroHorario = " Primeiro Horário";
   static String departamentoSegundoHorario = " Segundo Horário";
+  static String departamentoEnsaio = " Ensaio";
 
   // mensagens de sucesso ou erro nas acoes de cadastro e exclusao
   static String tipoNotificacaoSucesso = "Sucesso";
@@ -225,9 +236,9 @@ class Textos {
       "OBS : Pilhas alcalinas NÃO SÃO RECARREGAVEIS, jamais colocar para carregar, RISCO DE EXPLOSAO.";
 
   static String descricaoFechamento =
-      "OBS: O irmão que está escalado no Pulpito  está responsavel por FECHAR a IGREJA ao final dos CULTOS."
-      " Deve-se esperar"
-      " todos SAIREM da nave da igreja para fechar \n\n OBS: Obreiro que está na ENTRADA,ficar para o lado de DENTRO DO MURO da igreja";
+      "OBS: Quem está escalado no Pulpito está responsavel por FECHAR a IGREJA."
+     " Esperar todos SAIREM da nave da igreja\n\n "
+      " - Obreiro que está na ENTRADA,ficar para o lado de DENTRO DO MURO da igreja";
   static String descricaoObsPDFConversa =
       "OBS: Os Uniformes foram retirados, sendo livre utilizar ou nao\n\n OBS: Obreiros(as) Escalados na ENTRADA DA IGREJA fica PROIBIDO "
       "CONVERSAS PARELELAS no PERIODO do CULTO ou ANTES DO CULTO ";
