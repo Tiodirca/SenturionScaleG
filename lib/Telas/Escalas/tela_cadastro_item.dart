@@ -230,7 +230,8 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
         Constantes.mesaApoio: mesaApoio,
         Constantes.servirSantaCeia: servirSantaCeia,
         Constantes.dataCulto: formatarData(dataSelecionada),
-        Constantes.horarioTroca: opcaoDataComplemento == Textos.departamentoEbom
+        Constantes.horarioTroca: opcaoDataComplemento == Textos.departamentoEbom ||
+            opcaoDataComplemento == Textos.departamentoSede
             ? Textos.departamentoEbom
             : horarioTroca,
         Constantes.irmaoReserva: ctIrmaoReserva.text,

@@ -75,7 +75,6 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
     // que nao irao receber voluntarios baseado no tipo de voluntario
     if (widget.tipoCadastroVoluntarios ==
         Constantes.fireBaseDocumentoSonoplastas) {
-      print("Antes : ${locaisSorteioVoluntarios}");
       locaisSorteioVoluntarios.clear();
       locaisSorteioVoluntarios = [
         Constantes.mesaSom,
@@ -83,7 +82,6 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
         Constantes.videos,
         Constantes.irmaoReserva
       ];
-      print("Depois : ${locaisSorteioVoluntarios}");
     } else {
       if (widget.tipoCadastroVoluntarios !=
           Constantes.fireBaseDocumentoCooperadores) {

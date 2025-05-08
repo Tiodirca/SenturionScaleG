@@ -64,7 +64,6 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
             exibirWidgetCarregamento = false;
           });
         }
-        print("fdsfsdf");
       },
     );
   }

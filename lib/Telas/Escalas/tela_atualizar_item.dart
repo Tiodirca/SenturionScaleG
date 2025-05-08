@@ -216,8 +216,12 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
         DateFormat("dd/MM/yyyy EEEE", "pt_BR").parse(element.dataCulto);
     //verificando se os campos nao estao vazios
     // para exibi-los
-    formatarHorario(element.horarioTroca);
-    sobreescreverHorarioTroca();
+    if (element.dataCulto.contains(Textos.departamentoEbom) ||
+        element.dataCulto.contains(Textos.departamentoSede)) {
+    } else {
+      formatarHorario(element.horarioTroca);
+      sobreescreverHorarioTroca();
+    }
     if (element.servirSantaCeia.isNotEmpty) {
       setState(() {
         exibirCampoServirSantaCeia = true;
@@ -285,10 +289,10 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
         Constantes.servirSantaCeia: servirSantaCeia,
         Constantes.dataCulto: formatarData(dataSelecionada),
         Constantes.horarioTroca:
-            opcaoDataComplemento == Textos.departamentoEbom ||
-                    opcaoDataComplemento == Textos.departamentoSede
-                ? Textos.departamentoEbom
-                : horarioTroca,
+        opcaoDataComplemento == Textos.departamentoEbom ||
+            opcaoDataComplemento == Textos.departamentoSede
+            ? Textos.departamentoEbom
+            : horarioTroca,
         Constantes.irmaoReserva: ctIrmaoReserva.text,
       });
       MetodosAuxiliares.exibirMensagens(Textos.sucessoMsgAtualizarItemEscala,
@@ -404,16 +408,29 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
   sobreescreverHorarioTroca() {
     horarioTroca = "";
     horarioTroca =
-    "${Textos.msgComecoHorarioEscala}${horarioTimePicker!.hour.toString()}:${horarioTimePicker!.minute.toString()}";
+        "${Textos.msgComecoHorarioEscala}${horarioTimePicker!.hour.toString()}:${horarioTimePicker!.minute.toString()}";
   }
 
   formatarHorario(String horarioTrocaRecuperado) {
-    String horaSeparada = horarioTrocaRecuperado.split(" : ")[1];
+    String horarioSemCaracteres =
+        horarioTrocaRecuperado.replaceAll(new RegExp(r'[^0-9]'), '');
+
+    String hora = "";
+    String minuto = "";
+    if (horarioSemCaracteres.length == 4) {
+      hora = horarioSemCaracteres.substring(0, 2);
+      minuto = horarioSemCaracteres.substring(2);
+    } else {
+      hora = horarioSemCaracteres.substring(0, 1);
+      minuto = horarioSemCaracteres.substring(1);
+    }
+    String horarioFinal = hora + ":" + minuto;
     DateTime conversaoHorarioPData =
-    new DateFormat("hh:mm").parse(horaSeparada);
+        new DateFormat("hh:mm").parse(horarioFinal);
+
     setState(() {
       TimeOfDay conversaoDataPTimeOfDay =
-      TimeOfDay.fromDateTime(conversaoHorarioPData);
+          TimeOfDay.fromDateTime(conversaoHorarioPData);
       horarioTimePicker = conversaoDataPTimeOfDay;
     });
   }
@@ -514,15 +531,15 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
                                                     elevation: 0,
                                                     heroTag: "mudar horario",
                                                     backgroundColor:
-                                                    Colors.white,
+                                                        Colors.white,
                                                     shape: const RoundedRectangleBorder(
                                                         side: BorderSide(
                                                             color: PaletaCores
                                                                 .corCastanho),
                                                         borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                10))),
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    10))),
                                                     onPressed: () async {
                                                       exibirTimePicker();
                                                     },
@@ -712,7 +729,7 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
                               Visibility(
                                 visible: exibirOpcoesData,
                                 child: botoesAcoes(Textos.btnSalvarOpcoesData,
-                                    Constantes.iconeSalvarOpcoes,150, 60),
+                                    Constantes.iconeSalvarOpcoes, 150, 60),
                               ),
                               botoesAcoes(Textos.btnVerEscalaAtual,
                                   Constantes.iconeLista, 90, 60),
