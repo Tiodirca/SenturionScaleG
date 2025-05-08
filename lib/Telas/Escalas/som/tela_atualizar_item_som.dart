@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:senturionscaleg/Modelo/escala_sonoplastas.dart';
 import 'package:senturionscaleg/Uteis/paleta_cores.dart';
 import 'package:senturionscaleg/Widgets/widget_opcoes_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../Uteis/constantes.dart';
 import '../../../Uteis/estilo.dart';
 import '../../../Uteis/metodos_auxiliares.dart';
@@ -31,10 +32,13 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
   Estilo estilo = Estilo();
   bool exibirWidgetCarregamento = true;
   bool exibirOpcoesData = false;
+  String horarioTroca = "";
+  TimeOfDay? horarioTimePicker = const TimeOfDay(hour: 19, minute: 00);
   String opcaoDataComplemento = Textos.departamentoCultoLivre;
   late DateTime dataSelecionada = DateTime.now();
   final _formKeyFormulario = GlobalKey<FormState>();
   TextEditingController ctMesaSom = TextEditingController(text: "");
+  TextEditingController ctVideos = TextEditingController(text: "");
   TextEditingController ctNotebook = TextEditingController(text: "");
   TextEditingController ctIrmaoReserva = TextEditingController(text: "");
 
@@ -103,7 +107,8 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
                     },
                   ),
                   Text(
-                    nomeBotao, textAlign: TextAlign.center,
+                    nomeBotao,
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -126,6 +131,26 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
     MetodosAuxiliares.passarDepartamentoSelecionado("");
   }
 
+  // metodo para recuperar os horarios definidos
+  // e gravados no share preferences
+  recuperarHorarioTroca() async {
+    String data = formatarData(dataSelecionada).toString();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // verificando se a data corresponde a um dia do fim de semana
+    if (data.contains(Constantes.sabado) || data.contains(Constantes.domingo)) {
+      setState(() {
+        horarioTroca = Textos.msgComecoHorarioEscala +
+            "${prefs.getString(Constantes.shareHorarioInicialFSemana) ?? ''}";
+      });
+    } else {
+      setState(() {
+        horarioTroca = Textos.msgComecoHorarioEscala +
+            "${prefs.getString(Constantes.shareHorarioInicialSemana) ?? ''}";
+      });
+    }
+    formatarHorario(horarioTroca);
+  }
+
   redirecionarTela() {
     var dados = {};
     dados[Constantes.rotaArgumentoNomeEscala] = widget.nomeTabela;
@@ -138,6 +163,7 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
   preencherCampos(EscalaSonoplatasModelo element) {
     ctNotebook.text = element.notebook;
     ctMesaSom.text = element.mesaSom;
+    ctVideos.text = element.videos;
     ctIrmaoReserva.text = element.irmaoReserva;
     //verificando se a data salva no banco de dados contem o parametro
     // caso tenha quer dizer que foi gravado opcoes adicionais na data
@@ -149,8 +175,10 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
     }
     dataSelecionada =
         DateFormat("dd/MM/yyyy EEEE", "pt_BR").parse(element.dataCulto);
-    print(dataSelecionada.toString());
+
     formatarData(dataSelecionada);
+    formatarHorario(element.horarioTroca);
+    sobreescreverHorarioTroca();
     setState(() {
       exibirWidgetCarregamento = false;
     });
@@ -171,6 +199,8 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
           .set({
         Constantes.notebook: ctNotebook.text,
         Constantes.mesaSom: ctMesaSom.text,
+        Constantes.horarioTroca: horarioTroca,
+        Constantes.videos: ctVideos.text,
         Constantes.dataCulto: formatarData(dataSelecionada),
         Constantes.irmaoReserva: ctIrmaoReserva.text,
       });
@@ -187,7 +217,6 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
       });
     }
   }
-
 
   // metodo para formatar a data e exibir
   // ela nos moldes exigidos
@@ -232,6 +261,51 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
         }
       });
       formatarData(dataSelecionada);
+      recuperarHorarioTroca();
+    });
+  }
+
+  exibirTimePicker() async {
+    TimeOfDay? novoHorario = await showTimePicker(
+      context: context,
+      initialTime: horarioTimePicker!,
+      helpText: Textos.descricaoTimePickerHorarioInicial,
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.white,
+              onPrimary: PaletaCores.corCastanho,
+              surface: PaletaCores.corAzulEscuro,
+              onSurface: Colors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (novoHorario != null) {
+      setState(() {
+        horarioTimePicker = novoHorario;
+        sobreescreverHorarioTroca();
+      });
+    }
+  }
+
+  sobreescreverHorarioTroca() {
+    horarioTroca = "";
+    horarioTroca =
+        "${Textos.msgComecoHorarioEscala}${horarioTimePicker!.hour.toString()}:${horarioTimePicker!.minute.toString()}";
+  }
+
+  formatarHorario(String horarioTrocaRecuperado) {
+    String horaSeparada = horarioTrocaRecuperado.split(" : ")[1];
+    DateTime conversaoHorarioPData =
+        new DateFormat("hh:mm").parse(horaSeparada);
+    setState(() {
+      TimeOfDay conversaoDataPTimeOfDay =
+          TimeOfDay.fromDateTime(conversaoHorarioPData);
+      horarioTimePicker = conversaoDataPTimeOfDay;
     });
   }
 
@@ -324,6 +398,31 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
                                                 Constantes.iconeDataCulto,
                                                 60,
                                                 60),
+                                            SizedBox(
+                                                height: 50,
+                                                width: 50,
+                                                child: FloatingActionButton(
+                                                    elevation: 0,
+                                                    heroTag: "mudar horario",
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    shape: const RoundedRectangleBorder(
+                                                        side: BorderSide(
+                                                            color: PaletaCores
+                                                                .corCastanho),
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    10))),
+                                                    onPressed: () async {
+                                                      exibirTimePicker();
+                                                    },
+                                                    child: const Icon(
+                                                      Icons
+                                                          .access_time_filled_outlined,
+                                                      color: PaletaCores
+                                                          .corAzulEscuro,
+                                                    ))),
                                             botoesAcoes(
                                                 Textos.btnOpcoesData,
                                                 Constantes.iconeOpcoesData,
@@ -340,6 +439,12 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
                                                   formatarData(dataSelecionada),
                                               textAlign: TextAlign.center),
                                         ),
+                                        Container(
+                                          margin: EdgeInsets.only(bottom: 10.0),
+                                          width: larguraTela,
+                                          child: Text(horarioTroca,
+                                              textAlign: TextAlign.center),
+                                        ),
                                         Form(
                                           key: _formKeyFormulario,
                                           child: Wrap(
@@ -352,6 +457,8 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
                                                   larguraTela,
                                                   ctMesaSom,
                                                   Textos.labelSomMesa),
+                                              camposFormulario(larguraTela,
+                                                  ctVideos, Textos.labelVideos),
                                               camposFormulario(
                                                   larguraTela,
                                                   ctIrmaoReserva,
@@ -384,7 +491,7 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
                               Visibility(
                                 visible: exibirOpcoesData,
                                 child: botoesAcoes(Textos.btnSalvarOpcoesData,
-                                    Constantes.iconeSalvarOpcoes,150, 60),
+                                    Constantes.iconeSalvarOpcoes, 150, 60),
                               ),
                               botoesAcoes(Textos.btnVerEscalaAtual,
                                   Constantes.iconeLista, 90, 60),

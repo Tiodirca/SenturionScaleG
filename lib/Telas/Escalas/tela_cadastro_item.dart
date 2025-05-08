@@ -35,6 +35,7 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
   String horarioTroca = "";
   bool exibirWidgetCarregamento = false;
   String opcaoDataComplemento = Textos.departamentoCultoLivre;
+  TimeOfDay? horarioTimePicker = const TimeOfDay(hour: 19, minute: 00);
   DateTime dataSelecionada = DateTime.now();
   final _formKeyFormulario = GlobalKey<FormState>();
   TextEditingController ctPrimeiroHoraPulpito = TextEditingController(text: "");
@@ -120,7 +121,8 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                     },
                   ),
                   Text(
-                    nomeBotao, textAlign: TextAlign.center,
+                    nomeBotao,
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -265,6 +267,7 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
             "${prefs.getString(Constantes.shareHorarioInicialSemana) ?? ''}";
       });
     }
+    formatarHorario(horarioTroca);
   }
 
   // metodo para limpar valores dos
@@ -328,6 +331,50 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
       });
       formatarData(dataSelecionada);
       recuperarHorarioTroca();
+    });
+  }
+
+  exibirTimePicker() async {
+    TimeOfDay? novoHorario = await showTimePicker(
+      context: context,
+      initialTime: horarioTimePicker!,
+      helpText: Textos.descricaoTimePickerHorarioInicial,
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.white,
+              onPrimary: PaletaCores.corCastanho,
+              surface: PaletaCores.corAzulEscuro,
+              onSurface: Colors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (novoHorario != null) {
+      setState(() {
+        horarioTimePicker = novoHorario;
+        sobreescreverHorarioTroca();
+      });
+    }
+  }
+
+  sobreescreverHorarioTroca() {
+    horarioTroca = "";
+    horarioTroca =
+        "${Textos.msgComecoHorarioEscala}${horarioTimePicker!.hour.toString()}:${horarioTimePicker!.minute.toString()}";
+  }
+
+  formatarHorario(String horarioTrocaRecuperado) {
+    String horaSeparada = horarioTrocaRecuperado.split(" : ")[1];
+    DateTime conversaoHorarioPData =
+        new DateFormat("hh:mm").parse(horaSeparada);
+    setState(() {
+      TimeOfDay conversaoDataPTimeOfDay =
+          TimeOfDay.fromDateTime(conversaoHorarioPData);
+      horarioTimePicker = conversaoDataPTimeOfDay;
     });
   }
 
@@ -415,6 +462,31 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
                                     children: [
                                       botoesAcoes(Textos.btnData,
                                           Constantes.iconeDataCulto, 60, 60),
+                                      SizedBox(
+                                          height: 50,
+                                          width: 50,
+                                          child: FloatingActionButton(
+                                              elevation: 0,
+                                              heroTag: "mudar horario",
+                                              backgroundColor: Colors.white,
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                      side: BorderSide(
+                                                          color: PaletaCores
+                                                              .corCastanho),
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  10))),
+                                              onPressed: () async {
+                                                exibirTimePicker();
+                                              },
+                                              child: const Icon(
+                                                Icons
+                                                    .access_time_filled_outlined,
+                                                color:
+                                                    PaletaCores.corAzulEscuro,
+                                              ))),
                                       botoesAcoes(Textos.btnOpcoesData,
                                           Constantes.iconeOpcoesData, 120, 40)
                                     ],

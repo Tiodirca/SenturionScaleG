@@ -10,25 +10,50 @@ class GerarPdfEscalaSom {
   static List<String> listaLegenda = [];
   List<EscalaSonoplatasModelo> escala;
   bool exibirIrmaoReserva;
+  bool exibirVideos;
   String nomeEscala;
 
   GerarPdfEscalaSom(
       {required this.escala,
       required this.nomeEscala,
+      required this.exibirVideos,
       required this.exibirIrmaoReserva});
 
   pegarDados() {
     listaLegenda.clear();
-    if (exibirIrmaoReserva) {
+
+    if (exibirIrmaoReserva && exibirVideos) {
       listaLegenda.addAll([
         Textos.labelData,
+        Textos.labelHorario,
+        Textos.labelSomNotebook,
+        Textos.labelSomMesa,
+        Textos.labelVideos,
+        Textos.labelIrmaoReserva
+      ]);
+    } else if (exibirIrmaoReserva) {
+      listaLegenda.addAll([
+        Textos.labelData,
+        Textos.labelHorario,
         Textos.labelSomNotebook,
         Textos.labelSomMesa,
         Textos.labelIrmaoReserva
       ]);
+    } else if (exibirVideos) {
+      listaLegenda.addAll([
+        Textos.labelData,
+        Textos.labelHorario,
+        Textos.labelSomNotebook,
+        Textos.labelSomMesa,
+        Textos.labelVideos,
+      ]);
     } else {
-      listaLegenda.addAll(
-          [Textos.labelData, Textos.labelSomNotebook, Textos.labelSomMesa]);
+      listaLegenda.addAll([
+        Textos.labelData,
+        Textos.labelHorario,
+        Textos.labelSomNotebook,
+        Textos.labelSomMesa
+      ]);
     }
     gerarPDF();
   }
@@ -88,22 +113,29 @@ class GerarPdfEscalaSom {
               pdfLib.SizedBox(height: 20),
               pdfLib.TableHelper.fromTextArray(
                   cellPadding: const pdfLib.EdgeInsets.symmetric(
-                      horizontal: 0.0, vertical: 5.0),
+                      horizontal: 0.0, vertical: 2.0),
                   headerPadding: const pdfLib.EdgeInsets.symmetric(
-                      horizontal: 0.0, vertical: 5.0),
+                      horizontal: 0.0, vertical: 1.0),
                   cellAlignment: pdfLib.Alignment.center,
                   data: listagemDados()),
               pdfLib.LayoutBuilder(
                 builder: (context, constraints) {
-                  return pdfLib.Container(
-                    margin: pdfLib.EdgeInsets.all(10.0),
-                    child: pdfLib.Text(Textos.descricaoObsPDFSomHorario,
-                        textAlign: pdfLib.TextAlign.center,
-                        style: pdfLib.TextStyle(
-                            fontWeight: pdfLib.FontWeight.bold)),
-                  );
+                  if (exibirVideos) {
+                    return pdfLib.Container(
+                      margin: pdfLib.EdgeInsets.all(10.0),
+                      child: pdfLib.Text(Textos.descricaoObsPDFSomVideos,
+                          textAlign: pdfLib.TextAlign.center,
+                          style: pdfLib.TextStyle(
+                              fontWeight: pdfLib.FontWeight.bold)),
+                    );
+                  } else {
+                    return pdfLib.Container();
+                  }
                 },
               ),
+              pdfLib.Text(Textos.descricaoObsPDFSomHorario,
+                  textAlign: pdfLib.TextAlign.center,
+                  style: pdfLib.TextStyle(fontWeight: pdfLib.FontWeight.bold)),
             ]));
 
     List<int> bytes = await pdf.save();
@@ -113,17 +145,46 @@ class GerarPdfEscalaSom {
   }
 
   listagemDados() {
+    if (exibirIrmaoReserva && exibirVideos) {
+      return <List<String>>[
+        listaLegenda,
+        ...escala.map((e) {
+          return [
+            e.dataCulto,
+            e.horarioTroca,
+            e.notebook,
+            e.mesaSom,
+            e.videos,
+            e.irmaoReserva
+          ];
+        }),
+      ];
+    }
     if (exibirIrmaoReserva) {
       return <List<String>>[
         listaLegenda,
         ...escala.map((e) {
-          return [e.dataCulto, e.notebook, e.mesaSom, e.irmaoReserva];
+          return [
+            e.dataCulto,
+            e.horarioTroca,
+            e.notebook,
+            e.mesaSom,
+            e.irmaoReserva
+          ];
+        }),
+      ];
+    } else if (exibirVideos) {
+      return <List<String>>[
+        listaLegenda,
+        ...escala.map((e) {
+          return [e.dataCulto, e.horarioTroca, e.notebook, e.mesaSom, e.videos];
         }),
       ];
     } else {
       return <List<String>>[
         listaLegenda,
-        ...escala.map((e) => [e.dataCulto, e.notebook, e.mesaSom])
+        ...escala
+            .map((e) => [e.dataCulto, e.horarioTroca, e.notebook, e.mesaSom])
       ];
     }
   }

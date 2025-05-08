@@ -80,6 +80,7 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
       locaisSorteioVoluntarios = [
         Constantes.mesaSom,
         Constantes.notebook,
+        Constantes.videos,
         Constantes.irmaoReserva
       ];
       print("Depois : ${locaisSorteioVoluntarios}");
@@ -155,10 +156,18 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
       }
       if (widget.tipoCadastroVoluntarios ==
           Constantes.fireBaseDocumentoSonoplastas) {
-        print("entrou");
+        String horarioTroca = "";
+        if (elemento.contains(Constantes.diaDomingo.toLowerCase()) ||
+            elemento.contains(Constantes.diaSabado.toLowerCase())) {
+          horarioTroca = horarioFinalSemana;
+        } else {
+          horarioTroca = horarioSemana;
+        }
         escalaSorteadaSom.add(EscalaSonoplatasModelo(
             dataCulto: elemento,
             notebook: linha[Constantes.notebook],
+            videos: linha[Constantes.videos],
+            horarioTroca: horarioTroca,
             mesaSom: linha[Constantes.mesaSom],
             irmaoReserva: linha[Constantes.irmaoReserva]));
       } else {
@@ -329,6 +338,8 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
         // adicionando cada item da escala para poder ser gravado online
         Constantes.mesaSom: escala.mesaSom.toString(),
         Constantes.notebook: escala.notebook.toString(),
+        Constantes.horarioTroca: escala.horarioTroca.toString(),
+        Constantes.videos : escala.videos.toString(),
         Constantes.irmaoReserva: escala.irmaoReserva.toString(),
         Constantes.dataCulto: escala.dataCulto.toString(),
       });

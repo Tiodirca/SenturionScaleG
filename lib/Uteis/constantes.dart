@@ -59,6 +59,7 @@ class Constantes {
   static const horarioTroca = "horarioTroca";
   static const irmaoReserva = "irmaoReserva";
 
+  static const videos = "videos";
   static const mesaSom = "mesaSom";
   static const notebook = "notebook";
 

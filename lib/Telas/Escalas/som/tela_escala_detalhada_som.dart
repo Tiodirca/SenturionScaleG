@@ -32,6 +32,7 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
   bool exibirOcultarBtnAcao = true;
   TextEditingController ctPesquisa = TextEditingController(text: "");
   bool exibirOcultarIrmaoReserva = true;
+  bool exibirOcultarVideos = true;
 
   @override
   void initState() {
@@ -101,9 +102,23 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
   ordenarLista() {
     // ordenando a lista pela data colocando
     // a data mais antiga no topo da listagem
-    escala.sort((a, b) => DateFormat("dd/MM/yyyy EEEE", "pt_BR")
-        .parse(a.dataCulto)
-        .compareTo(DateFormat("dd/MM/yyyy EEEE", "pt_BR").parse(b.dataCulto)));
+    escala.sort(
+          (a, b) {
+        //convertendo data para o formato correto
+        int data = DateFormat("dd/MM/yyyy EEEE", "pt_BR")
+            .parse(a.dataCulto)
+            .compareTo(
+            DateFormat("dd/MM/yyyy EEEE", "pt_BR").parse(b.dataCulto));
+        // caso a variavel seja diferente de 0 quer dizer que as datas nao sao iguais
+        // logo sera colocado em ordem baseado na ordem acima
+        if (data != 0) {
+          return data;
+        }
+        // caso a condicao acima retorne 0 quer dizer que as datas sao iguais
+        // logo sera colocado em ordem baseado na ordem a baixo
+        return a.horarioTroca.compareTo(b.horarioTroca);
+      },
+    );
   }
 
   // Metodo para chamar deletar tabela
@@ -147,6 +162,7 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                   GerarPdfEscalaSom gerarPDF = GerarPdfEscalaSom(
                     escala: escala,
                     exibirIrmaoReserva: exibirOcultarIrmaoReserva,
+                    exibirVideos: exibirOcultarVideos,
                     nomeEscala: widget.nomeTabela,
                   );
                   gerarPDF.pegarDados();
@@ -240,11 +256,14 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
     );
   }
 
-  Widget botoesSwitch(String label, bool valorBotao) => SizedBox(
+  Widget botoesSwitch(String label, bool valorBotao) => Container(
         width: 180,
         child: Row(
           children: [
-            Text(label),
+            Container(
+              width: 100,
+              child: Text(label),
+            ),
             Switch(
                 inactiveThumbColor: PaletaCores.corAzulMagenta,
                 value: valorBotao,
@@ -264,6 +283,10 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
     if (label == Textos.labelIrmaoReserva) {
       setState(() {
         exibirOcultarIrmaoReserva = !exibirOcultarIrmaoReserva;
+      });
+    } else if (label == Textos.labelVideos) {
+      setState(() {
+        exibirOcultarVideos = !exibirOcultarVideos;
       });
     }
   }
@@ -361,9 +384,9 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                                           horizontal: 10.0, vertical: 0.0),
                                       height: Platform.isWindows
                                           ? alturaTela * 0.5
-                                          : alturaTela * 0.5,
+                                          : alturaTela * 0.45,
                                       width: Platform.isWindows
-                                          ? larguraTela * 0.5
+                                          ? larguraTela * 0.6
                                           : larguraTela,
                                       child: Card(
                                         color: Colors.white,
@@ -390,6 +413,11 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                                                                 .center)),
                                                     DataColumn(
                                                         label: Text(
+                                                            Textos.labelHorario,
+                                                            textAlign: TextAlign
+                                                                .center)),
+                                                    DataColumn(
+                                                        label: Text(
                                                             Textos
                                                                 .labelSomNotebook,
                                                             textAlign: TextAlign
@@ -399,6 +427,16 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                                                             Textos.labelSomMesa,
                                                             textAlign: TextAlign
                                                                 .center)),
+                                                    DataColumn(
+                                                        label: Visibility(
+                                                            visible:
+                                                                exibirOcultarVideos,
+                                                            child: Text(
+                                                                Textos
+                                                                    .labelVideos,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center))),
                                                     DataColumn(
                                                         label: Visibility(
                                                             visible:
@@ -444,6 +482,17 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                                                                 //SET width
                                                                 child: Text(
                                                                     item
+                                                                        .horarioTroca,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center)),
+                                                          ),
+                                                          DataCell(
+                                                            SizedBox(
+                                                                width: 90,
+                                                                //SET width
+                                                                child: Text(
+                                                                    item
                                                                         .notebook,
                                                                     textAlign:
                                                                         TextAlign
@@ -459,6 +508,21 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center)),
+                                                          ),
+                                                          DataCell(
+                                                            Visibility(
+                                                              visible:
+                                                                  exibirOcultarVideos,
+                                                              child: SizedBox(
+                                                                width: 90,
+                                                                //SET width
+                                                                child: Text(
+                                                                    item.videos,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center),
+                                                              ),
+                                                            ),
                                                           ),
                                                           DataCell(Visibility(
                                                             visible:
@@ -571,7 +635,7 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                       alignment: Alignment.center,
                       color: Colors.white,
                       width: larguraTela,
-                      height: 150,
+                      height: 200,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -579,7 +643,6 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                           Visibility(
                             visible: exibirOcultarBtnAcao,
                             child: Container(
-                              margin: const EdgeInsets.only(top: 10.0),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment:
@@ -587,8 +650,14 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
                                 children: [
                                   botoesAcoes(Textos.btnBaixar,
                                       Constantes.iconeBaixar, 100, 60),
-                                  botoesSwitch(Textos.labelIrmaoReserva,
-                                      exibirOcultarIrmaoReserva),
+                                  Column(
+                                    children: [
+                                      botoesSwitch(Textos.labelIrmaoReserva,
+                                          exibirOcultarIrmaoReserva),
+                                      botoesSwitch(Textos.labelVideos,
+                                          exibirOcultarVideos),
+                                    ],
+                                  ),
                                   botoesAcoes(Textos.btnAdicionar,
                                       Constantes.iconeAdicionar, 80, 60),
                                 ],

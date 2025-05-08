@@ -1,6 +1,6 @@
 class Textos {
   static String nomeApp = "Senturion Scale G";
-  static String versaoApp = "Versão : 2.3.2";
+  static String versaoApp = "Versão : 2.8.1";
 
   //BOTOES
   static String btnCooperadores = "Criar Escala Cooperadores";
@@ -143,6 +143,7 @@ class Textos {
   static String labelDataSemana = "dataSemana";
   static String labelIrmaoReserva = "Irmão(a) Reserva";
   static String labelSomMesa = "Mesa de Som";
+  static String labelVideos = "Redes Sociais/Videos";
   static String labelSomNotebook = "Notebook/Projetor";
 
   // data PICKER selecao de data manual
@@ -235,9 +236,13 @@ class Textos {
       "\n\n"
       "OBS : Pilhas alcalinas NÃO SÃO RECARREGAVEIS, jamais colocar para carregar, RISCO DE EXPLOSAO.";
 
+  static String descricaoObsPDFSomVideos =
+      "OBS: Sempre LIMPAR a lente da camera antes de gravar, gravar sempre com o "
+      "celular o mais estavel possivel, para evitar videos muito tremidos\n\n";
+
   static String descricaoFechamento =
       "OBS: Quem está escalado no Pulpito está responsavel por FECHAR a IGREJA."
-     " Esperar todos SAIREM da nave da igreja\n\n "
+      " Esperar todos SAIREM da nave da igreja\n\n "
       " - Obreiro que está na ENTRADA,ficar para o lado de DENTRO DO MURO da igreja";
   static String descricaoObsPDFConversa =
       "OBS: Os Uniformes foram retirados, sendo livre utilizar ou nao\n\n OBS: Obreiros(as) Escalados na ENTRADA DA IGREJA fica PROIBIDO "

@@ -103,9 +103,31 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
   ordenarLista() {
     // ordenando a lista pela data colocando
     // a data mais antiga no topo da listagem
-    escala.sort((a, b) => DateFormat("dd/MM/yyyy EEEE", "pt_BR")
-        .parse(a.dataCulto)
-        .compareTo(DateFormat("dd/MM/yyyy EEEE", "pt_BR").parse(b.dataCulto)));
+    escala.sort(
+      (a, b) {
+        //convertendo data para o formato correto
+        int data = DateFormat("dd/MM/yyyy EEEE", "pt_BR")
+            .parse(a.dataCulto)
+            .compareTo(
+                DateFormat("dd/MM/yyyy EEEE", "pt_BR").parse(b.dataCulto));
+
+        // caso a variavel seja diferente de 0 quer dizer que as datas nao sao iguais
+        // logo sera colocado em ordem baseado na ordem acima
+        if (data != 0) {
+          return data;
+        }
+        // caso a condicao acima retorne 0 quer dizer que as datas sao iguais
+        // logo sera colocado em ordem baseado na ordem a baixo
+        return a.horarioTroca.compareTo(b.horarioTroca);
+      },
+    );
+  }
+
+  formatarHorario(String horarioTrocaRecuperado) {
+    String horaSeparada = horarioTrocaRecuperado.split(" : ")[1];
+    DateTime conversaoHorarioPData = new DateFormat("hh").parse(horaSeparada);
+    print(conversaoHorarioPData.hour.toString());
+    return conversaoHorarioPData;
   }
 
   // metodo para chamar metodo para verificar
@@ -230,7 +252,7 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
               )));
 
   Widget botoesSwitch(String label, bool valorBotao) => Container(
-    margin: EdgeInsets.symmetric(horizontal: 1.0),
+        margin: EdgeInsets.symmetric(horizontal: 1.0),
         width: 180,
         child: Row(
           children: [

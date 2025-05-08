@@ -38,6 +38,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
   bool exibirOcultarCamposNaoUsados = false;
   bool exibirWidgetCarregamento = true;
   bool exibirOpcoesData = false;
+
+  TimeOfDay? horarioTimePicker = const TimeOfDay(hour: 19, minute: 00);
   String opcaoDataComplemento = Textos.departamentoCultoLivre;
   String horarioTroca = "";
 
@@ -171,7 +173,6 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
   void initState() {
     super.initState();
     exibirWidgetCarregamento = false;
-    recuperarHorarioTroca();
     opcaoDataComplemento = Textos.departamentoCultoLivre;
     preencherCampos(widget.escalaModelo);
   }
@@ -215,7 +216,8 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
         DateFormat("dd/MM/yyyy EEEE", "pt_BR").parse(element.dataCulto);
     //verificando se os campos nao estao vazios
     // para exibi-los
-    recuperarHorarioTroca();
+    formatarHorario(element.horarioTroca);
+    sobreescreverHorarioTroca();
     if (element.servirSantaCeia.isNotEmpty) {
       setState(() {
         exibirCampoServirSantaCeia = true;
@@ -320,6 +322,7 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
             "${prefs.getString(Constantes.shareHorarioInicialSemana) ?? ''}";
       });
     }
+    formatarHorario(horarioTroca);
   }
 
   // metodo para formatar a data e exibir
@@ -368,6 +371,50 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
       });
       formatarData(dataSelecionada);
       recuperarHorarioTroca();
+    });
+  }
+
+  exibirTimePicker() async {
+    TimeOfDay? novoHorario = await showTimePicker(
+      context: context,
+      initialTime: horarioTimePicker!,
+      helpText: Textos.descricaoTimePickerHorarioInicial,
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.white,
+              onPrimary: PaletaCores.corCastanho,
+              surface: PaletaCores.corAzulEscuro,
+              onSurface: Colors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (novoHorario != null) {
+      setState(() {
+        horarioTimePicker = novoHorario;
+        sobreescreverHorarioTroca();
+      });
+    }
+  }
+
+  sobreescreverHorarioTroca() {
+    horarioTroca = "";
+    horarioTroca =
+    "${Textos.msgComecoHorarioEscala}${horarioTimePicker!.hour.toString()}:${horarioTimePicker!.minute.toString()}";
+  }
+
+  formatarHorario(String horarioTrocaRecuperado) {
+    String horaSeparada = horarioTrocaRecuperado.split(" : ")[1];
+    DateTime conversaoHorarioPData =
+    new DateFormat("hh:mm").parse(horaSeparada);
+    setState(() {
+      TimeOfDay conversaoDataPTimeOfDay =
+      TimeOfDay.fromDateTime(conversaoHorarioPData);
+      horarioTimePicker = conversaoDataPTimeOfDay;
     });
   }
 
@@ -460,6 +507,31 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
                                                 Constantes.iconeDataCulto,
                                                 60,
                                                 60),
+                                            SizedBox(
+                                                height: 50,
+                                                width: 50,
+                                                child: FloatingActionButton(
+                                                    elevation: 0,
+                                                    heroTag: "mudar horario",
+                                                    backgroundColor:
+                                                    Colors.white,
+                                                    shape: const RoundedRectangleBorder(
+                                                        side: BorderSide(
+                                                            color: PaletaCores
+                                                                .corCastanho),
+                                                        borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10))),
+                                                    onPressed: () async {
+                                                      exibirTimePicker();
+                                                    },
+                                                    child: const Icon(
+                                                      Icons
+                                                          .access_time_filled_outlined,
+                                                      color: PaletaCores
+                                                          .corAzulEscuro,
+                                                    ))),
                                             botoesAcoes(
                                                 Textos.btnOpcoesData,
                                                 Constantes.iconeOpcoesData,

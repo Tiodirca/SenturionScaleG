@@ -4,7 +4,9 @@ class EscalaSonoplatasModelo {
   String id;
   String dataCulto;
   String notebook;
+  String horarioTroca;
   String mesaSom;
+  String videos;
   String irmaoReserva;
 
   EscalaSonoplatasModelo({
@@ -12,6 +14,8 @@ class EscalaSonoplatasModelo {
     required this.dataCulto,
     required this.notebook,
     required this.mesaSom,
+    required this.videos,
+    required this.horarioTroca,
     required this.irmaoReserva,
   });
 
@@ -23,6 +27,8 @@ class EscalaSonoplatasModelo {
     return EscalaSonoplatasModelo(
       notebook: data?['notebook'],
       mesaSom: data?['mesaSom'],
+      videos: data?["videos"],
+      horarioTroca: data?['horarioTroca'],
       dataCulto: data?['dataCulto'],
       irmaoReserva: data?['irmaoReserva'],
     );
@@ -33,6 +39,8 @@ class EscalaSonoplatasModelo {
       "id": id,
       "notebook": notebook,
       "mesaSom": mesaSom,
+      "videos" : videos,
+      "horarioTroca" : horarioTroca,
       "dataCulto": dataCulto,
       "irmaoReserva": irmaoReserva,
     };

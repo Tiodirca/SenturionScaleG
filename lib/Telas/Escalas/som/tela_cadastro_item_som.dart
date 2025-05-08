@@ -9,6 +9,7 @@ import 'package:senturionscaleg/Uteis/textos.dart';
 import 'package:senturionscaleg/Widgets/barra_navegacao_widget.dart';
 import 'package:senturionscaleg/Widgets/tela_carregamento.dart';
 import 'package:senturionscaleg/Widgets/widget_opcoes_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 @immutable
 class TelaCadastroItemSom extends StatefulWidget {
@@ -28,11 +29,15 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
   bool exibirWidgetCarregamento = false;
   bool exibirTelaCarregamento = false;
   bool exibirOpcoesData = false;
+  String horarioTroca = "";
+  TimeOfDay? horarioTimePicker = const TimeOfDay(hour: 19, minute: 00);
   String opcaoDataComplemento = Textos.departamentoCultoLivre;
   DateTime dataSelecionada = DateTime.now();
   final _formKeyFormulario = GlobalKey<FormState>();
   TextEditingController ctMesaSom = TextEditingController(text: "");
   TextEditingController ctNotebook = TextEditingController(text: "");
+  TextEditingController ctVideos = TextEditingController(text: "");
+
   TextEditingController ctIrmaoReserva = TextEditingController(text: "");
 
   @override
@@ -40,6 +45,13 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
     // TODO: implement dispose
     super.dispose();
     MetodosAuxiliares.passarDepartamentoSelecionado("");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    recuperarHorarioTroca();
   }
 
   Widget camposFormulario(
@@ -137,7 +149,9 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
           .doc()
           .set({
         Constantes.mesaSom: ctMesaSom.text,
+        Constantes.horarioTroca: horarioTroca,
         Constantes.notebook: ctNotebook.text,
+        Constantes.videos: ctVideos.text,
         Constantes.dataCulto: formatarData(dataSelecionada),
         Constantes.irmaoReserva: ctIrmaoReserva.text,
       });
@@ -208,6 +222,71 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
         }
       });
       formatarData(dataSelecionada);
+      recuperarHorarioTroca();
+    });
+  }
+
+  // metodo para recuperar os horarios definidos
+  // e gravados no share preferences
+  recuperarHorarioTroca() async {
+    String data = formatarData(dataSelecionada).toString();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // verificando se a data corresponde a um dia do fim de semana
+    if (data.contains(Constantes.sabado) || data.contains(Constantes.domingo)) {
+      setState(() {
+        horarioTroca = Textos.msgComecoHorarioEscala +
+            "${prefs.getString(Constantes.shareHorarioInicialFSemana) ?? ''}";
+      });
+    } else {
+      setState(() {
+        horarioTroca = Textos.msgComecoHorarioEscala +
+            "${prefs.getString(Constantes.shareHorarioInicialSemana) ?? ''}";
+      });
+    }
+    formatarHorario(horarioTroca);
+  }
+
+  exibirTimePicker() async {
+    TimeOfDay? novoHorario = await showTimePicker(
+      context: context,
+      initialTime: horarioTimePicker!,
+      helpText: Textos.descricaoTimePickerHorarioInicial,
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.white,
+              onPrimary: PaletaCores.corCastanho,
+              surface: PaletaCores.corAzulEscuro,
+              onSurface: Colors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (novoHorario != null) {
+      setState(() {
+        horarioTimePicker = novoHorario;
+        sobreescreverHorarioTroca();
+      });
+    }
+  }
+
+  sobreescreverHorarioTroca() {
+    horarioTroca = "";
+    horarioTroca =
+        "${Textos.msgComecoHorarioEscala}${horarioTimePicker!.hour.toString()}:${horarioTimePicker!.minute.toString()}";
+  }
+
+  formatarHorario(String horarioTrocaRecuperado) {
+    String horaSeparada = horarioTrocaRecuperado.split(" : ")[1];
+    DateTime conversaoHorarioPData =
+        new DateFormat("hh:mm").parse(horaSeparada);
+    setState(() {
+      TimeOfDay conversaoDataPTimeOfDay =
+          TimeOfDay.fromDateTime(conversaoHorarioPData);
+      horarioTimePicker = conversaoDataPTimeOfDay;
     });
   }
 
@@ -300,6 +379,31 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                                                 Constantes.iconeDataCulto,
                                                 60,
                                                 60),
+                                            SizedBox(
+                                                height: 50,
+                                                width: 50,
+                                                child: FloatingActionButton(
+                                                    elevation: 0,
+                                                    heroTag: "mudar horario",
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    shape: const RoundedRectangleBorder(
+                                                        side: BorderSide(
+                                                            color: PaletaCores
+                                                                .corCastanho),
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    10))),
+                                                    onPressed: () async {
+                                                      exibirTimePicker();
+                                                    },
+                                                    child: const Icon(
+                                                      Icons
+                                                          .access_time_filled_outlined,
+                                                      color: PaletaCores
+                                                          .corAzulEscuro,
+                                                    ))),
                                             botoesAcoes(
                                                 Textos.btnOpcoesData,
                                                 Constantes.iconeOpcoesData,
@@ -316,6 +420,11 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                                                   formatarData(dataSelecionada),
                                               textAlign: TextAlign.center),
                                         ),
+                                        SizedBox(
+                                          width: larguraTela,
+                                          child: Text(horarioTroca,
+                                              textAlign: TextAlign.center),
+                                        ),
                                         Form(
                                           key: _formKeyFormulario,
                                           child: Wrap(
@@ -328,6 +437,10 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                                                   larguraTela,
                                                   ctMesaSom,
                                                   Textos.labelSomMesa),
+                                              camposFormulario(
+                                                  larguraTela,
+                                                  ctVideos,
+                                                  Textos.labelVideos),
                                               camposFormulario(
                                                   larguraTela,
                                                   ctIrmaoReserva,
