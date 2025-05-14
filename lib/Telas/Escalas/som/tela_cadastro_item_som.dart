@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:senturionscaleg/Uteis/constantes.dart';
 import 'package:senturionscaleg/Uteis/estilo.dart';
@@ -322,7 +325,10 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
         .padding
         .top;
     double alturaAppBar = AppBar().preferredSize.height;
-
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Theme(
         data: estilo.estiloGeral,
         child: GestureDetector(

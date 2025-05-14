@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:senturionscaleg/Modelo/escala_sonoplastas.dart';
 import 'package:senturionscaleg/Uteis/PDF/gerar_pdf_escala_som.dart';
@@ -294,7 +296,10 @@ class _TelaEscalaDetalhadaSomState extends State<TelaEscalaDetalhadaSom> {
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
-
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Theme(
         data: estilo.estiloGeral,
         child: GestureDetector(

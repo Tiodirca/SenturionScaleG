@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:senturionscaleg/Modelo/escala_modelo.dart';
 import 'package:senturionscaleg/Uteis/paleta_cores.dart';
@@ -441,7 +443,10 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
     double larguraTela = MediaQuery.of(context).size.width;
     double alturaBarraStatus = MediaQuery.of(context).padding.top;
     double alturaAppBar = AppBar().preferredSize.height;
-
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Theme(
         data: estilo.estiloGeral,
         child: GestureDetector(

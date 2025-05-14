@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:senturionscaleg/Modelo/escala_modelo.dart';
 import 'package:senturionscaleg/Modelo/escala_sonoplastas.dart';
 import 'package:senturionscaleg/Uteis/metodos_auxiliares.dart';
@@ -440,6 +442,10 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;
     double alturaTela = MediaQuery.of(context).size.height;
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Theme(
         data: estilo.estiloGeral,
         child: GestureDetector(

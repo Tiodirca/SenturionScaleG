@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../Uteis/estilo.dart';
 import '../Uteis/textos.dart';
@@ -69,6 +72,10 @@ class _TelaInicialState extends State<TelaInicial> {
         .of(context)
         .size
         .height;
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Theme(
         data: estilo.estiloGeral,
         child: Scaffold(

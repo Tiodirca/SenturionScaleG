@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:senturionscaleg/Modelo/check_box_modelo.dart';
 import 'package:senturionscaleg/Uteis/constantes.dart';
 import 'package:senturionscaleg/Uteis/estilo.dart';
@@ -157,6 +159,10 @@ class _TelaSelecaoIntervaloTrabalhoState
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;
     double alturaTela = MediaQuery.of(context).size.height;
+    Timer(Duration(seconds: 2), () {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+    overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Theme(
         data: estilo.estiloGeral,
         child: GestureDetector(

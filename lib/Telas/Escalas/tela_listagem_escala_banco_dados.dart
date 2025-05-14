@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:senturionscaleg/Modelo/tabelas_modelo.dart';
 import 'package:senturionscaleg/Uteis/metodos_auxiliares.dart';
 import 'package:senturionscaleg/Uteis/paleta_cores.dart';
@@ -250,7 +253,10 @@ class _TelaListagemTabelasBancoDadosState
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;
     double alturaTela = MediaQuery.of(context).size.height;
-
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Theme(
         data: estilo.estiloGeral,
         child: GestureDetector(

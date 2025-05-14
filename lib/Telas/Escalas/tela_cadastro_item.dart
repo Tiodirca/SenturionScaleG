@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:senturionscaleg/Uteis/constantes.dart';
 import 'package:senturionscaleg/Uteis/estilo.dart';
@@ -385,7 +387,10 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
     double larguraTela = MediaQuery.of(context).size.width;
     double alturaBarraStatus = MediaQuery.of(context).padding.top;
     double alturaAppBar = AppBar().preferredSize.height;
-
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Theme(
         data: estilo.estiloGeral,
         child: GestureDetector(

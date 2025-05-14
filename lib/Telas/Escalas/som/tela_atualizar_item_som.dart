@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:senturionscaleg/Modelo/escala_sonoplastas.dart';
 import 'package:senturionscaleg/Uteis/paleta_cores.dart';
@@ -336,7 +339,10 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
     double larguraTela = MediaQuery.of(context).size.width;
     double alturaBarraStatus = MediaQuery.of(context).padding.top;
     double alturaAppBar = AppBar().preferredSize.height;
-
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Theme(
         data: estilo.estiloGeral,
         child: GestureDetector(

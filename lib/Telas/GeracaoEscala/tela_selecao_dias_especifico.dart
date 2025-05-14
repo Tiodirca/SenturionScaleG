@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../Modelo/check_box_modelo.dart';
 import '../../Uteis/estilo.dart';
 import '../../Uteis/paleta_cores.dart';
@@ -150,6 +153,10 @@ class _TelaSelecaoTelaSelecaoDiasEspecificoState
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;
     double alturaTela = MediaQuery.of(context).size.height;
+    Timer(Duration(seconds: 2), () {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+    overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Theme(
         data: estilo.estiloGeral,
         child: GestureDetector(

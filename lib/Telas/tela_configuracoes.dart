@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:senturionscaleg/Widgets/barra_navegacao_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -141,7 +144,10 @@ class _TelaConfiguracoesState extends State<TelaConfiguracoes> {
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
-
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Theme(
       data: estilo.estiloGeral,
       child: Scaffold(
