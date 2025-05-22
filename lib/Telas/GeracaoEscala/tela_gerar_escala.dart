@@ -288,6 +288,8 @@ class _TelaGerarEscalaState extends State<TelaGerarEscala> {
         Map dados = {};
         dados[Constantes.rotaArgumentoNomeEscala] =
             MetodosAuxiliares.removerEspacoNomeTabelas(nomeEscala.text);
+        dados[Constantes.rotaArgumentoIDEscalaSelecionada] =
+            idDocumentoFirebase;
         Navigator.pushReplacementNamed(
             arguments: dados, context, Constantes.rotaEscalaDetalhada);
       }
