@@ -111,11 +111,13 @@ class GerarPDFEscala {
                   )),
             ]),
         pageFormat: PdfPageFormat.a4,
+
         orientation: pdfLib.PageOrientation.portrait,
         //CORPO DO PDF
         build: (context) => [
               pdfLib.SizedBox(height: 20),
               pdfLib.TableHelper.fromTextArray(
+                
                   cellPadding: pdfLib.EdgeInsets.symmetric(
                       horizontal: 0.0,
                       vertical: exibirMesaApoio == true ? 5.0 : 1.0),
@@ -147,7 +149,6 @@ class GerarPDFEscala {
                         pdfLib.TextStyle(fontWeight: pdfLib.FontWeight.bold)),
               )
             ]));
-
     List<int> bytes = await pdf.save();
     salvarPDF(bytes, '$nomeEscala.pdf');
     escala = [];

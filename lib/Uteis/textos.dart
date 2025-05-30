@@ -23,6 +23,8 @@ class Textos {
   static String btnVerEscalaAtual = "Escalas atual";
   static String btnOpcoesData = "Opções da data";
   static String btnTelaInicial = "Tela Inicial";
+  static String btnCancelarAcao = "Cancelar Ação";
+  static String btnQuantidadeRepeticaoNomes = "";
 
   static String msgComecoHorarioEscala = "Iniciar às : ";
   static String msgTrocaHorarioEscala = " Trocar às: ";
@@ -80,9 +82,11 @@ class Textos {
   // LISTAGEM
   static String tituloTelaEscalaDetalhada = "Escalas Detalhada";
   static String descricaoTelaListagemItens =
-      "Aqui você pode estar vendo a escala completa,"
-      "com todos os itens já adicionados. se for necessario"
-      " arraste a lista para os lados para ver os demais campos.";
+      "Escala completa com todos os itens adicionados, arraste para os lados para ver demais campos";
+
+  static String telaFiltragemDescricao = "Aqui você pode ver os nomes "
+      "e a quantidade de vezes que eles se repetem, "
+      "aperte encima do nome para visualizar na escala onde eles estão";
 
   // TELA DE CADASTRO DE ITEM
   static String tituloTelaCadastro = "Cadastro de item na Escalas";
@@ -169,6 +173,7 @@ class Textos {
   static String departamentoConferencia = "Conferencia";
   static String departamentoGrupoLouvor = "Grupo de Louvor";
   static String departamentoMusicos = "Músicos";
+  static String departamentoCeia = "Santa Ceia";
 
   static String descricaoDepartamentoPeriodo =
       "Selecione se o culto haverá alguma informação adicional";

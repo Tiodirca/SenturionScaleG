@@ -62,6 +62,8 @@ class _WidgetOpcoesDataState extends State<WidgetOpcoesData> {
         valorRadioButton: 13, nomeRadioButton: Textos.departamentoGrupoLouvor),
     OpcaoDataRadioButton(
         valorRadioButton: 14, nomeRadioButton: Textos.departamentoMusicos),
+    OpcaoDataRadioButton(
+        valorRadioButton: 15, nomeRadioButton: Textos.departamentoCeia),
   ];
 
   @override

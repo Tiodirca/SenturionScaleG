@@ -30,13 +30,20 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
   Estilo estilo = Estilo();
   bool exibirOcultarCampoRecolherOferta = false;
   bool exibirOcultarCampoIrmaoReserva = false;
+  bool exibirTelaPesquisa = false;
   bool exibirOcultarCampoMesaApoio = false;
   bool exibirOcultarCampoUniforme = false;
   bool exibirOcultarServirSantaCeia = false;
-  bool exibirPortaBanheiroFeminino = true;
+  bool exibirOcultarTelaQuantiRepeticaoNomes = false;
   late List<EscalaModelo> escala;
   bool exibirWidgetCarregamento = true;
   bool exibirOcultarBtnAcao = true;
+  int contadorItensEscala = 0;
+  int quantRepeticaoNome = 0;
+  List<String> nomesFiltrados = [];
+  Set<String> nomes = Set();
+  String nomeReacar = "";
+  Map<String, int> quantidadeRepeticaoNome = {};
 
   @override
   void initState() {
@@ -46,6 +53,15 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
   }
 
   realizarBuscaDadosFireBase(String idDocumento) async {
+    setState(() {
+      nomes.clear();
+      quantidadeRepeticaoNome.clear();
+      nomesFiltrados.clear();
+      nomeReacar = "";
+      exibirOcultarTelaQuantiRepeticaoNomes = false;
+      contadorItensEscala = 0;
+      quantRepeticaoNome = 0;
+    });
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
@@ -58,9 +74,8 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
         // for para percorrer todos os dados que a variavel recebeu
         if (querySnapshot.docs.isNotEmpty) {
           for (var documentoFirebase in querySnapshot.docs) {
-            // chamando metodo para converter json
-            // recebido do firebase para objeto
-            converterJsonParaObjeto(idDocumento, documentoFirebase.id);
+            converterJsonParaObjeto(
+                idDocumento, documentoFirebase.id, querySnapshot.size);
           }
         } else {
           setState(() {
@@ -72,7 +87,8 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
     );
   }
 
-  converterJsonParaObjeto(String idDocumento, String id) async {
+  converterJsonParaObjeto(
+      String idDocumento, String id, int tamanhoEscala) async {
     // instanciando variavel
     var db = FirebaseFirestore.instance;
     //fazendo busca no banco de dados
@@ -94,11 +110,102 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
       dados.id = docSnap.id;
       //adicionando os dados convertidos na lista
       escala.add(dados);
+      contadorItensEscala++;
       setState(() {
         ordenarLista();
         chamarVerificarColunaVazia();
         exibirWidgetCarregamento = false;
       });
+      if (contadorItensEscala == tamanhoEscala) {
+        setState(() {
+          pegarNomesEscala();
+        });
+      }
+    }
+  }
+
+  pegarNomesEscala() {
+    List<String> nomesFiltradosAuxiliar = [];
+    if (exibirOcultarCampoMesaApoio) {
+      for (EscalaModelo voluntarios in escala) {
+        if (!nomes.contains(voluntarios.primeiraHoraEntrada) ||
+            !nomes.contains(voluntarios.irmaoReserva) ||
+            !nomes.contains(voluntarios.mesaApoio)) {
+          nomes.add(voluntarios.primeiraHoraEntrada.toLowerCase());
+          nomes.add(voluntarios.irmaoReserva.toLowerCase());
+          nomes.add(voluntarios.mesaApoio.toLowerCase());
+          nomesFiltradosAuxiliar.add(voluntarios.mesaApoio.toLowerCase());
+          nomesFiltradosAuxiliar
+              .add(voluntarios.primeiraHoraEntrada.toLowerCase());
+          nomesFiltradosAuxiliar.add(voluntarios.irmaoReserva.toLowerCase());
+        }
+      }
+    } else {
+      for (EscalaModelo voluntarios in escala) {
+        if (!nomes.contains(voluntarios.recolherOferta) ||
+            !nomes.contains(voluntarios.primeiraHoraPulpito) ||
+            !nomes.contains(voluntarios.primeiraHoraEntrada) ||
+            !nomes.contains(voluntarios.irmaoReserva)) {
+          nomesFiltradosAuxiliar.add(voluntarios.recolherOferta.toLowerCase());
+          nomesFiltradosAuxiliar.add(voluntarios.primeiraHoraPulpito.toLowerCase());
+          nomesFiltradosAuxiliar.add(voluntarios.primeiraHoraEntrada.toLowerCase());
+          nomesFiltradosAuxiliar.add(voluntarios.irmaoReserva.toLowerCase());
+        }
+      }
+    }
+    nomesFiltradosAuxiliar.forEach(
+      (element) {
+        if (element.isNotEmpty) {
+          if (element.contains(" e ") || element.contains("/")) {
+            element = element.replaceAll(" e ", "/");
+            nomesFiltrados.addAll(element.split("/"));
+          } else {
+            nomesFiltrados.add(element);
+          }
+        }
+      },
+    );
+    chamarPercorrerEscalaCompleta();
+    print(quantidadeRepeticaoNome.toString());
+  }
+
+  chamarPercorrerEscalaCompleta() {
+    for (int i = 0; i < nomesFiltrados.length; i++) {
+      percorrerEscalaCompleta(i);
+      quantRepeticaoNome = 0;
+    }
+  }
+
+  //metodo para percorrer a escala completa
+  percorrerEscalaCompleta(int index) {
+    escala.forEach(
+      (element) {
+        verificarQuantRepeticaoNome(
+            element.primeiraHoraEntrada.toLowerCase(), index);
+        //validando se a escala e de cooperadoras
+        //caso o campo mesa apoio estiver ativo fazer os seguintes passos
+        if (exibirOcultarCampoMesaApoio) {
+          verificarQuantRepeticaoNome(element.mesaApoio.toLowerCase(), index);
+        } else {
+          verificarQuantRepeticaoNome(
+              element.recolherOferta.toLowerCase(), index);
+          verificarQuantRepeticaoNome(
+              element.primeiraHoraPulpito.toLowerCase(), index);
+        }
+        verificarQuantRepeticaoNome(element.irmaoReserva.toLowerCase(), index);
+      },
+    );
+  }
+
+  //metodo para verificar q quantidade de repeticoes que a escala tem
+  verificarQuantRepeticaoNome(String nome, int index) {
+    //verificando se a string JA contem na LISTA nome filtrados
+    if (nome.contains(nomesFiltrados.elementAt(index))) {
+      //caso JA tenha aumentar a quantidade
+      quantRepeticaoNome++;
+      //passando MAP para colocar o nome e a quantidade
+      quantidadeRepeticaoNome[nomesFiltrados.elementAt(index)] =
+          quantRepeticaoNome;
     }
   }
 
@@ -282,6 +389,20 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
     }
   }
 
+  validarNomeFoco(String nome) {
+    if (nome.toLowerCase().contains(nomeReacar) && nomeReacar.isNotEmpty) {
+      return BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border(
+              bottom: BorderSide(width: 1, color: Colors.green),
+              left: BorderSide(width: 1, color: Colors.green),
+              right: BorderSide(width: 1, color: Colors.green),
+              top: BorderSide(width: 1, color: Colors.green)));
+    } else {
+      return null;
+    }
+  }
+
   Future<void> alertaExclusao(EscalaModelo escala, BuildContext context) async {
     return showDialog<void>(
       context: context,
@@ -363,6 +484,24 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
               } else {
                 return Scaffold(
                   appBar: AppBar(
+                      actions: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          child: FloatingActionButton(
+                            heroTag: "Pesquisa",
+                            onPressed: () {
+                              setState(() {
+                                exibirOcultarTelaQuantiRepeticaoNomes = true;
+                              });
+                            },
+                            child: Icon(
+                              Icons.search,
+                              size: 30,
+                            ),
+                          ),
+                        )
+                      ],
                       title: Text(Textos.tituloTelaEscalaDetalhada),
                       leading: IconButton(
                         color: Colors.white,
@@ -413,44 +552,47 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                             width: larguraTela,
                             height: alturaTela,
                             child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
-                                    width: larguraTela,
-                                    child: Text(
-                                        Textos.descricaoTabelaSelecionada +
-                                            widget.nomeTabela,
-                                        textAlign: TextAlign.end),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 0),
-                                    width: larguraTela,
-                                    child: Text(
-                                        Textos.descricaoTelaListagemItens,
-                                        style: const TextStyle(fontSize: 18),
-                                        textAlign: TextAlign.center),
-                                  ),
-                                  Container(
+                                child: Stack(
+                              alignment: AlignmentDirectional.topEnd,
+                              children: [
+                                Column(
+                                  children: [
+                                    Container(
                                       margin: const EdgeInsets.symmetric(
-                                          horizontal: 10.0, vertical: 0.0),
-                                      height: Platform.isWindows
-                                          ? alturaTela * 0.6
-                                          : alturaTela * 0.5,
+                                          horizontal: 10.0),
                                       width: larguraTela,
-                                      child: Card(
-                                        color: Colors.white,
-                                        shape: const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color:
-                                                    PaletaCores.corCastanho)),
-                                        child: Center(
-                                          child: ListView(
+                                      child: Text(
+                                          Textos.descricaoTabelaSelecionada +
+                                              widget.nomeTabela,
+                                          textAlign: TextAlign.end),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 0),
+                                      width: larguraTela,
+                                      child: Text(
+                                          Textos.descricaoTelaListagemItens,
+                                          style: const TextStyle(fontSize: 18),
+                                          textAlign: TextAlign.center),
+                                    ),
+                                    Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10.0, vertical: 0.0),
+                                        height: Platform.isWindows
+                                            ? alturaTela * 0.55
+                                            : alturaTela * 0.5,
+                                        width: larguraTela,
+                                        child: Card(
+                                          color: Colors.white,
+                                          shape: const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                              borderSide: BorderSide(
+                                                  width: 1,
+                                                  color:
+                                                      PaletaCores.corCastanho)),
+                                          child: Center(
+                                              child: ListView(
                                             children: [
                                               SingleChildScrollView(
                                                 scrollDirection:
@@ -580,7 +722,10 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                           DataCell(Visibility(
                                                             visible:
                                                                 !exibirOcultarCampoMesaApoio,
-                                                            child: SizedBox(
+                                                            child: Container(
+                                                                decoration:
+                                                                    validarNomeFoco(item
+                                                                        .primeiraHoraPulpito),
                                                                 width: 90,
                                                                 //SET width
                                                                 child: Text(
@@ -590,7 +735,10 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                                         TextAlign
                                                                             .center)),
                                                           )),
-                                                          DataCell(SizedBox(
+                                                          DataCell(Container(
+                                                              decoration:
+                                                                  validarNomeFoco(item
+                                                                      .primeiraHoraEntrada),
                                                               width: 90,
                                                               //SET width
                                                               child: Text(
@@ -602,7 +750,10 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                           DataCell(Visibility(
                                                             visible:
                                                                 exibirOcultarCampoMesaApoio,
-                                                            child: SizedBox(
+                                                            child: Container(
+                                                                decoration:
+                                                                    validarNomeFoco(item
+                                                                        .mesaApoio),
                                                                 width: 90,
                                                                 //SET width
                                                                 child: Text(
@@ -631,7 +782,10 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                           DataCell(Visibility(
                                                             visible:
                                                                 exibirOcultarCampoRecolherOferta,
-                                                            child: SizedBox(
+                                                            child: Container(
+                                                                decoration:
+                                                                    validarNomeFoco(item
+                                                                        .recolherOferta),
                                                                 width: 90,
                                                                 //SET width
                                                                 child: Text(
@@ -644,7 +798,10 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                           DataCell(Visibility(
                                                             visible:
                                                                 exibirOcultarServirSantaCeia,
-                                                            child: SizedBox(
+                                                            child: Container(
+                                                                decoration:
+                                                                    validarNomeFoco(item
+                                                                        .servirSantaCeia),
                                                                 width: 90,
                                                                 //SET width
                                                                 child: Text(
@@ -657,7 +814,10 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                           DataCell(Visibility(
                                                             visible:
                                                                 exibirOcultarCampoIrmaoReserva,
-                                                            child: SizedBox(
+                                                            child: Container(
+                                                                decoration:
+                                                                    validarNomeFoco(item
+                                                                        .irmaoReserva),
                                                                 width: 90,
                                                                 //SET width
                                                                 child: Text(
@@ -752,12 +912,150 @@ class _TelaEscalaDetalhadaState extends State<TelaEscalaDetalhada> {
                                                 ),
                                               ),
                                             ],
-                                          ),
-                                        ),
-                                      )),
-                                ],
-                              ),
-                            ));
+                                          )),
+                                        )),
+                                  ],
+                                ),
+                                Visibility(
+                                    visible:
+                                        exibirOcultarTelaQuantiRepeticaoNomes,
+                                    child: Positioned(
+                                        right: 0,
+                                        child: Center(
+                                          child: Container(
+                                              padding: EdgeInsets.all(10),
+                                              width: Platform.isAndroid ||
+                                                      Platform.isIOS
+                                                  ? larguraTela * 0.9
+                                                  : larguraTela * 0.3,
+                                              child: Card(
+                                                  color: Colors.white,
+                                                  shape: const OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20)),
+                                                      borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: PaletaCores
+                                                              .corCastanho)),
+                                                  child: Column(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(10),
+                                                        child: Text(
+                                                          Textos
+                                                              .telaFiltragemDescricao,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                      ),
+                                                      Column(
+                                                        children: [
+                                                          Container(
+                                                            height: 200,
+                                                            width: larguraTela,
+                                                            child: Center(
+                                                              child: GridView
+                                                                  .builder(
+                                                                itemCount:
+                                                                    quantidadeRepeticaoNome
+                                                                        .length,
+                                                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                                    crossAxisCount:
+                                                                        Platform.isAndroid ||
+                                                                                Platform.isIOS
+                                                                            ? 3
+                                                                            : 4),
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        index) {
+                                                                  return Container(
+                                                                      height:
+                                                                          100,
+                                                                      margin: EdgeInsets.symmetric(
+                                                                          vertical:
+                                                                              5,
+                                                                          horizontal:
+                                                                              5),
+                                                                      child:
+                                                                          FloatingActionButton(
+                                                                        heroTag: quantidadeRepeticaoNome
+                                                                            .keys
+                                                                            .elementAt(index)
+                                                                            .toString(),
+                                                                        onPressed:
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            exibirOcultarTelaQuantiRepeticaoNomes =
+                                                                                false;
+                                                                            nomeReacar =
+                                                                                "";
+                                                                            nomeReacar =
+                                                                                quantidadeRepeticaoNome.keys.elementAt(index);
+                                                                            print(nomeReacar);
+                                                                          });
+                                                                        },
+                                                                        child:
+                                                                            Wrap(
+                                                                          alignment:
+                                                                              WrapAlignment.center,
+                                                                          children: [
+                                                                            Text(
+                                                                              textAlign: TextAlign.center,
+                                                                              " ${quantidadeRepeticaoNome.keys.elementAt(index)}",
+                                                                              style: TextStyle(color: Colors.black),
+                                                                            ),
+                                                                            Text(textAlign: TextAlign.center,
+                                                                              ": ${quantidadeRepeticaoNome.values.elementAt(index).toString()}",
+                                                                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ));
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    bottom: 10),
+                                                            width: 100,
+                                                            height: 40,
+                                                            child:
+                                                                FloatingActionButton(
+                                                              heroTag: Textos
+                                                                  .btnCancelarAcao,
+                                                              onPressed: () {
+                                                                setState(() {
+                                                                  exibirOcultarTelaQuantiRepeticaoNomes =
+                                                                      false;
+                                                                  nomeReacar =
+                                                                      "";
+                                                                });
+                                                              },
+                                                              child: Text(
+                                                                Textos
+                                                                    .btnCancelarAcao,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    color: PaletaCores
+                                                                        .corRosaAvermelhado),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ))),
+                                        )))
+                              ],
+                            )));
                       }
                     },
                   ),
