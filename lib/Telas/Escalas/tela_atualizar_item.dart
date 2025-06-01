@@ -291,10 +291,10 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
         Constantes.servirSantaCeia: servirSantaCeia,
         Constantes.dataCulto: formatarData(dataSelecionada),
         Constantes.horarioTroca:
-        opcaoDataComplemento == Textos.departamentoEbom ||
-            opcaoDataComplemento == Textos.departamentoSede
-            ? Textos.departamentoEbom
-            : horarioTroca,
+        opcaoDataComplemento.contains(Textos.departamentoEbom)  ||
+            opcaoDataComplemento.contains(Textos.departamentoSede)
+            ? "--"
+                : horarioTroca,
         Constantes.irmaoReserva: ctIrmaoReserva.text,
       });
       MetodosAuxiliares.exibirMensagens(Textos.sucessoMsgAtualizarItemEscala,
@@ -339,7 +339,7 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
       return dataFormatada = "$dataFormatada ( Santa Ceia )";
     } else if (opcaoDataComplemento.isNotEmpty &&
         opcaoDataComplemento != Textos.departamentoCultoLivre) {
-      return "$dataFormatada ( $opcaoDataComplemento )";
+      return "$dataFormatada ($opcaoDataComplemento)";
     } else {
       return dataFormatada;
     }
@@ -408,9 +408,10 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
   }
 
   sobreescreverHorarioTroca() {
+    formatarHorario(horarioTimePicker.toString());
     horarioTroca = "";
     horarioTroca =
-        "${Textos.msgComecoHorarioEscala}${horarioTimePicker!.hour.toString()}:${horarioTimePicker!.minute.toString()}";
+        "${Textos.msgComecoHorarioEscala}${horarioTimePicker.toString().replaceAll("TimeOfDay(", "").replaceAll(")", "")}";
   }
 
   formatarHorario(String horarioTrocaRecuperado) {
@@ -428,7 +429,7 @@ class _TelaAtualizarState extends State<TelaAtualizar> {
     }
     String horarioFinal = hora + ":" + minuto;
     DateTime conversaoHorarioPData =
-        new DateFormat("hh:mm").parse(horarioFinal);
+        new DateFormat("HH:mm").parse(horarioFinal);
 
     setState(() {
       TimeOfDay conversaoDataPTimeOfDay =

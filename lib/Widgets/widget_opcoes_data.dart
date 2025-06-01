@@ -29,6 +29,7 @@ class _WidgetOpcoesDataState extends State<WidgetOpcoesData> {
     CheckBoxModelo(texto: Textos.departamentoPeriodoNoite),
     CheckBoxModelo(texto: Textos.departamentoPrimeiroHorario),
     CheckBoxModelo(texto: Textos.departamentoSegundoHorario),
+    CheckBoxModelo(texto: Textos.departamentoSede)
   ];
 
   List<OpcaoDataRadioButton> opcoesDepartamento = [
@@ -51,19 +52,19 @@ class _WidgetOpcoesDataState extends State<WidgetOpcoesData> {
     OpcaoDataRadioButton(
         valorRadioButton: 8, nomeRadioButton: Textos.departamentoEbom),
     OpcaoDataRadioButton(
-        valorRadioButton: 9, nomeRadioButton: Textos.departamentoSede),
+        valorRadioButton: 9, nomeRadioButton: Textos.departamentoFamilia),
     OpcaoDataRadioButton(
-        valorRadioButton: 10, nomeRadioButton: Textos.departamentoFamilia),
+        valorRadioButton: 10, nomeRadioButton: Textos.departamentoDeboras),
     OpcaoDataRadioButton(
-        valorRadioButton: 11, nomeRadioButton: Textos.departamentoDeboras),
+        valorRadioButton: 11, nomeRadioButton: Textos.departamentoConferencia),
     OpcaoDataRadioButton(
-        valorRadioButton: 12, nomeRadioButton: Textos.departamentoConferencia),
+        valorRadioButton: 12, nomeRadioButton: Textos.departamentoGrupoLouvor),
     OpcaoDataRadioButton(
-        valorRadioButton: 13, nomeRadioButton: Textos.departamentoGrupoLouvor),
+        valorRadioButton: 13, nomeRadioButton: Textos.departamentoMusicos),
     OpcaoDataRadioButton(
-        valorRadioButton: 14, nomeRadioButton: Textos.departamentoMusicos),
+        valorRadioButton: 14, nomeRadioButton: Textos.departamentoCeia),
     OpcaoDataRadioButton(
-        valorRadioButton: 15, nomeRadioButton: Textos.departamentoCeia),
+        valorRadioButton: 15, nomeRadioButton: Textos.departamentoEnsaio),
   ];
 
   @override
@@ -250,13 +251,15 @@ class _WidgetOpcoesDataState extends State<WidgetOpcoesData> {
     return Column(
       children: [
         Text(
-          Textos.descricaoSelecaoDepartamentos,textAlign: TextAlign.center,
+          Textos.descricaoSelecaoDepartamentos,
+          textAlign: TextAlign.center,
           style: TextStyle(fontSize: 16),
         ),
         Text(
           dataSelecionadaComDepartamento
               .replaceAll("(", "")
-              .replaceAll(")", ""),textAlign: TextAlign.center,
+              .replaceAll(")", ""),
+          textAlign: TextAlign.center,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         Container(

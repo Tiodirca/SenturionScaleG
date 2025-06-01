@@ -207,10 +207,10 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
         Constantes.notebook: ctNotebook.text,
         Constantes.mesaSom: ctMesaSom.text,
         Constantes.horarioTroca:
-            opcaoDataComplemento == Textos.departamentoEbom ||
-                    opcaoDataComplemento == Textos.departamentoSede
-                ? Textos.departamentoEbom
-                : horarioTroca,
+        opcaoDataComplemento.contains(Textos.departamentoEbom)  ||
+            opcaoDataComplemento.contains(Textos.departamentoSede)
+            ? "--"
+            : horarioTroca,
         Constantes.videos: ctVideos.text,
         Constantes.dataCulto: formatarData(dataSelecionada),
         Constantes.irmaoReserva: ctIrmaoReserva.text,
@@ -304,9 +304,10 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
   }
 
   sobreescreverHorarioTroca() {
+    formatarHorario(horarioTimePicker.toString());
     horarioTroca = "";
     horarioTroca =
-        "${Textos.msgComecoHorarioEscala}${horarioTimePicker!.hour.toString()}:${horarioTimePicker!.minute.toString()}";
+        "${Textos.msgComecoHorarioEscala}${horarioTimePicker.toString().replaceAll("TimeOfDay(", "").replaceAll(")", "")}";
   }
 
   formatarHorario(String horarioTrocaRecuperado) {
@@ -324,7 +325,7 @@ class _TelaAtualizarItemSomState extends State<TelaAtualizarItemSom> {
     }
     String horarioFinal = hora + ":" + minuto;
     DateTime conversaoHorarioPData =
-        new DateFormat("hh:mm").parse(horarioFinal);
+    new DateFormat("HH:mm").parse(horarioFinal);
 
     setState(() {
       TimeOfDay conversaoDataPTimeOfDay =

@@ -232,10 +232,11 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
         Constantes.mesaApoio: mesaApoio,
         Constantes.servirSantaCeia: servirSantaCeia,
         Constantes.dataCulto: formatarData(dataSelecionada),
-        Constantes.horarioTroca: opcaoDataComplemento == Textos.departamentoEbom ||
-            opcaoDataComplemento == Textos.departamentoSede
-            ? Textos.departamentoEbom
-            : horarioTroca,
+        Constantes.horarioTroca:
+        opcaoDataComplemento.contains(Textos.departamentoEbom)  ||
+            opcaoDataComplemento.contains(Textos.departamentoSede)
+            ? "--"
+                : horarioTroca,
         Constantes.irmaoReserva: ctIrmaoReserva.text,
       });
       MetodosAuxiliares.exibirMensagens(Textos.sucessoMsgAdicionarItemEscala,
@@ -296,7 +297,7 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
       return dataFormatada = "$dataFormatada ( Santa Ceia )";
     } else if (opcaoDataComplemento.isNotEmpty &&
         opcaoDataComplemento != Textos.departamentoCultoLivre) {
-      return "$dataFormatada ( $opcaoDataComplemento )";
+      return "$dataFormatada ($opcaoDataComplemento)";
     } else {
       return dataFormatada;
     }
@@ -365,15 +366,29 @@ class _TelaCadastroItemState extends State<TelaCadastroItem> {
   }
 
   sobreescreverHorarioTroca() {
+    formatarHorario(horarioTimePicker.toString());
     horarioTroca = "";
     horarioTroca =
-        "${Textos.msgComecoHorarioEscala}${horarioTimePicker!.hour.toString()}:${horarioTimePicker!.minute.toString()}";
+        "${Textos.msgComecoHorarioEscala}${horarioTimePicker.toString().replaceAll("TimeOfDay(", "").replaceAll(")", "")}";
   }
 
   formatarHorario(String horarioTrocaRecuperado) {
-    String horaSeparada = horarioTrocaRecuperado.split(" : ")[1];
+    String horarioSemCaracteres =
+        horarioTrocaRecuperado.replaceAll(new RegExp(r'[^0-9]'), '');
+
+    String hora = "";
+    String minuto = "";
+    if (horarioSemCaracteres.length == 4) {
+      hora = horarioSemCaracteres.substring(0, 2);
+      minuto = horarioSemCaracteres.substring(2);
+    } else {
+      hora = horarioSemCaracteres.substring(0, 1);
+      minuto = horarioSemCaracteres.substring(1);
+    }
+    String horarioFinal = hora + ":" + minuto;
     DateTime conversaoHorarioPData =
-        new DateFormat("hh:mm").parse(horaSeparada);
+        new DateFormat("HH:mm").parse(horarioFinal);
+
     setState(() {
       TimeOfDay conversaoDataPTimeOfDay =
           TimeOfDay.fromDateTime(conversaoHorarioPData);

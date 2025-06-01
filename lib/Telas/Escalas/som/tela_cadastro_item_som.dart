@@ -57,11 +57,11 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
     recuperarHorarioTroca();
   }
 
-  Widget camposFormulario(double larguraTela, TextEditingController controller,
-      String label) =>
+  Widget camposFormulario(
+          double larguraTela, TextEditingController controller, String label) =>
       Container(
         padding:
-        const EdgeInsets.only(left: 5.0, top: 5.0, right: 5.0, bottom: 5.0),
+            const EdgeInsets.only(left: 5.0, top: 5.0, right: 5.0, bottom: 5.0),
         width: MetodosAuxiliares.ajustarTamanhoTextField(larguraTela),
         child: TextFormField(
           keyboardType: TextInputType.text,
@@ -72,8 +72,8 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
         ),
       );
 
-  Widget botoesAcoes(String nomeBotao, IconData icone, double largura,
-      double altura) =>
+  Widget botoesAcoes(
+          String nomeBotao, IconData icone, double largura, double altura) =>
       Container(
           margin: const EdgeInsets.only(bottom: 10.0),
           height: altura,
@@ -151,15 +151,16 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
           .collection(Constantes.fireBaseDadosCadastrados)
           .doc()
           .set({
-      Constantes.mesaSom: ctMesaSom.text,
-      Constantes.horarioTroca: opcaoDataComplemento == Textos.departamentoEbom ||
-      opcaoDataComplemento == Textos.departamentoSede
-      ? Textos.departamentoEbom
-          : horarioTroca,
-      Constantes.notebook: ctNotebook.text,
-      Constantes.videos: ctVideos.text,
-      Constantes.dataCulto: formatarData(dataSelecionada),
-      Constantes.irmaoReserva: ctIrmaoReserva.text,
+        Constantes.mesaSom: ctMesaSom.text,
+        Constantes.horarioTroca:
+        opcaoDataComplemento.contains(Textos.departamentoEbom)  ||
+            opcaoDataComplemento.contains(Textos.departamentoSede)
+            ? "--"
+                : horarioTroca,
+        Constantes.notebook: ctNotebook.text,
+        Constantes.videos: ctVideos.text,
+        Constantes.dataCulto: formatarData(dataSelecionada),
+        Constantes.irmaoReserva: ctIrmaoReserva.text,
       });
       MetodosAuxiliares.exibirMensagens(Textos.sucessoMsgAdicionarItemEscala,
           Textos.tipoNotificacaoSucesso, context);
@@ -191,7 +192,7 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
     String dataFormatada = DateFormat("dd/MM/yyyy EEEE", "pt_BR").format(data);
     if (opcaoDataComplemento.isNotEmpty &&
         opcaoDataComplemento != Textos.departamentoCultoLivre) {
-      return "$dataFormatada ( $opcaoDataComplemento )";
+      return "$dataFormatada ($opcaoDataComplemento)";
     } else {
       return dataFormatada;
     }
@@ -280,16 +281,15 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
   }
 
   sobreescreverHorarioTroca() {
+    formatarHorario(horarioTimePicker.toString());
     horarioTroca = "";
     horarioTroca =
-    "${Textos.msgComecoHorarioEscala}${horarioTimePicker!.hour
-        .toString()}:${horarioTimePicker!.minute.toString()}";
+        "${Textos.msgComecoHorarioEscala}${horarioTimePicker.toString().replaceAll("TimeOfDay(", "").replaceAll(")", "")}";
   }
 
   formatarHorario(String horarioTrocaRecuperado) {
     String horarioSemCaracteres =
-    horarioTrocaRecuperado.replaceAll(new RegExp(r'[^0-9]'), '');
-
+        horarioTrocaRecuperado.replaceAll(new RegExp(r'[^0-9]'), '');
     String hora = "";
     String minuto = "";
     if (horarioSemCaracteres.length == 4) {
@@ -301,29 +301,19 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
     }
     String horarioFinal = hora + ":" + minuto;
     DateTime conversaoHorarioPData =
-    new DateFormat("hh:mm").parse(horarioFinal);
-
+        new DateFormat("HH:mm").parse(horarioFinal);
     setState(() {
       TimeOfDay conversaoDataPTimeOfDay =
-      TimeOfDay.fromDateTime(conversaoHorarioPData);
+          TimeOfDay.fromDateTime(conversaoHorarioPData);
       horarioTimePicker = conversaoDataPTimeOfDay;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    double alturaTela = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double larguraTela = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double alturaBarraStatus = MediaQuery
-        .of(context)
-        .padding
-        .top;
+    double alturaTela = MediaQuery.of(context).size.height;
+    double larguraTela = MediaQuery.of(context).size.width;
+    double alturaBarraStatus = MediaQuery.of(context).padding.top;
     double alturaAppBar = AppBar().preferredSize.height;
     Timer(Duration(seconds: 2), () {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
@@ -376,7 +366,7 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                                       children: [
                                         WidgetOpcoesData(
                                           dataSelecionada:
-                                          formatarData(dataSelecionada),
+                                              formatarData(dataSelecionada),
                                         ),
                                       ],
                                     );
@@ -388,8 +378,7 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                                               horizontal: 10.0),
                                           width: larguraTela,
                                           child: Text(
-                                              Textos
-                                                  .descricaoTabelaSelecionada +
+                                              Textos.descricaoTabelaSelecionada +
                                                   widget.nomeTabela,
                                               textAlign: TextAlign.end),
                                         ),
@@ -400,12 +389,12 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                                           child: Text(
                                               Textos.descricaoTelaCadastro,
                                               style:
-                                              const TextStyle(fontSize: 18),
+                                                  const TextStyle(fontSize: 18),
                                               textAlign: TextAlign.center),
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                              MainAxisAlignment.spaceEvenly,
                                           children: [
                                             botoesAcoes(
                                                 Textos.btnData,
@@ -419,15 +408,15 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                                                     elevation: 0,
                                                     heroTag: "mudar horario",
                                                     backgroundColor:
-                                                    Colors.white,
+                                                        Colors.white,
                                                     shape: const RoundedRectangleBorder(
                                                         side: BorderSide(
                                                             color: PaletaCores
                                                                 .corCastanho),
                                                         borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                10))),
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    10))),
                                                     onPressed: () async {
                                                       exibirTimePicker();
                                                     },
@@ -470,10 +459,8 @@ class _TelaCadastroItemSomState extends State<TelaCadastroItemSom> {
                                                   larguraTela,
                                                   ctMesaSom,
                                                   Textos.labelSomMesa),
-                                              camposFormulario(
-                                                  larguraTela,
-                                                  ctVideos,
-                                                  Textos.labelVideos),
+                                              camposFormulario(larguraTela,
+                                                  ctVideos, Textos.labelVideos),
                                               camposFormulario(
                                                   larguraTela,
                                                   ctIrmaoReserva,
